@@ -1,0 +1,18 @@
+name: system-view
+version: 0.1.0
+authors:
+  - "Matthäus J. N. Beyrle <system-view.github.com@mail.magynhard.de>"
+license: MIT
+description: A native GTK4 system and hardware overview for Linux
+repository: https://github.com/magynhard/system-view.cr
+crystal: ">= 1.21.0"
+
+targets:
+  system-view:
+    main: src/system-view.cr
+
+dependencies:
+  gettext:
+    git: https://codeberg.org/GeopJr/gettext.cr.git
+  libadwaita:
+    github: hugopl/libadwaita.cr

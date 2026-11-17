@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: CC0-1.0 -->
+<component type="desktop-application">
+  <id>de.magynhard.SystemView</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>System View</name>
+  <summary>Identify your computer and its hardware</summary>
+  <summary xml:lang="de">Computer und seine Hardware identifizieren</summary>
+  <developer id="de.magynhard"><name translate="no">Matthäus J. N. Beyrle</name></developer>
+  <description>
+    <p>System View presents your processor, mainboard, graphics cards, memory and physical drives in one clear overview.</p>
+    <p>Explore separate pages for hardware identification, processor topology, firmware, graphics drivers and storage capacity. The adaptive sidebar stays visible on wide windows and becomes an overlay on small screens.</p>
+    <p>Information is read without administrator privileges. The interface follows your system language and light or dark appearance.</p>
+    <p xml:lang="de">System View zeigt Prozessor, Mainboard, Grafikkarten, Arbeitsspeicher und physische Laufwerke in einer übersichtlichen Zusammenfassung.</p>
+    <p xml:lang="de">Eigene Seiten bieten Hardware-Identifikation, Prozessortopologie, Firmware, Grafiktreiber und Laufwerkskapazitäten. Die adaptive Seitenleiste bleibt in breiten Fenstern sichtbar und wird auf kleinen Bildschirmen eingeblendet.</p>
+    <p xml:lang="de">Die Informationen werden ohne Administratorrechte gelesen. Die Oberfläche übernimmt Systemsprache sowie helles oder dunkles Erscheinungsbild.</p>
+  </description>
+  <launchable type="desktop-id">de.magynhard.SystemView.desktop</launchable>
+  <translation type="gettext">de.magynhard.SystemView</translation>
+  <url type="homepage">https://github.com/magynhard/system-view.cr</url>
+  <url type="bugtracker">https://github.com/magynhard/system-view.cr/issues</url>
+  <content_rating type="oars-1.1"/>
+  <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
+  <releases>
+    <release version="0.1.0" date="2026-11-16">
+      <description>
+        <p>Initial system overview with adaptive navigation, hardware detail pages and a native application icon.</p>
+        <p xml:lang="de">Erste Systemübersicht mit adaptiver Navigation, Hardware-Detailseiten und einem eigenen Anwendungssymbol.</p>
+      </description>
+    </release>
+  </releases>
+</component>

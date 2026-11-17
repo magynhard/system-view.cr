@@ -1,0 +1,10 @@
+/bin/
+/lib/
+/.shards/
+*.gresource
+*.mo
+.idea
+/build/
+/dist/
+/.flatpak-builder/
+__pycache__/

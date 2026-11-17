@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=System View
+Comment=View your system and hardware at a glance
+Comment[de]=System und Hardware auf einen Blick anzeigen
+Exec=system-view
+Icon=de.magynhard.SystemView
+Terminal=false
+Categories=GTK;System;
+Keywords=Hardware;System;CPU;GPU;RAM;Storage;
+Keywords[de]=Hardware;System;Prozessor;Grafikkarte;Arbeitsspeicher;Laufwerke;
+StartupNotify=true
+StartupWMClass=de.magynhard.SystemView

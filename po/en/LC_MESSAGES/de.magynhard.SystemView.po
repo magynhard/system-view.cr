@@ -1,0 +1,779 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: System View 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
+"POT-Creation-Date: 2026-11-17 10:54+0100\n"
+"PO-Revision-Date: 2026-11-16 12:00+0000\n"
+"Last-Translator: Matthäus J. N. Beyrle\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/window.cr:39
+msgid "Toggle sidebar"
+msgstr ""
+
+#: src/window.cr:45
+msgid "Refresh"
+msgstr ""
+
+#: src/window.cr:50
+msgid "Copy system information"
+msgstr ""
+
+#: src/window.cr:53
+msgid "Copy overview"
+msgstr ""
+
+#: src/window.cr:54
+msgid "Copy all information"
+msgstr ""
+
+#: src/window.cr:59
+msgid "Main menu"
+msgstr ""
+
+#: src/window.cr:62
+msgid "About System View"
+msgstr ""
+
+#: src/window.cr:63
+msgid "Close"
+msgstr ""
+
+#: src/window.cr:85
+msgid "Some hardware details are locked"
+msgstr ""
+
+#: src/window.cr:119
+msgid "Your system and hardware at a glance."
+msgstr ""
+
+#: src/window.cr:162
+msgid "Overview"
+msgstr ""
+
+#: src/window.cr:163 src/window.cr:453 src/window.cr:563 src/window.cr:565
+msgid "Graphics"
+msgstr ""
+
+#: src/window.cr:164 src/window.cr:446 src/window.cr:481
+msgid "Processor"
+msgstr ""
+
+#: src/window.cr:165 src/window.cr:447 src/window.cr:550
+msgid "Mainboard"
+msgstr ""
+
+#: src/window.cr:166 src/window.cr:600 src/window.cr:602
+msgid "Drives"
+msgstr ""
+
+#: src/window.cr:167 src/window.cr:461 src/window.cr:617 src/window.cr:619
+msgid "Memory"
+msgstr ""
+
+#: src/window.cr:168 src/window.cr:457 src/window.cr:670 src/window.cr:671
+msgid "Monitors"
+msgstr ""
+
+#: src/window.cr:169 src/window.cr:699 src/window.cr:700
+msgid "Audio"
+msgstr ""
+
+#: src/window.cr:170 src/window.cr:711 src/window.cr:712
+msgid "Input Devices"
+msgstr ""
+
+#: src/window.cr:171 src/window.cr:472 src/window.cr:732 src/window.cr:734
+msgid "Network"
+msgstr ""
+
+#: src/window.cr:172 src/window.cr:474 src/window.cr:660 src/window.cr:662
+msgid "Operating System"
+msgstr ""
+
+#: src/window.cr:240
+msgid "Could not read system information"
+msgstr ""
+
+#: src/window.cr:241 src/window.cr:392 src/window.cr:421 src/window.cr:425
+#: src/window.cr:451 src/window.cr:455 src/window.cr:523 src/window.cr:545
+#: src/window.cr:783 src/window.cr:793 src/window.cr:797 src/window.cr:801
+#: src/window.cr:832 src/window.cr:845 src/window.cr:850
+msgid "Unknown"
+msgstr ""
+
+#: src/window.cr:282
+msgid "Authentication cancelled."
+msgstr ""
+
+#: src/window.cr:282 src/window.cr:290
+msgid "Hardware details could not be unlocked."
+msgstr ""
+
+#: src/window.cr:314
+msgid "Unlocking…"
+msgstr ""
+
+#: src/window.cr:314
+msgid "Unlock…"
+msgstr ""
+
+#: src/window.cr:345
+msgid "Reading system information…"
+msgstr ""
+
+#: src/window.cr:443
+msgid "Hardware overview"
+msgstr ""
+
+#: src/window.cr:445
+msgid "%{cores} cores · %{threads} threads"
+msgstr ""
+
+#: src/window.cr:463 src/window.cr:602
+msgid "Storage"
+msgstr ""
+
+#: src/window.cr:470
+msgid "Bluetooth"
+msgstr ""
+
+#: src/window.cr:472 src/window.cr:623 src/window.cr:734 src/window.cr:783
+msgid "None"
+msgstr ""
+
+#: src/window.cr:473 src/window.cr:661
+msgid "System"
+msgstr ""
+
+#: src/window.cr:475 src/window.cr:663
+msgid "Kernel"
+msgstr ""
+
+#: src/window.cr:476 src/window.cr:664
+msgid "Desktop Environment"
+msgstr ""
+
+#: src/window.cr:477 src/window.cr:666
+msgid "Uptime"
+msgstr ""
+
+#: src/window.cr:483 src/window.cr:552
+msgid "Identification"
+msgstr ""
+
+#: src/window.cr:485 src/window.cr:554 src/window.cr:606 src/window.cr:650
+#: src/window.cr:675 src/window.cr:738
+msgid "Model"
+msgstr ""
+
+#: src/window.cr:486 src/window.cr:553 src/window.cr:607 src/window.cr:674
+msgid "Manufacturer"
+msgstr ""
+
+#: src/window.cr:487
+msgid "Architecture"
+msgstr ""
+
+#: src/window.cr:488
+msgid "CPU family"
+msgstr ""
+
+#: src/window.cr:489
+msgid "Model ID"
+msgstr ""
+
+#: src/window.cr:490
+msgid "Stepping"
+msgstr ""
+
+#: src/window.cr:491
+msgid "Topology"
+msgstr ""
+
+#: src/window.cr:492
+msgid "Physical cores"
+msgstr ""
+
+#: src/window.cr:493
+msgid "Logical processors"
+msgstr ""
+
+#: src/window.cr:494
+msgid "Socket count"
+msgstr ""
+
+#: src/window.cr:501
+msgid "Processor %{number}"
+msgstr ""
+
+#: src/window.cr:503
+msgid "Socket"
+msgstr ""
+
+#: src/window.cr:504 src/window.cr:652
+msgid "Voltage"
+msgstr ""
+
+#: src/window.cr:505
+msgid "External clock"
+msgstr ""
+
+#: src/window.cr:506
+msgid "Configured clock"
+msgstr ""
+
+#: src/window.cr:507 src/window.cr:516
+msgid "Maximum clock"
+msgstr ""
+
+#: src/window.cr:508
+msgid "Socket type"
+msgstr ""
+
+#: src/window.cr:509
+msgid "Processor Features"
+msgstr ""
+
+#: src/window.cr:510
+msgid "Characteristics"
+msgstr ""
+
+#: src/window.cr:512
+msgid "Clock speed"
+msgstr ""
+
+#: src/window.cr:514
+msgid "Base clock"
+msgstr ""
+
+#: src/window.cr:515
+msgid "Minimum clock"
+msgstr ""
+
+#: src/window.cr:519
+msgid "Current clock range"
+msgstr ""
+
+#: src/window.cr:520
+msgid "Available frequency steps"
+msgstr ""
+
+#: src/window.cr:521
+msgid "Frequency driver"
+msgstr ""
+
+#: src/window.cr:522
+msgid "Governor"
+msgstr ""
+
+#: src/window.cr:523 src/window.cr:612 src/window.cr:678 src/window.cr:793
+msgid "Yes"
+msgstr ""
+
+#: src/window.cr:523 src/window.cr:612 src/window.cr:678 src/window.cr:793
+msgid "No"
+msgstr ""
+
+#: src/window.cr:524
+msgid "Boost enabled"
+msgstr ""
+
+#: src/window.cr:525
+msgid "Caches"
+msgstr ""
+
+#: src/window.cr:526
+msgid "Cache information"
+msgstr ""
+
+#: src/window.cr:529
+msgid "Data"
+msgstr ""
+
+#: src/window.cr:530
+msgid "Instructions"
+msgstr ""
+
+#: src/window.cr:531
+msgid "Data and instructions"
+msgstr ""
+
+#: src/window.cr:534
+msgid "L%{level} cache (%{type})"
+msgstr ""
+
+#: src/window.cr:536
+msgid "%{count} × %{size} · %{total} total"
+msgstr ""
+
+#: src/window.cr:538
+msgid "%{size} cache lines"
+msgstr ""
+
+#: src/window.cr:539
+msgid "%{ways}-way associative"
+msgstr ""
+
+#: src/window.cr:555 src/window.cr:576
+msgid "Revision"
+msgstr ""
+
+#: src/window.cr:556
+msgid "Firmware"
+msgstr ""
+
+#: src/window.cr:557
+msgid "BIOS vendor"
+msgstr ""
+
+#: src/window.cr:558
+msgid "BIOS version"
+msgstr ""
+
+#: src/window.cr:559
+msgid "BIOS date"
+msgstr ""
+
+#: src/window.cr:565
+msgid "Display controller"
+msgstr ""
+
+#: src/window.cr:569
+msgid "GPU model"
+msgstr ""
+
+#: src/window.cr:570
+msgid "GPU manufacturer"
+msgstr ""
+
+#: src/window.cr:571
+msgid "Card manufacturer"
+msgstr ""
+
+#: src/window.cr:572
+msgid "Board model"
+msgstr ""
+
+#: src/window.cr:573
+msgid "Model group"
+msgstr ""
+
+#: src/window.cr:574
+msgid "PCI ID"
+msgstr ""
+
+#: src/window.cr:575
+msgid "Subsystem ID"
+msgstr ""
+
+#: src/window.cr:577
+msgid "PCI address"
+msgstr ""
+
+#: src/window.cr:578 src/window.cr:749 src/window.cr:769
+msgid "Kernel driver"
+msgstr ""
+
+#: src/window.cr:579
+msgid "Dedicated video memory"
+msgstr ""
+
+#: src/window.cr:580
+msgid "Current GPU clock"
+msgstr ""
+
+#: src/window.cr:580 src/window.cr:581 src/window.cr:582 src/window.cr:583
+#: src/window.cr:584 src/window.cr:586 src/window.cr:651 src/window.cr:679
+#: src/window.cr:680 src/window.cr:766
+msgid "Not reported"
+msgstr ""
+
+#: src/window.cr:581
+msgid "Current video memory clock"
+msgstr ""
+
+#: src/window.cr:582
+msgid "OpenGL"
+msgstr ""
+
+#: src/window.cr:583
+msgid "GLSL"
+msgstr ""
+
+#: src/window.cr:584
+msgid "OpenGL ES"
+msgstr ""
+
+#: src/window.cr:585
+msgid "OpenGL renderer"
+msgstr ""
+
+#: src/window.cr:586
+msgid "Vulkan"
+msgstr ""
+
+#: src/window.cr:587
+msgid "Vulkan driver"
+msgstr ""
+
+#: src/window.cr:594
+msgid "Connected monitors"
+msgstr ""
+
+#: src/window.cr:608
+msgid "Capacity"
+msgstr ""
+
+#: src/window.cr:609 src/window.cr:724
+msgid "Type"
+msgstr ""
+
+#: src/window.cr:610 src/window.cr:677 src/window.cr:725
+msgid "Connection"
+msgstr ""
+
+#: src/window.cr:611
+msgid "Device"
+msgstr ""
+
+#: src/window.cr:612
+msgid "Removable"
+msgstr ""
+
+#: src/window.cr:620
+msgid "Installed RAM"
+msgstr ""
+
+#: src/window.cr:621
+msgid "Usable RAM"
+msgstr ""
+
+#: src/window.cr:622
+msgid "Available RAM"
+msgstr ""
+
+#: src/window.cr:623
+msgid "Swap"
+msgstr ""
+
+#: src/window.cr:626
+msgid "Module %{number}"
+msgstr ""
+
+#: src/window.cr:651
+msgid "Timings (CL–tRCD–tRP–tRAS)"
+msgstr ""
+
+#: src/window.cr:653
+msgid "Minimum voltage"
+msgstr ""
+
+#: src/window.cr:654
+msgid "Maximum voltage"
+msgstr ""
+
+#: src/window.cr:665
+msgid "Hostname"
+msgstr ""
+
+#: src/window.cr:671
+msgid "Monitor"
+msgstr ""
+
+#: src/window.cr:676 src/window.cr:727
+msgid "Product ID"
+msgstr ""
+
+#: src/window.cr:678 src/window.cr:797
+msgid "Active"
+msgstr ""
+
+#: src/window.cr:679
+msgid "Current resolution"
+msgstr ""
+
+#: src/window.cr:680
+msgid "Current refresh rate"
+msgstr ""
+
+#: src/window.cr:681
+msgid "Preferred resolution"
+msgstr ""
+
+#: src/window.cr:682
+msgid "Preferred refresh rate"
+msgstr ""
+
+#: src/window.cr:684
+msgid "Display size"
+msgstr ""
+
+#: src/window.cr:686
+msgid "Diagonal"
+msgstr ""
+
+#: src/window.cr:688
+msgid "Supported resolutions"
+msgstr ""
+
+#: src/window.cr:693
+msgid "Monitor %{number}"
+msgstr ""
+
+#: src/window.cr:694
+msgid "Primary"
+msgstr ""
+
+#: src/window.cr:700
+msgid "Audio device"
+msgstr ""
+
+#: src/window.cr:703 src/window.cr:762
+msgid "Name"
+msgstr ""
+
+#: src/window.cr:704
+msgid "Device ID"
+msgstr ""
+
+#: src/window.cr:705
+msgid "Driver"
+msgstr ""
+
+#: src/window.cr:706
+msgid "Codecs"
+msgstr ""
+
+#: src/window.cr:712 src/window.cr:722
+msgid "Input device"
+msgstr ""
+
+#: src/window.cr:716
+msgid "Keyboard"
+msgstr ""
+
+#: src/window.cr:717
+msgid "Mouse"
+msgstr ""
+
+#: src/window.cr:718
+msgid "Gamepad / Joystick"
+msgstr ""
+
+#: src/window.cr:719
+msgid "Touchpad"
+msgstr ""
+
+#: src/window.cr:720
+msgid "Touchscreen"
+msgstr ""
+
+#: src/window.cr:721
+msgid "Graphics tablet"
+msgstr ""
+
+#: src/window.cr:726
+msgid "Vendor ID"
+msgstr ""
+
+#: src/window.cr:734
+msgid "Network adapters"
+msgstr ""
+
+#: src/window.cr:739
+msgid "Interface"
+msgstr ""
+
+#: src/window.cr:740
+msgid "Status"
+msgstr ""
+
+#: src/window.cr:741
+msgid "Connection profile"
+msgstr ""
+
+#: src/window.cr:742 src/window.cr:766
+msgid "Link speed"
+msgstr ""
+
+#: src/window.cr:744
+msgid "Duplex"
+msgstr ""
+
+#: src/window.cr:744
+msgid "Full duplex"
+msgstr ""
+
+#: src/window.cr:744
+msgid "Half duplex"
+msgstr ""
+
+#: src/window.cr:746 src/window.cr:763 src/window.cr:773
+msgid "MAC address"
+msgstr ""
+
+#: src/window.cr:747
+msgid "Permanent MAC address"
+msgstr ""
+
+#: src/window.cr:748
+msgid "MTU"
+msgstr ""
+
+#: src/window.cr:751
+msgid "SSID"
+msgstr ""
+
+#: src/window.cr:752
+msgid "Access point (BSSID)"
+msgstr ""
+
+#: src/window.cr:753 src/window.cr:776
+msgid "Signal strength"
+msgstr ""
+
+#: src/window.cr:754
+msgid "Frequency"
+msgstr ""
+
+#: src/window.cr:755
+msgid "Security"
+msgstr ""
+
+#: src/window.cr:755
+msgid "Open network"
+msgstr ""
+
+#: src/window.cr:764
+msgid "Enabled"
+msgstr ""
+
+#: src/window.cr:765
+msgid "Bluetooth version"
+msgstr ""
+
+#: src/window.cr:767
+msgid "Discoverable"
+msgstr ""
+
+#: src/window.cr:768
+msgid "Pairable"
+msgstr ""
+
+#: src/window.cr:770
+msgid "Connected devices"
+msgstr ""
+
+#: src/window.cr:774 src/window.cr:825
+msgid "Connected"
+msgstr ""
+
+#: src/window.cr:775
+msgid "Paired"
+msgstr ""
+
+#: src/window.cr:784
+msgid "IP addresses"
+msgstr ""
+
+#: src/window.cr:785
+msgid "Address configuration"
+msgstr ""
+
+#: src/window.cr:786 src/window.cr:840
+msgid "DHCP"
+msgstr ""
+
+#: src/window.cr:787
+msgid "Gateway"
+msgstr ""
+
+#: src/window.cr:788
+msgid "DNS servers"
+msgstr ""
+
+#: src/window.cr:789
+msgid "Search domains"
+msgstr ""
+
+#: src/window.cr:797
+msgid "Inactive"
+msgstr ""
+
+#: src/window.cr:807
+msgid "%{days} d %{hours} h %{minutes} min"
+msgstr ""
+
+#: src/window.cr:809
+msgid "%{hours} h %{minutes} min"
+msgstr ""
+
+#: src/window.cr:811
+msgid "%{minutes} min"
+msgstr ""
+
+#: src/window.cr:817
+msgid "Wi-Fi"
+msgstr ""
+
+#: src/window.cr:818
+msgid "Bluetooth PAN"
+msgstr ""
+
+#: src/window.cr:819
+msgid "Ethernet (LAN)"
+msgstr ""
+
+#: src/window.cr:826
+msgid "Disconnected"
+msgstr ""
+
+#: src/window.cr:827
+msgid "Connecting"
+msgstr ""
+
+#: src/window.cr:828
+msgid "Disconnecting"
+msgstr ""
+
+#: src/window.cr:829
+msgid "Unavailable"
+msgstr ""
+
+#: src/window.cr:830
+msgid "Unmanaged"
+msgstr ""
+
+#: src/window.cr:831
+msgid "Connection failed"
+msgstr ""
+
+#: src/window.cr:838
+msgid "Automatic"
+msgstr ""
+
+#: src/window.cr:839
+msgid "Manual"
+msgstr ""
+
+#: src/window.cr:841
+msgid "Link-local"
+msgstr ""
+
+#: src/window.cr:842
+msgid "Shared"
+msgstr ""
+
+#: src/window.cr:843
+msgid "Disabled"
+msgstr ""
+
+#: src/window.cr:844
+msgid "Ignored"
+msgstr ""
