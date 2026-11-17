@@ -174,9 +174,11 @@ factory = -> do
           check(rows.any? { |row| row.title == "Memory" && row.subtitle == "Example Memory · TEST-16G-DDR4 · 32.0 GiB · DDR4" }, "overview shows the identical RAM manufacturer/model before capacity and type")
           check(widgets.select(Gtk::Label).none? { |label| label.text.includes?("Redundant Board") }, "overview subtitle contains only the operating system, without the computer model")
           check(widgets.select(Gtk::Label).none? { |label| label.text == "Memory (RAM)" }, "memory navigation uses the shorter name")
-          check(rows.any? { |row| row.title == "Monitors" && row.subtitle == "Dell · ExamplePanel · DP-1 · 1920 × 1080" }, "overview includes each monitor identity and preferred resolution")
+          check(rows.any? { |row| row.title == "Monitors" && row.subtitle == "Dell · ExamplePanel · 1920 × 1080 · DP-1" }, "overview shows monitor connection after its preferred resolution")
           check(rows.any? { |row| row.title == "Desktop Environment" && row.subtitle == "GNOME 50.5" }, "overview includes desktop name and version")
           check(rows.any? { |row| row.title == "Uptime" && row.subtitle == "2 d 4 h 33 min" }, "overview shows the uptime")
+          uptime = rows.find { |row| row.title == "Uptime" }.not_nil!
+          check(descendants(uptime).select(Gtk::Image).any? { |image| image.icon_name == "preferences-system-time-symbolic" }, "uptime row has a clock icon")
           network_row = rows.find { |row| row.title == "Network" }.not_nil!
           check(network_row.subtitle.to_s.includes?("Ethernet (LAN) · enp1s0 · Connected · 2.5 Gbit/s · 192.0.2.10"), "LAN overview row includes the IPv4 address")
           check(network_row.subtitle.to_s.includes?("Bluetooth · Example Bluetooth · Active"), "Bluetooth overview row reports an active adapter")

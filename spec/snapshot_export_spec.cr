@@ -22,6 +22,7 @@ describe SystemView::SnapshotExport do
     text.should contain("- **Processor:** Example CPU 9000\n  - 2 cores · 4 threads")
     text.should contain("- **Mainboard:** Example Boards Board X570")
     text.should contain("- **Graphics:** Example Graphics · Example Graphics Exact GPU 5000 · 7.5 GiB")
+    text.should contain("- **Monitors:** Dell · ExamplePanel · 1920 × 1080 · DP-1")
     text.should contain("- **Memory:** Example Memory · TEST-16G-DDR4 · 32.0 GiB · DDR4")
     text.should contain("- **Storage:** Example NVMe 1TB · 1.0 TB")
     # Bluetooth adapters state their power state, not a bare yes/no.
@@ -40,6 +41,8 @@ describe SystemView::SnapshotExport do
      "## Audio", "## Input Devices", "## Network", "## Operating System"}.each do |heading|
       text.should contain(heading)
     end
+    text.should_not contain("## Overview")
+    text.should_not contain("### Hardware overview")
     text.should contain("- **Operating System:** Example Linux 1.0\n- **Kernel:** 6.18.0-example\n- **Desktop Environment:** GNOME 50.5\n- **Hostname:** workstation\n- **Uptime:** 2 d 4 h 33 min")
     text.should contain("### Example Graphics Exact GPU 5000")
     text.should contain("- **Current GPU clock:** 1800 MHz")

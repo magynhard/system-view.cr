@@ -452,7 +452,7 @@ module SystemView
       end.join("\n")
       row(hardware, translate("Graphics"), graphics, "system-view-graphics-symbolic", target: "graphics")
       monitors = data.monitors.map do |monitor|
-        [monitor.vendor, monitor.model, monitor.connector, monitor.preferred_mode].map { |value| value.empty? ? translate("Unknown") : value }.join(" · ")
+        [monitor.vendor, monitor.model, monitor.preferred_mode, monitor.connector].map { |value| value.empty? ? translate("Unknown") : value }.join(" · ")
       end.join("\n")
       row(hardware, translate("Monitors"), monitors, "video-display-symbolic", target: "monitors")
       memory_info = [Inventory.common_memory_model(data.memory), capacity(data.memory.installed, binary: true)].reject(&.empty?)
@@ -474,7 +474,7 @@ module SystemView
       row(software, translate("Operating System"), data.os, "preferences-system-symbolic", target: "system")
       row(software, translate("Kernel"), data.kernel, "system-view-processor-symbolic", target: "system")
       row(software, translate("Desktop Environment"), data.desktop, "preferences-desktop-display-symbolic", target: "system")
-      row(software, translate("Uptime"), uptime_text(data.uptime), "preferences-system-symbolic", target: "system")
+      row(software, translate("Uptime"), uptime_text(data.uptime), "preferences-system-time-symbolic", target: "system")
     end
 
     private def processor(data : Snapshot)

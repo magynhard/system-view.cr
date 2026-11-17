@@ -16,8 +16,6 @@ module SystemView
 
     def full(data : Snapshot, firmware : FirmwareDetails? = nil) : String
       lines = ["# System View — #{report_title(data)}"]
-      lines << "## Overview"
-      overview_section(lines, data)
       lines << "## Graphics"
       graphics_section(lines, data)
       lines << "## Processor"
@@ -152,7 +150,7 @@ module SystemView
       end
       hardware << {"Graphics", graphics.join("\n")} unless graphics.empty?
       monitors = data.monitors.map do |monitor|
-        [monitor.vendor, monitor.model, monitor.connector, monitor.preferred_mode].map { |value| unknown(value) }.join(" · ")
+        [monitor.vendor, monitor.model, monitor.preferred_mode, monitor.connector].map { |value| unknown(value) }.join(" · ")
       end
       hardware << {"Monitors", monitors.join("\n")} unless monitors.empty?
       memory_info = [common_memory_model(data.memory), capacity(data.memory.installed, binary: true)].reject(&.empty?)
