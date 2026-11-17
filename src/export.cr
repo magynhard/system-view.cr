@@ -9,7 +9,7 @@ module SystemView
 
     def overview(data : Snapshot) : String
       lines = ["# System View — #{report_title(data)}"]
-      lines << "## Overview"
+      lines << "## Summary"
       overview_section(lines, data)
       lines.join("\n")
     end
@@ -169,7 +169,7 @@ module SystemView
                         adapter.powered.nil? ? "Unknown" : (adapter.powered ? "Active" : "Inactive")].join(" · ")
       end
       hardware << {"Network", connections.empty? ? "None" : connections.join("\n")}
-      lines << "### Hardware overview"
+      lines << "### Hardware summary"
       add_rows(lines, hardware)
       lines << "### System"
       add_rows(lines, [{"Operating System", data.os}, {"Kernel", data.kernel},
@@ -189,20 +189,10 @@ module SystemView
       lines << "- **Display controller:** Unknown" if data.graphics.empty?
       data.graphics.each do |gpu|
         lines << "### #{gpu.name}"
+        lines << "#### Identification"
         add_rows(lines, [{"GPU model", gpu.model}, {"GPU manufacturer", gpu.vendor},
                          {"Card manufacturer", gpu.board_vendor}, {"Board model", gpu.board_model},
-                         {"Model group", gpu.model_group}, {"PCI ID", "#{gpu.vendor_id}:#{gpu.device_id}"},
-                         {"Subsystem ID", gpu.subsystem_id}, {"Revision", gpu.revision},
-                         {"PCI address", gpu.address}, {"Kernel driver", gpu.driver},
-                         {"Dedicated video memory", capacity(gpu.memory, binary: true)},
-                         {"Current GPU clock", gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : "Not reported"},
-                         {"Current video memory clock", gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : "Not reported"},
-                         {"OpenGL", gpu.opengl.empty? ? "Not reported" : gpu.opengl},
-                         {"GLSL", gpu.glsl.empty? ? "Not reported" : gpu.glsl},
-                         {"OpenGL ES", gpu.opengl_es.empty? ? "Not reported" : gpu.opengl_es},
-                         {"OpenGL renderer", gpu.renderer},
-                         {"Vulkan", gpu.vulkan.empty? ? "Not reported" : gpu.vulkan},
-                         {"Vulkan driver", gpu.vulkan_driver}])
+                         {"Model group", gpu.model_group}])
         attached = data.monitors.select { |monitor| monitor.graphics_address == gpu.address }
         unless attached.empty?
           displays = attached.map do |monitor|
@@ -211,6 +201,21 @@ module SystemView
           end
           add_rows(lines, [{"Connected monitors", displays.join("\n")}])
         end
+        lines << "#### PCI and driver"
+        add_rows(lines, [{"PCI ID", "#{gpu.vendor_id}:#{gpu.device_id}"},
+                         {"Subsystem ID", gpu.subsystem_id}, {"Revision", gpu.revision},
+                         {"PCI address", gpu.address}, {"Kernel driver", gpu.driver}])
+        lines << "#### Memory and clocks"
+        add_rows(lines, [{"Dedicated video memory", capacity(gpu.memory, binary: true)},
+                         {"Current GPU clock", gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : "Not reported"},
+                         {"Current video memory clock", gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : "Not reported"}])
+        lines << "#### Graphics APIs"
+        add_rows(lines, [{"OpenGL", gpu.opengl.empty? ? "Not reported" : gpu.opengl},
+                         {"GLSL", gpu.glsl.empty? ? "Not reported" : gpu.glsl},
+                         {"OpenGL ES", gpu.opengl_es.empty? ? "Not reported" : gpu.opengl_es},
+                         {"OpenGL renderer", gpu.renderer},
+                         {"Vulkan", gpu.vulkan.empty? ? "Not reported" : gpu.vulkan},
+                         {"Vulkan driver", gpu.vulkan_driver}])
       end
     end
 
@@ -220,19 +225,14 @@ module SystemView
       add_rows(lines, [{"Model", cpu.name}, {"Manufacturer", cpu.vendor},
                        {"Architecture", cpu.architecture}, {"CPU family", cpu.family},
                        {"Model ID", cpu.model_id}, {"Stepping", cpu.stepping}])
-      lines << "### Topology"
+      lines << "### Topology and socket"
       add_rows(lines, [{"Physical cores", cpu.cores > 0 ? cpu.cores.to_s : "Unknown"},
                        {"Logical processors", cpu.threads > 0 ? cpu.threads.to_s : "Unknown"},
                        {"Socket count", cpu.sockets > 0 ? cpu.sockets.to_s : "Unknown"}])
       if firmware
-        sockets = firmware.processors
-        sockets.each_with_index do |entry, index|
-          lines << "### Processor #{index + 1}"
-          add_rows(lines, [{"Socket", entry.socket}, {"Voltage", entry.voltage},
-                           {"External clock", entry.external_clock}, {"Configured clock", entry.configured_clock},
-                           {"Maximum clock", entry.maximum_clock}, {"Socket type", entry.upgrade},
-                           {"Processor Features", entry.capabilities.join("\n")},
-                           {"Characteristics", entry.characteristics.join("\n")}])
+        firmware.processors.each_with_index do |entry, index|
+          lines << "### Socket #{index + 1}" if firmware.processors.size > 1
+          add_rows(lines, [{"Socket", entry.socket}, {"Socket type", entry.upgrade}])
         end
       end
       lines << "### Clock speed"
@@ -242,10 +242,20 @@ module SystemView
       add_rows(lines, [{"Base clock", frequency(speed.base_khz)},
                        {"Minimum clock", frequency(speed.minimum_khz)},
                        {"Maximum clock", frequency(speed.maximum_khz)},
-                       {"Current clock range", current},
-                       {"Available frequency steps", speed.steps_khz.map { |khz| frequency(khz) }.join(" · ")},
+                       {"Current clock range", current}])
+      lines << "### Clock control"
+      add_rows(lines, [{"Available frequency steps", speed.steps_khz.map { |khz| frequency(khz) }.join(" · ")},
                        {"Frequency driver", speed.driver}, {"Governor", speed.governor},
                        {"Boost enabled", speed.boost.nil? ? "Unknown" : (speed.boost ? "Yes" : "No")}])
+      if firmware
+        firmware.processors.each_with_index do |entry, index|
+          suffix = firmware.processors.size > 1 ? " · Socket #{index + 1}" : ""
+          lines << "### Additional processor information#{suffix}"
+          add_rows(lines, [{"Voltage", entry.voltage}, {"External clock", entry.external_clock},
+                           {"Configured clock", entry.configured_clock}, {"Maximum clock", entry.maximum_clock}])
+        end
+      end
+      lines << "### Caches"
       cpu.caches.each do |cache|
         kind = case cache.kind
                when "Data"        then "Data"
@@ -259,6 +269,14 @@ module SystemView
         info << "%{size} cache lines" % {size: capacity(cache.line_bytes, binary: true)} if cache.line_bytes > 0
         info << "%{ways}-way associative" % {ways: cache.ways} if cache.ways > 0
         add_rows(lines, [{"L#{cache.level} cache (#{kind})", info.join("\n")}])
+      end
+      if firmware
+        firmware.processors.each_with_index do |entry, index|
+          suffix = firmware.processors.size > 1 ? " · Socket #{index + 1}" : ""
+          lines << "### Processor features#{suffix}"
+          add_rows(lines, [{"Processor Features", entry.capabilities.join("\n")},
+                           {"Characteristics", entry.characteristics.join("\n")}])
+        end
       end
     end
 

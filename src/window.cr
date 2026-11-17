@@ -18,12 +18,18 @@ module SystemView
     @refresh = Gio::SimpleAction.new("refresh", nil)
     @snapshot : Snapshot?
     @page = "overview"
+    @history = [] of String
+    @history_index = -1
+    @history_traversal = false
+    @back = Gio::SimpleAction.new("back", nil)
+    @forward = Gio::SimpleAction.new("forward", nil)
     @closed = false
     @loading = false
     @firmware_action = Gio::SimpleAction.new("hardware-details", nil)
     @firmware_query : FirmwareQuery?
     @firmware : FirmwareDetails?
     @firmware_message = ""
+    @two_column_layouts = [] of Gtk::FlowBox
 
     def initialize(app : Gtk::Application, @files : LinuxFiles = LinuxFiles.new, @firmware : FirmwareDetails? = nil, @desktop_name : String? = nil, @firmware_loader : Proc(FirmwareResult)? = nil, @network_loader : Proc(Connectivity)? = nil,
                    @graphics_loader : Proc(Array(GraphicsCard), Array(GraphicsCard))? = nil,
@@ -34,13 +40,27 @@ module SystemView
 
       header = Adw::HeaderBar.new
       header.title_widget = @subtitle
-      toggle = Gtk::ToggleButton.new
-      toggle.icon_name = "sidebar-show-symbolic"
-      toggle.tooltip_text = translate("Toggle sidebar")
-      toggle.active = true
-      toggle.toggled_signal.connect { @split.show_sidebar = toggle.active? }
-      @split.notify_signal["show-sidebar"].connect { toggle.active = @split.show_sidebar? }
-      header.pack_start(toggle)
+      sidebar_header = Adw::HeaderBar.new
+      sidebar_header.show_end_title_buttons = false
+      sidebar_header.add_css_class("flat")
+      sidebar_header.title_widget = Gtk::Box.new(:horizontal, 0)
+      header.show_start_title_buttons = false
+      sidebar_controls = navigation_controls
+      sidebar_controls.name = "sidebar-controls"
+      sidebar_header.pack_start(sidebar_controls)
+      content_controls = navigation_controls
+      content_controls.name = "content-controls"
+      header.pack_start(content_controls)
+      update_controls = -> do
+        content_controls.visible = @split.collapsed? || !@split.show_sidebar?
+      end
+      @split.notify_signal["show-sidebar"].connect { update_controls.call }
+      @split.notify_signal["collapsed"].connect do
+        @subtitle.visible = !@split.collapsed?
+        @two_column_layouts.each { |columns| columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32 }
+        update_controls.call
+      end
+      update_controls.call
       refresh_button = Gtk::Button.new_from_icon_name("view-refresh-symbolic")
       refresh_button.tooltip_text = translate("Refresh")
       refresh_button.action_name = "win.refresh"
@@ -50,7 +70,7 @@ module SystemView
       copy_button.tooltip_text = translate("Copy system information")
       copy_button.primary = true
       copy_model = Gio::Menu.new
-      copy_model.append(translate("Copy overview"), "win.copy-overview")
+      copy_model.append(translate("Copy summary"), "win.copy-overview")
       copy_model.append(translate("Copy all information"), "win.copy-all")
       copy_button.menu_model = copy_model
       header.pack_end(copy_button)
@@ -68,8 +88,11 @@ module SystemView
       sidebar = Gtk::ScrolledWindow.new
       sidebar.hscrollbar_policy = :never
       sidebar.child = @navigation
-      sidebar.add_css_class("sidebar")
-      @split.sidebar = sidebar
+      sidebar_toolbar = Adw::ToolbarView.new
+      sidebar_toolbar.add_css_class("sidebar")
+      sidebar_toolbar.add_top_bar(sidebar_header)
+      sidebar_toolbar.content = sidebar
+      @split.sidebar = sidebar_toolbar
       @split.min_sidebar_width = 210.0
       @split.max_sidebar_width = 260.0
       @body.margin_top = 28
@@ -77,7 +100,7 @@ module SystemView
       @body.margin_start = 20
       @body.margin_end = 20
       clamp = Adw::Clamp.new
-      clamp.maximum_size = 860
+      clamp.maximum_size = 1200
       clamp.child = @body
       scroll = @content_scroll
       scroll.hscrollbar_policy = :never
@@ -89,13 +112,18 @@ module SystemView
       page.append(@unlock_banner)
       page.append(scroll)
       scroll.vexpand = true
-      @split.content = page
       toolbar = Adw::ToolbarView.new
       toolbar.add_top_bar(header)
-      toolbar.content = @split
-      self.content = toolbar
+      toolbar.content = page
+      @split.content = toolbar
+      self.content = @split
 
-      breakpoint = Adw::Breakpoint.new(Adw::BreakpointCondition.new_length(:max_width, 860.0, :px))
+      # The generated constructor passes this transfer-full boxed condition
+      # without relinquishing its Crystal wrapper. Create it directly so only
+      # the breakpoint owns and frees it.
+      condition = LibAdw.adw_breakpoint_condition_new_length(Adw::BreakpointConditionLengthType::MaxWidth.value,
+        860.0, Adw::LengthUnit::Px.value)
+      breakpoint = Adw::Breakpoint.new(LibAdw.adw_breakpoint_new(condition), GICrystal::Transfer::Full)
       breakpoint.add_setter(@split, "collapsed", true)
       add_breakpoint(breakpoint)
       close_request_signal.connect do
@@ -107,7 +135,38 @@ module SystemView
       reload
     end
 
+    private def navigation_controls : Gtk::Box
+      controls = Gtk::Box.new(:horizontal, 0)
+      toggle = Gtk::ToggleButton.new
+      toggle.icon_name = "sidebar-show-symbolic"
+      toggle.tooltip_text = translate("Toggle sidebar")
+      toggle.add_css_class("flat")
+      toggle.active = @split.show_sidebar?
+      toggle.toggled_signal.connect { @split.show_sidebar = toggle.active? }
+      @split.notify_signal["show-sidebar"].connect { toggle.active = @split.show_sidebar? }
+      controls.append(toggle)
+      back = Gtk::Button.new_from_icon_name("go-previous-symbolic")
+      back.add_css_class("flat")
+      back.tooltip_text = translate("Back")
+      back.action_name = "win.back"
+      controls.append(back)
+      forward = Gtk::Button.new_from_icon_name("go-next-symbolic")
+      forward.add_css_class("flat")
+      forward.tooltip_text = translate("Forward")
+      forward.action_name = "win.forward"
+      controls.append(forward)
+      controls
+    end
+
     private def setup_actions(app : Gtk::Application)
+      @back.enabled = false
+      @forward.enabled = false
+      @back.activate_signal.connect { move_history(-1) }
+      @forward.activate_signal.connect { move_history(1) }
+      add_action(@back)
+      add_action(@forward)
+      app.set_accels_for_action("win.back", ["<Alt>Left"])
+      app.set_accels_for_action("win.forward", ["<Alt>Right"])
       @refresh.activate_signal.connect { reload }
       add_action(@refresh)
       about = Gio::SimpleAction.new("about", nil)
@@ -159,7 +218,7 @@ module SystemView
         nil
       end
       entries = {
-        {"overview", translate("Overview"), "view-grid-symbolic"},
+        {"overview", translate("Summary"), "view-grid-symbolic"},
         {"graphics", translate("Graphics"), "system-view-graphics-symbolic"},
         {"processor", translate("Processor"), "system-view-processor-symbolic"},
         {"mainboard", translate("Mainboard"), "system-view-mainboard-symbolic"},
@@ -190,6 +249,12 @@ module SystemView
       end
       @navigation.row_selected_signal.connect do |row|
         if row
+          unless @history_traversal || (@history_index >= 0 && @history[@history_index] == row.name)
+            @history = @history[0, @history_index + 1]
+            @history << row.name
+            @history_index = @history.size - 1
+            update_history_actions
+          end
           @page = row.name
           @subtitle.subtitle = entries.find { |entry| entry[0] == @page }.try(&.[1]) || ""
           render
@@ -338,6 +403,7 @@ module SystemView
 
     private def render
       update_unlock_banner
+      @two_column_layouts.clear
       clear_body
       unless data = @snapshot
         loading = Adw::StatusPage.new
@@ -378,11 +444,25 @@ module SystemView
       @body.append(box)
     end
 
-    private def group(title : String) : Adw::PreferencesGroup
+    private def group(title : String, parent : Gtk::Box | Gtk::FlowBox = @body) : Adw::PreferencesGroup
       widget = Adw::PreferencesGroup.new
       widget.title = title
-      @body.append(widget)
+      widget.width_request = 240 if parent.is_a?(Gtk::FlowBox)
+      widget.valign = :start
+      parent.append(widget)
       widget
+    end
+
+    private def group_columns(max_columns : UInt32 = 3) : Gtk::FlowBox
+      columns = Gtk::FlowBox.new
+      columns.selection_mode = :none
+      columns.min_children_per_line = 1
+      columns.max_children_per_line = max_columns
+      columns.homogeneous = false
+      columns.column_spacing = 24
+      columns.row_spacing = 24
+      @body.append(columns)
+      columns
     end
 
     private def row(group : Adw::PreferencesGroup, title : String, value : String, icon : String? = nil, target : String? = nil, locked : Bool = false)
@@ -417,6 +497,24 @@ module SystemView
       end
     end
 
+    private def update_history_actions
+      @back.enabled = @history_index > 0
+      @forward.enabled = @history_index >= 0 && @history_index < @history.size - 1
+    end
+
+    private def move_history(direction : Int32)
+      index = @history_index + direction
+      return unless index >= 0 && index < @history.size
+      @history_index = index
+      @history_traversal = true
+      begin
+        navigate(@history[index])
+      ensure
+        @history_traversal = false
+      end
+      update_history_actions
+    end
+
     private def count(value : Int32) : String
       value > 0 ? value.to_s : translate("Unknown")
     end
@@ -440,7 +538,7 @@ module SystemView
       subtitle.add_css_class("dim-label")
       hero.append(subtitle)
       @body.append(hero)
-      hardware = group(translate("Hardware overview"))
+      hardware = group(translate("Hardware summary"))
       cpu = data.processor
       cpu_info = [cpu.name, translate("%{cores} cores · %{threads} threads", cores: count(cpu.cores), threads: count(cpu.threads))].reject(&.empty?).join("\n")
       row(hardware, translate("Processor"), cpu_info, "system-view-processor-symbolic", target: "processor")
@@ -480,7 +578,8 @@ module SystemView
     private def processor(data : Snapshot)
       heading(translate("Processor"), data.processor.name)
       firmware_status
-      details = group(translate("Identification"))
+      columns = group_columns
+      details = group(translate("Identification"), columns)
       cpu = data.processor
       row(details, translate("Model"), cpu.name)
       row(details, translate("Manufacturer"), cpu.vendor)
@@ -488,7 +587,7 @@ module SystemView
       row(details, translate("CPU family"), cpu.family)
       row(details, translate("Model ID"), cpu.model_id)
       row(details, translate("Stepping"), cpu.stepping)
-      topology = group(translate("Topology"))
+      topology = group(translate("Topology and socket"), columns)
       row(topology, translate("Physical cores"), count(cpu.cores))
       row(topology, translate("Logical processors"), count(cpu.threads))
       row(topology, translate("Socket count"), count(cpu.sockets))
@@ -497,19 +596,19 @@ module SystemView
         firmware.processors.each { |entry| processors << entry }
       end
       {cpu.sockets, 1}.max.times { processors << nil } if processors.empty?
-      processors.each_with_index do |entry, index|
-        extra = group(translate("Processor %{number}", number: index + 1))
-        locked = @firmware.nil?
-        row(extra, translate("Socket"), entry.try(&.socket) || "", locked: locked)
-        row(extra, translate("Voltage"), entry.try(&.voltage) || "", locked: locked)
-        row(extra, translate("External clock"), entry.try(&.external_clock) || "", locked: locked)
-        row(extra, translate("Configured clock"), entry.try(&.configured_clock) || "", locked: locked)
-        row(extra, translate("Maximum clock"), entry.try(&.maximum_clock) || "", locked: locked)
-        row(extra, translate("Socket type"), entry.try(&.upgrade) || "", locked: locked)
-        row(extra, translate("Processor Features"), entry.try { |processor| processor.capabilities.join("\n") } || "", locked: locked)
-        row(extra, translate("Characteristics"), entry.try { |processor| processor.characteristics.join("\n") } || "", locked: locked)
+      locked = @firmware.nil?
+      if processors.size == 1
+        entry = processors.first
+        row(topology, translate("Socket"), entry.try(&.socket) || "", locked: locked)
+        row(topology, translate("Socket type"), entry.try(&.upgrade) || "", locked: locked)
+      else
+        processors.each_with_index do |entry, index|
+          socket = group(translate("Socket %{number}", number: index + 1), columns)
+          row(socket, translate("Socket"), entry.try(&.socket) || "", locked: locked)
+          row(socket, translate("Socket type"), entry.try(&.upgrade) || "", locked: locked)
+        end
       end
-      clocks = group(translate("Clock speed"))
+      clocks = group(translate("Clock speed"), columns)
       speed = cpu.clocks
       row(clocks, translate("Base clock"), frequency(speed.base_khz))
       row(clocks, translate("Minimum clock"), frequency(speed.minimum_khz))
@@ -517,12 +616,24 @@ module SystemView
       current = frequency(speed.current_min_khz)
       current += " – #{frequency(speed.current_max_khz)}" if speed.current_max_khz > speed.current_min_khz
       row(clocks, translate("Current clock range"), current)
-      row(clocks, translate("Available frequency steps"), speed.steps_khz.map { |khz| frequency(khz) }.join(" · "))
-      row(clocks, translate("Frequency driver"), speed.driver)
-      row(clocks, translate("Governor"), speed.governor)
+      control = group(translate("Clock control"), columns)
+      row(control, translate("Available frequency steps"), speed.steps_khz.map { |khz| frequency(khz) }.join(" · "))
+      row(control, translate("Frequency driver"), speed.driver)
+      row(control, translate("Governor"), speed.governor)
       boost = speed.boost.nil? ? translate("Unknown") : (speed.boost ? translate("Yes") : translate("No"))
-      row(clocks, translate("Boost enabled"), boost)
-      caches = group(translate("Caches"))
+      row(control, translate("Boost enabled"), boost)
+      processors.each_with_index do |entry, index|
+        extra_title = translate("Additional processor information")
+        if processors.size > 1
+          extra_title = translate("%{section} · Socket %{number}", section: extra_title, number: index + 1)
+        end
+        extra = group(extra_title, columns)
+        row(extra, translate("Voltage"), entry.try(&.voltage) || "", locked: locked)
+        row(extra, translate("External clock"), entry.try(&.external_clock) || "", locked: locked)
+        row(extra, translate("Configured clock"), entry.try(&.configured_clock) || "", locked: locked)
+        row(extra, translate("Maximum clock"), entry.try(&.maximum_clock) || "", locked: locked)
+      end
+      caches = group(translate("Caches"), columns)
       row(caches, translate("Cache information"), "") if cpu.caches.empty?
       cpu.caches.each do |cache|
         kind = case cache.kind
@@ -539,6 +650,15 @@ module SystemView
         info << translate("%{ways}-way associative", ways: cache.ways) if cache.ways > 0
         row(caches, title, info.join("\n"))
       end
+      processors.each_with_index do |entry, index|
+        features_title = translate("Processor features")
+        if processors.size > 1
+          features_title = translate("%{section} · Socket %{number}", section: features_title, number: index + 1)
+        end
+        features = group(features_title, columns)
+        row(features, translate("Processor Features"), entry.try { |processor| processor.capabilities.join("\n") } || "", locked: locked)
+        row(features, translate("Characteristics"), entry.try { |processor| processor.characteristics.join("\n") } || "", locked: locked)
+      end
     end
 
     private def frequency(khz : UInt64) : String
@@ -549,11 +669,12 @@ module SystemView
     private def mainboard(data : Snapshot)
       heading(translate("Mainboard"), data.mainboard.name)
       board = data.mainboard
-      details = group(translate("Identification"))
+      columns = group_columns(2)
+      details = group(translate("Identification"), columns)
       row(details, translate("Manufacturer"), board.vendor)
       row(details, translate("Model"), board.name)
       row(details, translate("Revision"), board.version)
-      firmware = group(translate("Firmware"))
+      firmware = group(translate("Firmware"), columns)
       row(firmware, translate("BIOS vendor"), board.bios_vendor)
       row(firmware, translate("BIOS version"), board.bios_version)
       row(firmware, translate("BIOS date"), board.bios_date)
@@ -565,26 +686,20 @@ module SystemView
         row(group(translate("Graphics")), translate("Display controller"), "")
       end
       data.graphics.each do |gpu|
-        details = group(gpu.name)
+        title = Gtk::Label.new(gpu.name)
+        title.xalign = 0.0
+        title.wrap = true
+        title.add_css_class("heading")
+        @body.append(title)
+        columns = group_columns(2)
+        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
+        @two_column_layouts << columns
+        details = group(translate("Identification"), columns)
         row(details, translate("GPU model"), gpu.model)
         row(details, translate("GPU manufacturer"), gpu.vendor)
         row(details, translate("Card manufacturer"), gpu.board_vendor)
         row(details, translate("Board model"), gpu.board_model)
         row(details, translate("Model group"), gpu.model_group)
-        row(details, translate("PCI ID"), "#{gpu.vendor_id}:#{gpu.device_id}")
-        row(details, translate("Subsystem ID"), gpu.subsystem_id)
-        row(details, translate("Revision"), gpu.revision)
-        row(details, translate("PCI address"), gpu.address)
-        row(details, translate("Kernel driver"), gpu.driver)
-        row(details, translate("Dedicated video memory"), capacity(gpu.memory, binary: true))
-        row(details, translate("Current GPU clock"), gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : translate("Not reported"))
-        row(details, translate("Current video memory clock"), gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : translate("Not reported"))
-        row(details, translate("OpenGL"), gpu.opengl.empty? ? translate("Not reported") : gpu.opengl)
-        row(details, translate("GLSL"), gpu.glsl.empty? ? translate("Not reported") : gpu.glsl)
-        row(details, translate("OpenGL ES"), gpu.opengl_es.empty? ? translate("Not reported") : gpu.opengl_es)
-        row(details, translate("OpenGL renderer"), gpu.renderer) unless gpu.renderer.empty?
-        row(details, translate("Vulkan"), gpu.vulkan.empty? ? translate("Not reported") : gpu.vulkan)
-        row(details, translate("Vulkan driver"), gpu.vulkan_driver) unless gpu.vulkan_driver.empty?
         attached = data.monitors.select { |monitor| monitor.graphics_address == gpu.address }
         unless attached.empty?
           displays = attached.map do |monitor|
@@ -593,6 +708,23 @@ module SystemView
           end
           row(details, translate("Connected monitors"), displays.join("\n"), target: "monitors")
         end
+        details = group(translate("PCI and driver"), columns)
+        row(details, translate("PCI ID"), "#{gpu.vendor_id}:#{gpu.device_id}")
+        row(details, translate("Subsystem ID"), gpu.subsystem_id)
+        row(details, translate("Revision"), gpu.revision)
+        row(details, translate("PCI address"), gpu.address)
+        row(details, translate("Kernel driver"), gpu.driver)
+        details = group(translate("Memory and clocks"), columns)
+        row(details, translate("Dedicated video memory"), capacity(gpu.memory, binary: true))
+        row(details, translate("Current GPU clock"), gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : translate("Not reported"))
+        row(details, translate("Current video memory clock"), gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : translate("Not reported"))
+        details = group(translate("Graphics APIs"), columns)
+        row(details, translate("OpenGL"), gpu.opengl.empty? ? translate("Not reported") : gpu.opengl)
+        row(details, translate("GLSL"), gpu.glsl.empty? ? translate("Not reported") : gpu.glsl)
+        row(details, translate("OpenGL ES"), gpu.opengl_es.empty? ? translate("Not reported") : gpu.opengl_es)
+        row(details, translate("OpenGL renderer"), gpu.renderer) unless gpu.renderer.empty?
+        row(details, translate("Vulkan"), gpu.vulkan.empty? ? translate("Not reported") : gpu.vulkan)
+        row(details, translate("Vulkan driver"), gpu.vulkan_driver) unless gpu.vulkan_driver.empty?
       end
     end
 
@@ -602,21 +734,30 @@ module SystemView
         row(group(translate("Storage")), translate("Drives"), "")
       end
       data.drives.each do |drive|
-        details = group(drive.model)
-        row(details, translate("Model"), drive.model)
-        row(details, translate("Manufacturer"), drive.vendor)
-        row(details, translate("Capacity"), capacity(drive.bytes))
-        row(details, translate("Type"), drive.kind)
-        row(details, translate("Connection"), drive.connection)
-        row(details, translate("Device"), "/dev/#{drive.name}")
-        row(details, translate("Removable"), drive.removable ? translate("Yes") : translate("No"))
+        title = Gtk::Label.new(drive.model)
+        title.xalign = 0.0
+        title.wrap = true
+        title.add_css_class("heading")
+        @body.append(title)
+        columns = group_columns
+        identification = group("", columns)
+        row(identification, translate("Model"), drive.model)
+        row(identification, translate("Manufacturer"), drive.vendor)
+        properties = group("", columns)
+        row(properties, translate("Capacity"), capacity(drive.bytes))
+        row(properties, translate("Type"), drive.kind)
+        connection = group("", columns)
+        row(connection, translate("Connection"), drive.connection)
+        row(connection, translate("Device"), "/dev/#{drive.name}")
+        row(connection, translate("Removable"), drive.removable ? translate("Yes") : translate("No"))
       end
     end
 
     private def memory(data : Snapshot)
       heading(translate("Memory"))
       firmware_status
-      details = group(translate("Memory"))
+      columns = group_columns
+      details = group(translate("Memory"), columns)
       row(details, translate("Installed RAM"), capacity(data.memory.installed, binary: true))
       row(details, translate("Usable RAM"), capacity(data.memory.total, binary: true))
       row(details, translate("Available RAM"), capacity(data.memory.available, binary: true))
@@ -624,7 +765,7 @@ module SystemView
       unless data.memory.modules.empty?
         data.memory.modules.each_with_index do |mod, index|
           title = mod.slot.empty? ? translate("Module %{number}", number: index + 1) : mod.slot
-          details = group(title)
+          details = group(title, columns)
           info = [capacity(mod.bytes, binary: true)]
           info << mod.kind unless mod.kind.empty?
           info << "#{mod.speed_mts} MT/s" if mod.speed_mts > 0
@@ -670,16 +811,21 @@ module SystemView
       heading(translate("Monitors"))
       row(group(translate("Monitors")), translate("Monitor"), "") if data.monitors.empty?
       data.monitors.each_with_index do |monitor, index|
-        details = group(monitor_title(monitor, index + 1))
+        columns = group_columns(2)
+        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
+        @two_column_layouts << columns
+        details = group(monitor_title(monitor, index + 1), columns)
         row(details, translate("Manufacturer"), monitor.vendor)
         row(details, translate("Model"), monitor.model)
         row(details, translate("Product ID"), monitor.product_id)
         row(details, translate("Connection"), monitor.connector)
         row(details, translate("Active"), monitor.active ? translate("Yes") : translate("No"))
+        details = group("", columns)
         row(details, translate("Current resolution"), monitor.current_mode.empty? ? translate("Not reported") : monitor.current_mode)
         row(details, translate("Current refresh rate"), monitor.current_hz > 0 ? "#{monitor.current_hz.round(2)} Hz" : translate("Not reported"))
         row(details, translate("Preferred resolution"), monitor.preferred_mode)
         row(details, translate("Preferred refresh rate"), monitor.preferred_hz > 0 ? "#{monitor.preferred_hz.round(2)} Hz" : "")
+        details = group("", columns)
         if monitor.width_mm > 0 && monitor.height_mm > 0
           row(details, translate("Display size"), "#{monitor.width_mm} × #{monitor.height_mm} mm")
           diagonal = Math.sqrt(monitor.width_mm.to_f64 ** 2 + monitor.height_mm.to_f64 ** 2) / 25.4
@@ -699,10 +845,18 @@ module SystemView
       heading(translate("Audio"))
       row(group(translate("Audio")), translate("Audio device"), "") if data.audio.empty?
       data.audio.each do |device|
-        details = group(device.name)
+        title = Gtk::Label.new(device.name)
+        title.xalign = 0.0
+        title.wrap = true
+        title.add_css_class("heading")
+        @body.append(title)
+        columns = group_columns
+        details = group("", columns)
         row(details, translate("Name"), device.name)
         row(details, translate("Device ID"), device.id)
+        details = group("", columns)
         row(details, translate("Driver"), device.driver)
+        details = group("", columns)
         row(details, translate("Codecs"), device.codecs.join("\n"))
       end
     end
@@ -711,7 +865,13 @@ module SystemView
       heading(translate("Input Devices"))
       row(group(translate("Input Devices")), translate("Input device"), "") if data.inputs.empty?
       data.inputs.each do |device|
-        details = group(device.name)
+        title = Gtk::Label.new(device.name)
+        title.xalign = 0.0
+        title.wrap = true
+        title.add_css_class("heading")
+        @body.append(title)
+        columns = group_columns(2)
+        details = group("", columns)
         kind = case device.kind
                when "keyboard"    then translate("Keyboard")
                when "mouse"       then translate("Mouse")
@@ -723,6 +883,7 @@ module SystemView
                end
         row(details, translate("Type"), kind)
         row(details, translate("Connection"), device.bus)
+        details = group("", columns)
         row(details, translate("Vendor ID"), device.vendor_id)
         row(details, translate("Product ID"), device.product_id)
       end
@@ -734,7 +895,9 @@ module SystemView
         row(group(translate("Network")), translate("Network adapters"), translate("None"))
       end
       data.connectivity.devices.each do |device|
-        details = group("#{network_kind(device.kind)} · #{device.interface}")
+        columns = group_columns
+        columns.homogeneous = true
+        details = group("#{network_kind(device.kind)} · #{device.interface}", columns)
         row(details, translate("Model"), device.name) unless device.name.empty?
         row(details, translate("Interface"), device.interface)
         row(details, translate("Status"), network_state(device.state))
@@ -754,11 +917,13 @@ module SystemView
           row(details, translate("Frequency"), device.frequency_mhz > 0 ? "#{device.frequency_mhz} MHz" : "")
           row(details, translate("Security"), device.security == "open" ? translate("Open network") : device.security)
         end
-        network_addresses(device.interface, device.ipv4, 4)
-        network_addresses(device.interface, device.ipv6, 6)
+        network_addresses(device.interface, device.ipv4, 4, columns)
+        network_addresses(device.interface, device.ipv6, 6, columns)
       end
       data.connectivity.bluetooth.each do |adapter|
-        details = group("#{translate("Bluetooth")} · #{adapter.id}")
+        columns = group_columns
+        columns.homogeneous = true
+        details = group("#{translate("Bluetooth")} · #{adapter.id}", columns)
         row(details, translate("Name"), adapter.name)
         row(details, translate("MAC address"), adapter.address)
         row(details, translate("Enabled"), enabled(adapter.powered))
@@ -769,7 +934,7 @@ module SystemView
         row(details, translate("Kernel driver"), adapter.driver) unless adapter.driver.empty?
         row(details, translate("Connected devices"), adapter.devices.count(&.connected).to_s)
         adapter.devices.each do |device|
-          remote = group("#{translate("Bluetooth")} · #{device.name.presence || device.address}")
+          remote = group("#{translate("Bluetooth")} · #{device.name.presence || device.address}", columns)
           row(remote, translate("MAC address"), device.address)
           row(remote, translate("Connected"), enabled(device.connected))
           row(remote, translate("Paired"), enabled(device.paired))
@@ -778,8 +943,8 @@ module SystemView
       end
     end
 
-    private def network_addresses(interface : String, config : NetworkAddress, version : Int32)
-      details = group("#{interface} · IPv#{version}")
+    private def network_addresses(interface : String, config : NetworkAddress, version : Int32, columns : Gtk::FlowBox)
+      details = group("#{interface} · IPv#{version}", columns)
       missing = config.available ? translate("None") : translate("Unknown")
       row(details, translate("IP addresses"), config.addresses.empty? ? missing : config.addresses.join("\n"))
       row(details, translate("Address configuration"), address_method(config.method))

@@ -17,8 +17,8 @@ describe SystemView::SnapshotExport do
   it "writes an English overview report independent of the UI locale" do
     text = SystemView::SnapshotExport.overview(sample_snapshot)
     text.should start_with("# System View — workstation")
-    text.should contain("## Overview")
-    text.should contain("### Hardware overview")
+    text.should contain("## Summary")
+    text.should contain("### Hardware summary")
     text.should contain("- **Processor:** Example CPU 9000\n  - 2 cores · 4 threads")
     text.should contain("- **Mainboard:** Example Boards Board X570")
     text.should contain("- **Graphics:** Example Graphics · Example Graphics Exact GPU 5000 · 7.5 GiB")
@@ -41,15 +41,19 @@ describe SystemView::SnapshotExport do
      "## Audio", "## Input Devices", "## Network", "## Operating System"}.each do |heading|
       text.should contain(heading)
     end
-    text.should_not contain("## Overview")
-    text.should_not contain("### Hardware overview")
+    text.should_not contain("## Summary")
+    text.should_not contain("### Hardware summary")
     text.should contain("- **Operating System:** Example Linux 1.0\n- **Kernel:** 6.18.0-example\n- **Desktop Environment:** GNOME 50.5\n- **Hostname:** workstation\n- **Uptime:** 2 d 4 h 33 min")
     text.should contain("### Example Graphics Exact GPU 5000")
     text.should contain("- **Current GPU clock:** 1800 MHz")
     text.should contain("- **OpenGL:** 4.6")
     text.should contain("- **Vulkan:** 1.3.280")
     text.should contain("- **Connected monitors:** Monitor 1 (Primary) · DP-1 · 1920 × 1080 · 75.0 Hz")
-    text.should contain("### Processor 1")
+    text.should contain("### Topology and socket")
+    text.should contain("### Additional processor information")
+    text.should contain("### Processor features")
+    text.should contain("### Clock control")
+    text.should_not contain("### Processor 1")
     text.should contain("- **Socket:** AM4")
     text.should contain("- **Voltage:** 1.1 V")
     text.should contain("- **Base clock:** 3.4 GHz")
@@ -75,6 +79,15 @@ describe SystemView::SnapshotExport do
     text.should contain("- **Bluetooth version:** 5.3")
     text.should contain("### Bluetooth · Headphones")
     text.should contain("- **Signal strength:** -48 dBm")
+  end
+
+  it "keeps firmware details associated with each socket" do
+    firmware = SystemView::Firmware.parse("Handle 0x0001, DMI type 4, 48 bytes\nProcessor Information\n\tSocket Designation: CPU A\n\tVoltage: 1.1 V\nHandle 0x0002, DMI type 4, 48 bytes\nProcessor Information\n\tSocket Designation: CPU B\n\tVoltage: 1.2 V\n")
+    text = SystemView::SnapshotExport.full(sample_snapshot, firmware)
+    text.should contain("### Socket 1\n- **Socket:** CPU A")
+    text.should contain("### Socket 2\n- **Socket:** CPU B")
+    text.should contain("### Additional processor information · Socket 1\n- **Voltage:** 1.1 V")
+    text.should contain("### Additional processor information · Socket 2\n- **Voltage:** 1.2 V")
   end
 
   it "omits empty values and tolerates missing sections" do

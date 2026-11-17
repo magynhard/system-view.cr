@@ -76,7 +76,7 @@ factory = -> do
   end
   graphics_loader = ->(cards : Array(SystemView::GraphicsCard)) do
     cards.map_with_index do |card, index|
-      index == 0 ? card.copy_with(clock_mhz: 1800_u64, memory_clock_mhz: 1124_u64, opengl: "4.6", glsl: "4.60", opengl_es: "3.2", vulkan: "1.3.280", vulkan_driver: "Example driver") : card
+      index == 0 ? card.copy_with(clock_mhz: 1800_u64, memory_clock_mhz: 1124_u64, opengl: "4.6", glsl: "4.60", opengl_es: "3.2", vulkan: "1.3.280", vulkan_driver: "Example driver", renderer: "AMD Radeon RX 7600 (radeonsi, navi33, LLVM 20.1.8, DRM 3.64, 6.18.0-example)") : card
     end
   end
   display_loader = ->(monitors : Array(SystemView::Monitor)) { SystemView::DisplayConfig.enrich(monitors, display_reply) }
@@ -85,10 +85,11 @@ factory = -> do
   window.present
   phase = -8
   ticks = 0
+  resize_cycles = 0
   GLib.timeout(200.milliseconds) do
     begin
       ticks += 1
-      raise "UI test timed out" if ticks > 60
+      raise "UI test timed out" if ticks > 160
       widgets = descendants(window)
       if error_page = widgets.select(Adw::StatusPage).find { |page| page.title == "Could not read system information" }
         raise "Discovery failed: #{error_page.description}"
@@ -102,6 +103,7 @@ factory = -> do
       when -8
         if rows.any? { |row| row.subtitle.try(&.includes?("Example CPU 9000")) }
           check(Thread.current == gtk_thread, "GTK callbacks stay on the original application thread")
+          check(!window.lookup_action("back").not_nil!.enabled? && !window.lookup_action("forward").not_nil!.enabled?, "history starts with no previous or next page")
           navigation.select_row(navigation.row_at_index(2))
           locked_rows = descendants(window).select(Adw::ActionRow)
           check(banner.revealed? && banner.title == "Some hardware details are locked", "CPU page shows the unlock banner")
@@ -166,6 +168,30 @@ factory = -> do
       when 0
         if rows.any? { |row| row.subtitle.try(&.includes?("Example CPU 9000")) }
           check(navigation.selected_row.not_nil!.name == "overview", "overview selected on startup")
+          {"Back", "Forward", "Toggle sidebar"}.each do |tooltip|
+            button = widgets.select(Gtk::Button).find { |item| item.tooltip_text == tooltip }.not_nil!
+            check(button.has_css_class("flat"), "#{tooltip} button uses flat styling")
+          end
+          screenshot(window, "system-view-overview")
+          check(navigation.row_at_index(0).not_nil!.tooltip_text == "Summary", "navigation names the summary")
+          content_controls = widgets.select(Gtk::Box).find { |box| box.name == "content-controls" }.not_nil!
+          check(!content_controls.visible?, "sidebar header contains navigation controls while sidebar is open")
+          split.show_sidebar = false
+          check(content_controls.visible?, "content header exposes navigation controls while sidebar is hidden")
+          split.show_sidebar = true
+          check(!content_controls.visible?, "navigation controls return to the sidebar header")
+          back = window.lookup_action("back").not_nil!
+          forward = window.lookup_action("forward").not_nil!
+          navigation.select_row(navigation.row_at_index(1))
+          navigation.select_row(navigation.row_at_index(2))
+          back.activate(nil)
+          check(navigation.selected_row.not_nil!.name == "graphics" && forward.enabled?, "back restores the previous page")
+          forward.activate(nil)
+          check(navigation.selected_row.not_nil!.name == "processor" && !forward.enabled?, "forward restores the next page")
+          back.activate(nil)
+          navigation.select_row(navigation.row_at_index(5))
+          check(!forward.enabled?, "new navigation discards forward history")
+          navigation.select_row(navigation.row_at_index(0))
           check(navigation.row_at_index(1).not_nil!.header.is_a?(Gtk::Separator), "overview separated from hardware sections")
           check(!split.collapsed? && split.show_sidebar?, "wide sidebar is visible (width=#{window.width}, collapsed=#{split.collapsed?}, shown=#{split.show_sidebar?})")
           check(rows.any? { |row| row.subtitle.try(&.includes?("Exact GPU 5000")) }, "resolved GPU model displayed")
@@ -184,7 +210,6 @@ factory = -> do
           check(network_row.subtitle.to_s.includes?("Bluetooth · Example Bluetooth · Active"), "Bluetooth overview row reports an active adapter")
           kernel = rows.find { |row| row.title == "Kernel" }.not_nil!
           check(descendants(kernel).select(Gtk::Image).any? { |image| image.icon_name == "system-view-processor-symbolic" }, "kernel row has a leading icon")
-          screenshot(window, "system-view-overview")
           { {"Processor", "processor"}, {"Mainboard", "mainboard"}, {"Graphics", "graphics"},
            {"Monitors", "monitors"}, {"Memory", "memory"}, {"Storage", "drives"},
            {"Network", "network"}, {"Operating System", "system"}, {"Kernel", "system"},
@@ -198,6 +223,11 @@ factory = -> do
           (1..10).each do |index|
             navigation.select_row(navigation.row_at_index(index))
             detail_rows = descendants(window).select(Adw::ActionRow)
+            if {3, 5, 6, 7, 8, 9}.includes?(index)
+              layouts = descendants(window).select(Gtk::FlowBox)
+              expected_columns = {3, 6, 8}.includes?(index) ? 2 : 3
+              check(!layouts.empty? && layouts.all? { |layout| layout.max_children_per_line == expected_columns }, "detail page #{index} uses at most #{expected_columns} columns")
+            end
             check(!detail_rows.empty?, "detail page #{index} has real information")
             check(detail_rows.none? { |row| {"Capacity source", "Model identification"}.includes?(row.title) }, "detail page #{index} omits data provenance")
             check(descendants(window).select(Adw::PreferencesGroup).all? { |group| group.description.to_s.empty? }, "detail page #{index} omits implementation explanations")
@@ -290,6 +320,55 @@ factory = -> do
         if window.width >= 1000 && !split.collapsed? && split.show_sidebar?
           check(true, "expanding restores persistent sidebar")
           screenshot(window, "system-view-processor")
+          GC.collect
+          window.set_default_size(800, 780)
+          phase = -10
+        end
+      when -10
+        if window.width.in?(780..820) && split.collapsed?
+          groups = widgets.select(Adw::PreferencesGroup)
+          identification = groups.find { |group| group.title == "Identification" }.not_nil!
+          topology = groups.find { |group| group.title == "Topology and socket" }.not_nil!
+          check(identification.parent.not_nil!.compute_bounds(window).origin.y == topology.parent.not_nil!.compute_bounds(window).origin.y, "processor groups use two columns at medium width") if resize_cycles == 0
+          GC.collect
+          window.set_default_size(1040, 780)
+          phase = -11
+        end
+      when -11
+        if window.width >= 1000 && !split.collapsed?
+          resize_cycles += 1
+          if resize_cycles < 10
+            GC.collect
+            window.set_default_size(800, 780)
+            phase = -10
+          else
+            check(true, "repeated breakpoint transitions survive garbage collection")
+            window.set_default_size(360, 780)
+            phase = -12
+          end
+        end
+      when -12
+        if window.width.in?(340..380)
+          groups = widgets.select(Adw::PreferencesGroup)
+          identification = groups.find { |group| group.title == "Identification" }.not_nil!
+          topology = groups.find { |group| group.title == "Topology and socket" }.not_nil!
+          check(identification.parent.not_nil!.compute_bounds(window).origin.y < topology.parent.not_nil!.compute_bounds(window).origin.y, "processor groups stack in narrow windows")
+          window.set_default_size(1600, 780)
+          phase = -13
+        end
+      when -13
+        if window.width >= 1500
+          groups = widgets.select(Adw::PreferencesGroup)
+          identification = groups.find { |group| group.title == "Identification" }.not_nil!
+          topology = groups.find { |group| group.title == "Topology and socket" }.not_nil!
+          processor = groups.find { |group| group.title == "Clock speed" }.not_nil!
+          y = identification.parent.not_nil!.compute_bounds(window).origin.y
+          check(y == topology.parent.not_nil!.compute_bounds(window).origin.y && y == processor.parent.not_nil!.compute_bounds(window).origin.y, "processor groups use three columns in wide windows")
+          window.set_default_size(1040, 780)
+          phase = -14
+        end
+      when -14
+        if window.width.in?(1000..1100)
           scroll = widgets.select(Gtk::ScrolledWindow).find { |view| descendants(view).any? { |child| child.is_a?(Adw::Clamp) } }.not_nil!
           scroll.vadjustment.value = scroll.vadjustment.upper - scroll.vadjustment.page_size
           phase = 6
@@ -306,11 +385,19 @@ factory = -> do
         navigation.select_row(navigation.row_at_index(6))
         phase = 8
       when 8
+        monitor_layout = widgets.select(Gtk::FlowBox).first
+        monitor_groups = descendants(monitor_layout).select(Adw::PreferencesGroup)
+        check(monitor_groups[0].parent.not_nil!.compute_bounds(monitor_layout).origin.y == monitor_groups[1].parent.not_nil!.compute_bounds(monitor_layout).origin.y, "monitor groups appear side by side at desktop width")
         screenshot(window, "system-view-monitors")
         navigation.select_row(navigation.row_at_index(7))
         phase = 9
       when 9
         screenshot(window, "system-view-audio")
+        navigation.select_row(navigation.row_at_index(4))
+        phase = -9
+      when -9
+        check(widgets.select(Gtk::FlowBox).size == 2 && widgets.select(Adw::PreferencesGroup).size == 6, "each drive uses three preferences groups")
+        screenshot(window, "system-view-drives")
         navigation.select_row(navigation.row_at_index(8))
         phase = 10
       when 10
@@ -318,6 +405,11 @@ factory = -> do
         navigation.select_row(navigation.row_at_index(9))
         phase = 11
       when 11
+        network_layout = widgets.select(Gtk::FlowBox).first
+        network_groups = descendants(network_layout).select(Adw::PreferencesGroup)
+        first = network_groups[0].parent.not_nil!.compute_bounds(network_layout)
+        second = network_groups[1].parent.not_nil!.compute_bounds(network_layout)
+        check(first.origin.y == second.origin.y && (first.size.width - second.size.width).abs <= 1, "network columns have equal widths")
         screenshot(window, "system-view-network")
         window.set_default_size(360, 780)
         phase = 12
@@ -345,6 +437,14 @@ factory = -> do
         phase = 16
       when 16
         next true unless window.width >= 1000
+        graphics_columns = widgets.select(Gtk::FlowBox)
+        check(graphics_columns.size == 2 && graphics_columns.all? { |box| box.max_children_per_line == 2 }, "each GPU has at most two columns")
+        graphics_columns.each do |box|
+          titles = descendants(box).select(Adw::PreferencesGroup).map(&.title)
+          check(titles == ["Identification", "PCI and driver", "Memory and clocks", "Graphics APIs"], "each GPU retains its own graphics detail groups")
+          groups = descendants(box).select(Adw::PreferencesGroup)
+          check(groups[0].parent.not_nil!.compute_bounds(box).origin.y == groups[1].parent.not_nil!.compute_bounds(box).origin.y, "GPU groups appear side by side at desktop width")
+        end
         screenshot(window, "system-view-graphics")
         window.lookup_action("refresh").not_nil!.activate(nil)
         window.close
