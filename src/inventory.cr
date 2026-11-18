@@ -15,7 +15,9 @@ module SystemView
     clocks : CpuClocks = CpuClocks.new, caches : Array(CpuCache) = [] of CpuCache,
     flags : Array(String) = [] of String
   record Mainboard, vendor : String, name : String, version : String,
-    bios_vendor : String, bios_version : String, bios_date : String
+    bios_vendor : String, bios_version : String, bios_date : String,
+    boot_mode : String = "", secure_boot : Bool? = nil,
+    tpm_present : Bool? = nil, tpm_versions : Array(String) = [] of String
   record GraphicsCard, name : String, vendor_id : String, device_id : String,
     driver : String, address : String, memory : UInt64,
     model : String = "", vendor : String = "", board_vendor : String = "",
@@ -31,8 +33,11 @@ module SystemView
   end
   record PciNames, vendors : Hash(String, String), devices : Hash(String, String),
     subsystems : Hash(String, String)
+  record DriveHealth, failing : Bool? = nil, temperature : Float64? = nil,
+    power_on_hours : UInt64? = nil, updated_at : UInt64? = nil
   record Drive, name : String, model : String, vendor : String,
-    bytes : UInt64, kind : String, removable : Bool, connection : String = ""
+    bytes : UInt64, kind : String, removable : Bool, connection : String = "",
+    health : DriveHealth = DriveHealth.new
   record MemoryModule, slot : String, bytes : UInt64, part_number : String,
     kind : String, speed_mts : UInt64, voltage : Float64 = 0.0,
     minimum_voltage : Float64 = 0.0, maximum_voltage : Float64 = 0.0,
@@ -117,13 +122,37 @@ module SystemView
         kernel: files.read("/proc/sys/kernel/osrelease"),
         product: [files.read("#{board}/sys_vendor"), files.read("#{board}/product_name")].reject(&.empty?).uniq.join(" "),
         processor: processor(files),
-        mainboard: Mainboard.new(files.read("#{board}/board_vendor"), files.read("#{board}/board_name"),
-          files.read("#{board}/board_version"), files.read("#{board}/bios_vendor"),
-          files.read("#{board}/bios_version"), files.read("#{board}/bios_date")),
+        mainboard: mainboard(files),
         graphics: graphics(files), drives: drives(files),
         memory: memory(files), monitors: monitors(files), audio: audio_devices(files), inputs: input_devices(files), desktop: desktop,
         connectivity: connectivity || NetworkDiscovery.scan(files), uptime: uptime_seconds(files.read("/proc/uptime"))
       )
+    end
+
+    def mainboard(files : LinuxFiles) : Mainboard
+      board = "/sys/class/dmi/id"
+      efi = files.exists?("/sys/firmware/efi")
+      boot_mode = efi ? "uefi" : (files.exists?("/sys/firmware") ? "legacy" : "")
+      secure_boot = nil
+      if efi
+        data = files.read_bytes("/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c")
+        secure_boot = data[4] == 1 if data.size == 5 && data[4] <= 1
+      end
+      tpm_root = "/sys/class/tpm"
+      devices = files.children(tpm_root).select { |name| name.matches?(/^tpm\d+$/) }
+      present = devices.empty? ? (files.exists?(tpm_root) ? false : nil) : true
+      versions = devices.compact_map do |device|
+        case files.read("#{tpm_root}/#{device}/tpm_version_major")
+        when "2" then "2.0"
+        when "1"
+          caps = parse_fields(files.read("#{tpm_root}/#{device}/device/caps"), ':')
+          caps["TCG version"]?.presence || "1.x"
+        end
+      end.uniq
+      Mainboard.new(files.read("#{board}/board_vendor"), files.read("#{board}/board_name"),
+        files.read("#{board}/board_version"), files.read("#{board}/bios_vendor"),
+        files.read("#{board}/bios_version"), files.read("#{board}/bios_date"),
+        boot_mode: boot_mode, secure_boot: secure_boot, tpm_present: present, tpm_versions: versions)
     end
 
     def parse_fields(text : String, separator : Char) : Hash(String, String)

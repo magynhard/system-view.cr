@@ -46,6 +46,11 @@ class FixtureFiles < SystemView::LinuxFiles
     @files["/sys/class/dmi/id/board_vendor"] = "Example Boards"
     @files["/sys/class/dmi/id/board_name"] = "Board X570"
     @files["/sys/class/dmi/id/bios_version"] = "1.20"
+    @directories["/sys/firmware"] = ["efi"]
+    @directories["/sys/firmware/efi"] = ["efivars"]
+    @files["/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c"] = String.new(Bytes[7, 0, 0, 0, 1])
+    @directories["/sys/class/tpm"] = ["tpm0"]
+    @files["/sys/class/tpm/tpm0/tpm_version_major"] = "2"
     @directories["/sys/bus/pci/devices"] = ["0000:01:00.0", "0000:02:00.0", "0000:03:00.0"]
     {"0000:01:00.0" => {"0x030000", "0x1234", "0xabcd"},
      "0000:02:00.0" => {"0x030200", "0x5678", "0x0001"},

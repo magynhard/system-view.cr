@@ -1,5 +1,6 @@
 require "./inventory"
 require "./firmware"
+require "./drive_health"
 
 module SystemView
   # Clipboard export in plain English, independent of the UI locale, so copied
@@ -287,6 +288,23 @@ module SystemView
       lines << "### Firmware"
       add_rows(lines, [{"BIOS vendor", board.bios_vendor}, {"BIOS version", board.bios_version},
                        {"BIOS date", board.bios_date}])
+      lines << "### Boot and security"
+      mode = case board.boot_mode
+             when "uefi"   then "UEFI"
+             when "legacy" then "Legacy BIOS"
+             else               "Unknown"
+             end
+      secure_boot = board.secure_boot.nil? ? "Unknown" : (board.secure_boot ? "Active" : "Inactive")
+      tpm = if board.tpm_present.nil?
+              "Unknown"
+            elsif !board.tpm_present
+              "Not detected"
+            elsif board.tpm_versions.empty?
+              "Detected"
+            else
+              board.tpm_versions.map { |version| "TPM #{version}" }.join(" · ")
+            end
+      add_rows(lines, [{"Boot mode", mode}, {"Secure Boot", secure_boot}, {"TPM", tpm}])
     end
 
     private def drives_section(lines : Array(String), data : Snapshot) : Nil
@@ -296,7 +314,11 @@ module SystemView
         add_rows(lines, [{"Model", drive.model}, {"Manufacturer", drive.vendor},
                          {"Capacity", capacity(drive.bytes)}, {"Type", drive.kind},
                          {"Connection", drive.connection}, {"Device", "/dev/#{drive.name}"},
-                         {"Removable", drive.removable ? "Yes" : "No"}])
+                         {"Removable", drive.removable ? "Yes" : "No"},
+                         {"Status (SMART)", drive.health.failing.nil? ? "Not reported" : (drive.health.failing ? "Warning" : "OK")},
+                         {"Temperature", drive.health.temperature.try { |value| "#{value.round(1)} °C" } || "Not reported"},
+                         {"Power-on hours", drive.health.power_on_hours.try(&.to_s) || "Not reported"},
+                         {"Last updated", DriveHealthDiscovery.updated_text(drive.health.updated_at).presence || "Not reported"}])
       end
     end
 

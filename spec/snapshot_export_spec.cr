@@ -59,6 +59,7 @@ describe SystemView::SnapshotExport do
     text.should contain("- **Base clock:** 3.4 GHz")
     text.should contain("- **L3 cache (Data and instructions):** 1 × 32.0 MiB · 32.0 MiB total")
     text.should contain("### Firmware\n- **BIOS version:** 1.20")
+    text.should contain("### Boot and security\n- **Boot mode:** UEFI\n- **Secure Boot:** Active\n- **TPM:** TPM 2.0")
     text.should contain("- **Manufacturer:** Example Boards\n- **Model:** Board X570")
     text.should contain("### Example NVMe 1TB")
     text.should contain("- **Removable:** No")

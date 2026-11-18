@@ -41,8 +41,8 @@ class PackagingTests(unittest.TestCase):
             self.assertIn("--talk-name=org.gnome.Mutter.DisplayConfig", permissions)
             self.assertIn("--system-talk-name=org.freedesktop.NetworkManager", permissions)
             self.assertIn("--system-talk-name=org.bluez", permissions)
+            self.assertIn("--system-talk-name=org.freedesktop.UDisks2", permissions)
             self.assertIn("--require-version=1.17.0", permissions)
-            self.assertFalse(any("UDisks2" in permission for permission in permissions))
             for permission in ("--device=all", "--share=network", "--socket=system-bus"):
                 self.assertNotIn(permission, permissions)
             self.assertFalse(manifest["separate-locales"])

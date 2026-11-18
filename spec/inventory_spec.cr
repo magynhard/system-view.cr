@@ -27,9 +27,34 @@ describe SystemView::Inventory do
     data.hostname.should eq("workstation")
     data.mainboard.name.should eq("Board X570")
     data.mainboard.bios_version.should eq("1.20")
+    data.mainboard.boot_mode.should eq("uefi")
+    data.mainboard.secure_boot.should be_true
+    data.mainboard.tpm_present.should be_true
+    data.mainboard.tpm_versions.should eq(["2.0"])
     data.memory.total.should eq(32_768_000_000_u64)
     data.memory.available.should eq(16_384_000_000_u64)
     data.memory.swap.should eq(8_192_000_000_u64)
+  end
+
+  it "distinguishes disabled, unavailable, and malformed boot security information" do
+    files = FixtureFiles.new
+    secure_boot = "/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c"
+    files.files[secure_boot] = String.new(Bytes[7, 0, 0, 0, 0])
+    SystemView::Inventory.mainboard(files).secure_boot.should be_false
+    files.files[secure_boot] = String.new(Bytes[7, 0, 0, 0, 2])
+    SystemView::Inventory.mainboard(files).secure_boot.should be_nil
+    files.files.delete(secure_boot)
+    files.directories.delete("/sys/firmware/efi")
+    files.directories["/sys/class/tpm"] = [] of String
+    legacy = SystemView::Inventory.mainboard(files)
+    legacy.boot_mode.should eq("legacy")
+    legacy.secure_boot.should be_nil
+    legacy.tpm_present.should be_false
+    files.directories.delete("/sys/firmware")
+    files.directories.delete("/sys/class/tpm")
+    unknown = SystemView::Inventory.mainboard(files)
+    unknown.boot_mode.should be_empty
+    unknown.tpm_present.should be_nil
   end
 
   it "resolves multiple GPU models and excludes non-display PCI devices" do

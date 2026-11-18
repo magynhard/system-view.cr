@@ -80,8 +80,12 @@ factory = -> do
     end
   end
   display_loader = ->(monitors : Array(SystemView::Monitor)) { SystemView::DisplayConfig.enrich(monitors, display_reply) }
+  drive_health_loader = ->(drives : Array(SystemView::Drive)) do
+    drives.map { |drive| drive.copy_with(health: SystemView::DriveHealth.new(failing: false, temperature: 30.0, power_on_hours: 42_u64)) }
+  end
   window = SystemView::Window.new(app, files, desktop_name: "GNOME 50.5", firmware_loader: loader,
-    network_loader: network_loader, graphics_loader: graphics_loader, display_loader: display_loader)
+    network_loader: network_loader, graphics_loader: graphics_loader, display_loader: display_loader,
+    drive_health_loader: drive_health_loader)
   window.present
   phase = -8
   ticks = 0
@@ -247,6 +251,10 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Socket count" && row.subtitle == "1" }, "CPU socket quantity is explicitly labelled")
               check(detail_rows.any? { |row| row.title == "Base clock" && row.subtitle == "3.4 GHz" }, "CPU details show clock speeds")
               check(detail_rows.any? { |row| row.title == "L3 cache (Data and instructions)" && row.subtitle.try(&.includes?("32.0 MiB total")) }, "shared L3 cache is counted once")
+            elsif index == 3
+              check(detail_rows.any? { |row| row.title == "Boot mode" && row.subtitle == "UEFI" }, "mainboard shows the boot mode")
+              check(detail_rows.any? { |row| row.title == "Secure Boot" && row.subtitle == "Active" }, "mainboard shows the Secure Boot state")
+              check(detail_rows.any? { |row| row.title == "TPM" && row.subtitle == "TPM 2.0" }, "mainboard shows the TPM version")
             elsif index == 5
               check(detail_rows.any? { |row| row.title == "Voltage" && row.subtitle == "1.2 V" }, "precise module voltage is displayed")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("Corsair Vengeance LPX · CMK32GX4M2E3200C16")) }, "RAM manufacturer and series precede the model identifier")
@@ -396,7 +404,10 @@ factory = -> do
         navigation.select_row(navigation.row_at_index(4))
         phase = -9
       when -9
-        check(widgets.select(Gtk::FlowBox).size == 2 && widgets.select(Adw::PreferencesGroup).size == 6, "each drive uses three preferences groups")
+        check(widgets.select(Gtk::FlowBox).size == 2 && widgets.select(Adw::PreferencesGroup).size == 8, "each drive includes its health group")
+        check(rows.any? { |row| row.title == "Status (SMART)" && row.subtitle == "OK" }, "SMART status is displayed")
+        check(rows.any? { |row| row.title == "Temperature" && row.subtitle == "30.0 °C" }, "drive temperature is displayed")
+        check(rows.any? { |row| row.title == "Power-on hours" && row.subtitle == "42" }, "drive power-on hours are displayed")
         screenshot(window, "system-view-drives")
         navigation.select_row(navigation.row_at_index(8))
         phase = 10

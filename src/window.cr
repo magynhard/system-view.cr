@@ -4,6 +4,7 @@ require "./gtk_runtime"
 require "./graphics_diagnostics"
 require "./display_config"
 require "./export"
+require "./drive_health"
 
 module SystemView
   class Window < Adw::ApplicationWindow
@@ -33,7 +34,8 @@ module SystemView
 
     def initialize(app : Gtk::Application, @files : LinuxFiles = LinuxFiles.new, @firmware : FirmwareDetails? = nil, @desktop_name : String? = nil, @firmware_loader : Proc(FirmwareResult)? = nil, @network_loader : Proc(Connectivity)? = nil,
                    @graphics_loader : Proc(Array(GraphicsCard), Array(GraphicsCard))? = nil,
-                   @display_loader : Proc(Array(Monitor), Array(Monitor))? = nil)
+                   @display_loader : Proc(Array(Monitor), Array(Monitor))? = nil,
+                   @drive_health_loader : Proc(Array(Drive), Array(Drive))? = nil)
       super(application: app, title: "System View", default_width: 1040, default_height: 780)
       set_size_request(360, 420)
       setup_actions(app)
@@ -278,9 +280,10 @@ module SystemView
         begin
           connectivity = @network_loader.try(&.call) || NetworkDiscovery.scan(@files, SystemNetworkBus.new)
           data = Inventory.scan(@files, desktop: @desktop_name || DesktopEnvironment.detect(@files), connectivity: connectivity)
+          drives = @drive_health_loader.try(&.call(data.drives)) || DriveHealthDiscovery.scan(data.drives, SystemNetworkBus.new)
           graphics = @graphics_loader.try(&.call(data.graphics)) || GraphicsDiagnostics.scan(data.graphics)
           monitors = @display_loader.try(&.call(data.monitors)) || DisplayConfig.enrich(data.monitors)
-          results.send(data.copy_with(graphics: graphics, monitors: monitors))
+          results.send(data.copy_with(graphics: graphics, monitors: monitors, drives: drives))
         rescue error : Exception
           results.send(error)
         end
@@ -678,6 +681,24 @@ module SystemView
       row(firmware, translate("BIOS vendor"), board.bios_vendor)
       row(firmware, translate("BIOS version"), board.bios_version)
       row(firmware, translate("BIOS date"), board.bios_date)
+      security = group(translate("Boot and security"), columns)
+      mode = case board.boot_mode
+             when "uefi"   then "UEFI"
+             when "legacy" then translate("Legacy BIOS")
+             else               translate("Unknown")
+             end
+      row(security, translate("Boot mode"), mode)
+      row(security, translate("Secure Boot"), power_state(board.secure_boot))
+      tpm = if board.tpm_present.nil?
+              translate("Unknown")
+            elsif !board.tpm_present
+              translate("Not detected")
+            elsif board.tpm_versions.empty?
+              translate("Detected")
+            else
+              board.tpm_versions.map { |version| "TPM #{version}" }.join(" · ")
+            end
+      row(security, translate("TPM"), tpm)
     end
 
     private def graphics(data : Snapshot)
@@ -750,6 +771,12 @@ module SystemView
         row(connection, translate("Connection"), drive.connection)
         row(connection, translate("Device"), "/dev/#{drive.name}")
         row(connection, translate("Removable"), drive.removable ? translate("Yes") : translate("No"))
+        health = group("", columns)
+        status = drive.health.failing.nil? ? translate("Not reported") : (drive.health.failing ? translate("Warning") : translate("OK"))
+        row(health, translate("Status (SMART)"), status)
+        row(health, translate("Temperature"), drive.health.temperature.try { |value| "#{value.round(1)} °C" } || translate("Not reported"))
+        row(health, translate("Power-on hours"), drive.health.power_on_hours.try(&.to_s) || translate("Not reported"))
+        row(health, translate("Last updated"), DriveHealthDiscovery.updated_text(drive.health.updated_at).presence || translate("Not reported"))
       end
     end
 

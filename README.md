@@ -149,6 +149,11 @@ protocol names such as ATA/USB are not treated as manufacturers. Explicit model
 brand prefixes identify common vendors when ATA metadata omits the manufacturer.
 Connection type (such as SATA or USB) is displayed separately.
 
+Drive health uses cached UDisks2 SMART properties for status, temperature and
+power-on hours when available. The displayed update time indicates the age of
+the cached reading. No SMART update is requested and devices are not opened by
+the application; unsupported or inaccessible values remain Not reported.
+
 CPU socket count means the number of processor packages, not a socket type such
 as AM4. Processor Features lists the additional processor capabilities after
 unlocking. The optional additional-details
