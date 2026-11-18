@@ -85,7 +85,8 @@ factory = -> do
   end
   window = SystemView::Window.new(app, files, desktop_name: "GNOME 50.5", firmware_loader: loader,
     network_loader: network_loader, graphics_loader: graphics_loader, display_loader: display_loader,
-    drive_health_loader: drive_health_loader)
+    drive_health_loader: drive_health_loader,
+    runtime_info: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"))
   window.present
   phase = -8
   ticks = 0
@@ -227,9 +228,9 @@ factory = -> do
           (1..11).each do |index|
             navigation.select_row(navigation.row_at_index(index))
             detail_rows = descendants(window).select(Adw::ActionRow)
-            if {3, 5, 6, 7, 8, 9}.includes?(index)
+            if {3, 5, 6, 7, 8, 9, 10}.includes?(index)
               layouts = descendants(window).select(Gtk::FlowBox)
-              expected_columns = {3, 6, 8}.includes?(index) ? 2 : 3
+              expected_columns = {3, 6, 8, 9, 10}.includes?(index) ? 2 : 3
               check(!layouts.empty? && layouts.all? { |layout| layout.max_children_per_line == expected_columns }, "detail page #{index} uses at most #{expected_columns} columns")
             end
             check(!detail_rows.empty?, "detail page #{index} has real information")
@@ -281,6 +282,11 @@ factory = -> do
             elsif index == 10
               check(detail_rows.none? { |row| row.title == "Computer model" }, "OS page omits redundant computer model")
               check(detail_rows.any? { |row| row.title == "Uptime" && row.subtitle == "2 d 4 h 33 min" }, "OS page shows the uptime")
+              check(detail_rows.any? { |row| row.title == "Session type" && row.subtitle == "Wayland" }, "OS page shows the session type")
+              check(detail_rows.any? { |row| row.title == "System architecture" && row.subtitle == "x86_64" }, "OS page shows the system architecture")
+              check(detail_rows.any? { |row| row.title == "Virtualization" && row.subtitle == "KVM/QEMU" }, "OS page shows the virtual machine")
+              check(detail_rows.any? { |row| row.title == "Container" && row.subtitle == "Podman" }, "OS page distinguishes the host container")
+              check(detail_rows.any? { |row| row.title == "Application format" && row.subtitle == "Flatpak" }, "OS page shows the application format")
             elsif index == 11
               check(detail_rows.any? { |row| row.title == "Connected" && row.subtitle == "Yes" }, "power adapter status is displayed")
               check(detail_rows.any? { |row| row.title == "Charge" && row.subtitle == "80.0 %" }, "battery charge is displayed")
@@ -422,6 +428,7 @@ factory = -> do
         phase = 11
       when 11
         network_layout = widgets.select(Gtk::FlowBox).first
+        check(widgets.select(Gtk::FlowBox).all? { |box| box.min_children_per_line == 2 }, "wide network layouts require two columns")
         network_groups = descendants(network_layout).select(Adw::PreferencesGroup)
         first = network_groups[0].parent.not_nil!.compute_bounds(network_layout)
         second = network_groups[1].parent.not_nil!.compute_bounds(network_layout)
@@ -432,6 +439,7 @@ factory = -> do
       when 12
         if window.width.in?(340..380)
           check(split.collapsed?, "network page supports the minimum-width layout")
+          check(widgets.select(Gtk::FlowBox).all? { |box| box.min_children_per_line == 1 }, "narrow network layouts stack their columns")
           scroll = widgets.select(Gtk::ScrolledWindow).find { |view| descendants(view).any? { |child| child.is_a?(Adw::Clamp) } }.not_nil!
           check(scroll.hadjustment.upper <= scroll.hadjustment.page_size + 1, "network details fit without horizontal scrolling")
           screenshot(window, "system-view-network-narrow")

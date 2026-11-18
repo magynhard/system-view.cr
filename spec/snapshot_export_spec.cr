@@ -9,7 +9,8 @@ private def sample_snapshot : SystemView::Snapshot
     connectivity: SystemView::NetworkDiscovery.scan(network_files, FixtureNetworkBus.new))
   gpu = data.graphics.first
   monitor = data.monitors.first
-  data.copy_with(graphics: [gpu.copy_with(clock_mhz: 1800_u64, memory_clock_mhz: 1124_u64, opengl: "4.6", glsl: "4.60", opengl_es: "3.2", vulkan: "1.3.280", vulkan_driver: "Example driver")],
+  data.copy_with(runtime: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"),
+    graphics: [gpu.copy_with(clock_mhz: 1800_u64, memory_clock_mhz: 1124_u64, opengl: "4.6", glsl: "4.60", opengl_es: "3.2", vulkan: "1.3.280", vulkan_driver: "Example driver")],
     monitors: [monitor.copy_with(graphics_address: gpu.address, current_mode: "1920 × 1080", current_hz: 75.0, number: 1, primary: true)])
 end
 
@@ -44,6 +45,7 @@ describe SystemView::SnapshotExport do
     text.should_not contain("## Summary")
     text.should_not contain("### Hardware summary")
     text.should contain("- **Operating System:** Example Linux 1.0\n- **Kernel:** 6.18.0-example\n- **Desktop Environment:** GNOME 50.5\n- **Hostname:** workstation\n- **Uptime:** 2 d 4 h 33 min")
+    text.should contain("### Runtime environment\n- **Session type:** Wayland\n- **System architecture:** x86_64\n- **Virtualization:** KVM/QEMU\n- **Container:** Podman\n- **Application format:** Flatpak")
     text.should contain("### Example Graphics Exact GPU 5000")
     text.should contain("- **Current GPU clock:** 1800 MHz")
     text.should contain("- **OpenGL:** 4.6")

@@ -2,6 +2,19 @@ require "set"
 require "./ram_identity"
 require "./network"
 
+lib LibSystemViewUname
+  struct UtsName
+    sysname : StaticArray(UInt8, 65)
+    nodename : StaticArray(UInt8, 65)
+    release : StaticArray(UInt8, 65)
+    version : StaticArray(UInt8, 65)
+    machine : StaticArray(UInt8, 65)
+    domainname : StaticArray(UInt8, 65)
+  end
+
+  fun uname(name : UtsName*) : Int32
+end
+
 module SystemView
   record CpuClocks, minimum_khz : UInt64 = 0_u64, maximum_khz : UInt64 = 0_u64,
     base_khz : UInt64 = 0_u64, current_min_khz : UInt64 = 0_u64, current_max_khz : UInt64 = 0_u64,
@@ -49,17 +62,21 @@ module SystemView
     unit : String = "", cycles : UInt64? = nil, power : Float64? = nil, remaining_seconds : UInt64? = nil
   record PowerAdapter, name : String, online : Bool? = nil
   record PowerSupply, batteries : Array(Battery) = [] of Battery, adapters : Array(PowerAdapter) = [] of PowerAdapter
+  record RuntimeInfo, session : String = "", architecture : String = "", virtualization : String = "",
+    container : String = "", app_format : String = ""
   record Snapshot, hostname : String, os : String, kernel : String,
     product : String, processor : Processor, mainboard : Mainboard,
     graphics : Array(GraphicsCard), drives : Array(Drive), memory : Memory,
     monitors : Array(Monitor) = [] of Monitor, audio : Array(AudioDevice) = [] of AudioDevice,
     inputs : Array(InputDevice) = [] of InputDevice, desktop : String = "",
     connectivity : Connectivity = Connectivity.new, uptime : Float64 = 0.0,
-    power_supply : PowerSupply = PowerSupply.new
+    power_supply : PowerSupply = PowerSupply.new, runtime : RuntimeInfo = RuntimeInfo.new
 
   # Root injection keeps discovery testable without probing devices or executing
   # external commands. Flatpak host paths are mapped only for read-only discovery.
   class LinuxFiles
+    getter? sandboxed : Bool
+
     def initialize(@root : String = "/", @sandboxed : Bool = File.file?("/.flatpak-info"))
     end
 
@@ -97,6 +114,17 @@ module SystemView
       File.exists?(self.path(path))
     end
 
+    def host_read(path : String) : String
+      return read(path) unless @sandboxed
+      File.read("/run/host/root#{path}").scrub.strip
+    rescue File::Error | IO::Error
+      ""
+    end
+
+    def host_exists?(path : String) : Bool
+      @sandboxed ? File.exists?("/run/host/root#{path}") : exists?(path)
+    end
+
     def link_name(path : String) : String
       File.basename(File.readlink(self.path(path)))
     rescue File::Error | IO::Error
@@ -119,7 +147,7 @@ module SystemView
                      ""
                    {% end %}
 
-    def scan(files = LinuxFiles.new, desktop : String = "", connectivity : Connectivity? = nil) : Snapshot
+    def scan(files = LinuxFiles.new, desktop : String = "", connectivity : Connectivity? = nil, runtime : RuntimeInfo? = nil) : Snapshot
       os = parse_fields(files.read("/etc/os-release"), '=')
       board = "/sys/class/dmi/id"
       Snapshot.new(
@@ -132,8 +160,49 @@ module SystemView
         graphics: graphics(files), drives: drives(files),
         memory: memory(files), monitors: monitors(files), audio: audio_devices(files), inputs: input_devices(files), desktop: desktop,
         connectivity: connectivity || NetworkDiscovery.scan(files), uptime: uptime_seconds(files.read("/proc/uptime")),
-        power_supply: power_supply(files)
+        power_supply: power_supply(files), runtime: runtime || runtime_info(files)
       )
+    end
+
+    def runtime_info(files : LinuxFiles, session : String = ENV["XDG_SESSION_TYPE"]? || "",
+                     appimage : Bool = !!ENV["APPIMAGE"]?) : RuntimeInfo
+      session = case session.downcase
+                when "wayland" then "Wayland"
+                when "x11"     then "X11"
+                when "tty"     then "TTY"
+                when "mir"     then "Mir"
+                else                ""
+                end
+      uts = uninitialized LibSystemViewUname::UtsName
+      architecture = LibSystemViewUname.uname(pointerof(uts)) == 0 ? String.new(uts.machine.to_unsafe) : ""
+      container = files.host_read("/run/systemd/container").downcase
+      container = "docker" if container.empty? && files.host_exists?("/.dockerenv")
+      container = "podman" if container.empty? && files.host_exists?("/run/.containerenv")
+      container = case container
+                  when "docker"             then "Docker"
+                  when "podman"             then "Podman"
+                  when "lxc", "lxc-libvirt" then "LXC"
+                  when "systemd-nspawn"     then "systemd-nspawn"
+                  when "containerd"         then "containerd"
+                  else                           ""
+                  end
+      hypervisor = files.host_read("/sys/hypervisor/type").downcase
+      flags = files.host_read("/proc/cpuinfo")
+      virtualized = !hypervisor.empty? || flags.each_line.any? { |line| line.matches?(/^flags\s*:/) && line.split.includes?("hypervisor") }
+      virtualization = if virtualized
+                         identity = [hypervisor, files.host_read("/sys/class/dmi/id/sys_vendor"), files.host_read("/sys/class/dmi/id/product_name")].join(" ").downcase
+                         case identity
+                         when /kvm|qemu/                      then "KVM/QEMU"
+                         when /vmware/                        then "VMware"
+                         when /virtualbox|innotek/            then "VirtualBox"
+                         when /xen/                           then "Xen"
+                         when /microsoft corporation|hyper-v/ then "Hyper-V"
+                         else                                      "virtual-machine"
+                         end
+                       else
+                         ""
+                       end
+      RuntimeInfo.new(session, architecture, virtualization, container, files.sandboxed? ? "Flatpak" : (appimage ? "AppImage" : ""))
     end
 
     def power_supply(files : LinuxFiles) : PowerSupply

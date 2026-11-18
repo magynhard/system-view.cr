@@ -35,7 +35,8 @@ module SystemView
     def initialize(app : Gtk::Application, @files : LinuxFiles = LinuxFiles.new, @firmware : FirmwareDetails? = nil, @desktop_name : String? = nil, @firmware_loader : Proc(FirmwareResult)? = nil, @network_loader : Proc(Connectivity)? = nil,
                    @graphics_loader : Proc(Array(GraphicsCard), Array(GraphicsCard))? = nil,
                    @display_loader : Proc(Array(Monitor), Array(Monitor))? = nil,
-                   @drive_health_loader : Proc(Array(Drive), Array(Drive))? = nil)
+                   @drive_health_loader : Proc(Array(Drive), Array(Drive))? = nil,
+                   @runtime_info : RuntimeInfo? = nil)
       super(application: app, title: "System View", default_width: 1040, default_height: 780)
       set_size_request(360, 420)
       setup_actions(app)
@@ -280,7 +281,7 @@ module SystemView
       Fiber::ExecutionContext::Isolated.new("system-discovery") do
         begin
           connectivity = @network_loader.try(&.call) || NetworkDiscovery.scan(@files, SystemNetworkBus.new)
-          data = Inventory.scan(@files, desktop: @desktop_name || DesktopEnvironment.detect(@files), connectivity: connectivity)
+          data = Inventory.scan(@files, desktop: @desktop_name || DesktopEnvironment.detect(@files), connectivity: connectivity, runtime: @runtime_info)
           drives = @drive_health_loader.try(&.call(data.drives)) || DriveHealthDiscovery.scan(data.drives, SystemNetworkBus.new)
           graphics = @graphics_loader.try(&.call(data.graphics)) || GraphicsDiagnostics.scan(data.graphics)
           monitors = @display_loader.try(&.call(data.monitors)) || DisplayConfig.enrich(data.monitors)
@@ -828,12 +829,20 @@ module SystemView
 
     private def system(data : Snapshot)
       heading(translate("Operating System"), data.os)
-      details = group(translate("System"))
+      columns = group_columns(2)
+      details = group(translate("System"), columns)
       row(details, translate("Operating System"), data.os)
       row(details, translate("Kernel"), data.kernel)
       row(details, translate("Desktop Environment"), data.desktop)
       row(details, translate("Hostname"), data.hostname)
       row(details, translate("Uptime"), uptime_text(data.uptime))
+      runtime = group(translate("Runtime environment"), columns)
+      row(runtime, translate("Session type"), data.runtime.session)
+      row(runtime, translate("System architecture"), data.runtime.architecture)
+      virtualization = data.runtime.virtualization == "virtual-machine" ? translate("Virtual machine") : data.runtime.virtualization
+      row(runtime, translate("Virtualization"), virtualization)
+      row(runtime, translate("Container"), data.runtime.container)
+      row(runtime, translate("Application format"), data.runtime.app_format)
     end
 
     private def power(data : Snapshot)
@@ -964,7 +973,9 @@ module SystemView
         row(group(translate("Network")), translate("Network adapters"), translate("None"))
       end
       data.connectivity.devices.each do |device|
-        columns = group_columns
+        columns = group_columns(2)
+        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
+        @two_column_layouts << columns
         columns.homogeneous = true
         details = group("#{network_kind(device.kind)} · #{device.interface}", columns)
         row(details, translate("Model"), device.name) unless device.name.empty?
@@ -990,17 +1001,20 @@ module SystemView
         network_addresses(device.interface, device.ipv6, 6, columns)
       end
       data.connectivity.bluetooth.each do |adapter|
-        columns = group_columns
+        columns = group_columns(2)
+        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
+        @two_column_layouts << columns
         columns.homogeneous = true
         details = group("#{translate("Bluetooth")} · #{adapter.id}", columns)
         row(details, translate("Name"), adapter.name)
         row(details, translate("MAC address"), adapter.address)
+        row(details, translate("Kernel driver"), adapter.driver) unless adapter.driver.empty?
+        details = group("", columns)
         row(details, translate("Enabled"), enabled(adapter.powered))
         row(details, translate("Bluetooth version"), adapter.version)
         row(details, translate("Link speed"), translate("Not reported"))
         row(details, translate("Discoverable"), enabled(adapter.discoverable))
         row(details, translate("Pairable"), enabled(adapter.pairable))
-        row(details, translate("Kernel driver"), adapter.driver) unless adapter.driver.empty?
         row(details, translate("Connected devices"), adapter.devices.count(&.connected).to_s)
         adapter.devices.each do |device|
           remote = group("#{translate("Bluetooth")} · #{device.name.presence || device.address}", columns)

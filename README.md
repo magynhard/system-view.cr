@@ -94,7 +94,7 @@ Refresh keeps the selected page. The application only reads system information.
 | Graphics | PCI display controllers in `/sys/bus/pci/devices`, `pci.ids`, libdrm `amdgpu.ids` and optional driver-reported product names |
 | RAM | Cached udev/SMBIOS module sizes in `/run/udev/data/+dmi:id`; `/proc/meminfo` for usable and available memory |
 | Drives | Physical block devices in `/sys/block`, cached udev model/vendor/transport properties; sizes use 512-byte kernel sectors |
-| System | `os-release`, kernel version, hostname and computer model |
+| System | `os-release`, kernel version, hostname, session type, kernel architecture and detectable virtualization or container environment |
 | Monitors | Connected DRM outputs and validated base EDID blocks |
 | Audio | ALSA card and codec metadata in `/proc/asound` |
 | Input devices | `/proc/bus/input/devices` and cached udev classification, without opening event devices |

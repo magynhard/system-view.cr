@@ -498,6 +498,12 @@ module SystemView
       add_rows(lines, [{"Operating System", data.os}, {"Kernel", data.kernel},
                        {"Desktop Environment", data.desktop}, {"Hostname", data.hostname},
                        {"Uptime", uptime_text(data.uptime)}])
+      lines << "### Runtime environment"
+      runtime = data.runtime
+      virtualization = runtime.virtualization == "virtual-machine" ? "Virtual machine" : runtime.virtualization
+      add_rows(lines, [{"Session type", unknown(runtime.session)}, {"System architecture", unknown(runtime.architecture)},
+                       {"Virtualization", unknown(virtualization)}, {"Container", unknown(runtime.container)},
+                       {"Application format", unknown(runtime.app_format)}])
     end
   end
 end
