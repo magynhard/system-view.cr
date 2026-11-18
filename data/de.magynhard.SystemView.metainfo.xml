@@ -23,6 +23,14 @@
   <content_rating type="oars-1.1"/>
   <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
   <releases>
+    <release version="0.2.0" date="2026-11-18">
+      <description>
+        <p>Explore hardware and connected devices in a clear, adaptive overview.</p>
+        <p>View components and connected devices, available live readings, power information and sensors. Open GNOME Settings, copy system information and unlock additional hardware details when available.</p>
+        <p xml:lang="de">Hardware und verbundene Geräte in einer übersichtlichen, adaptiven Oberfläche erkunden.</p>
+        <p xml:lang="de">Komponenten und verbundene Geräte, verfügbare Live-Werte, Energieinformationen und Sensoren anzeigen. GNOME-Einstellungen öffnen, Systeminformationen kopieren und zusätzliche Hardwaredetails bei Verfügbarkeit freischalten.</p>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-11-16">
       <description>
         <p>Initial system overview with adaptive navigation, hardware detail pages and a native application icon.</p>

@@ -5,13 +5,13 @@ module SystemView::I18n
 
   DOMAIN = "de.magynhard.SystemView"
 
-    def setup(locale_dir : String = default_locale_dir) : Nil
-      LibC.setlocale(Gettext::LC::ALL, "C") if LibC.setlocale(Gettext::LC::ALL, "").null?
-      if ENV["SYSTEM_VIEW_LANGUAGE"]? == "en"
-        ENV["LANGUAGE"] = "en"
-        LibC.setlocale(Gettext::LC::MESSAGES, "C.UTF-8") || LibC.setlocale(Gettext::LC::MESSAGES, "C")
-      end
-      Gettext.bindtextdomain(DOMAIN, locale_dir)
+  def setup(locale_dir : String = default_locale_dir) : Nil
+    LibC.setlocale(Gettext::LC::ALL, "C") if LibC.setlocale(Gettext::LC::ALL, "").null?
+    if ENV["SYSTEM_VIEW_LANGUAGE"]? == "en"
+      ENV["LANGUAGE"] = "en"
+      LibC.setlocale(Gettext::LC::MESSAGES, "C.UTF-8") || LibC.setlocale(Gettext::LC::MESSAGES, "C")
+    end
+    Gettext.bindtextdomain(DOMAIN, locale_dir)
     Gettext.bind_textdomain_codeset(DOMAIN, "UTF-8")
   end
 
