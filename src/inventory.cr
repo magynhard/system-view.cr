@@ -1,6 +1,7 @@
 require "set"
 require "./ram_identity"
 require "./network"
+require "./printers"
 
 lib LibSystemViewUname
   struct UtsName
@@ -38,7 +39,8 @@ module SystemView
     revision : String = "", model_source : GraphicsModelSource = GraphicsModelSource::Unknown,
     clock_mhz : UInt64 = 0_u64, memory_clock_mhz : UInt64 = 0_u64,
     opengl : String = "", glsl : String = "", opengl_es : String = "", renderer : String = "",
-    vulkan : String = "", vulkan_driver : String = ""
+    vulkan : String = "", vulkan_driver : String = "", vulkan_device_type : String = "", vulkan_driver_version : String = "",
+    pcie_current : String = "", pcie_maximum : String = "", utilization : Float64? = nil, power_watts : Float64? = nil
   enum GraphicsModelSource
     Unknown
     Driver
@@ -70,7 +72,9 @@ module SystemView
     monitors : Array(Monitor) = [] of Monitor, audio : Array(AudioDevice) = [] of AudioDevice,
     inputs : Array(InputDevice) = [] of InputDevice, desktop : String = "",
     connectivity : Connectivity = Connectivity.new, uptime : Float64 = 0.0,
-    power_supply : PowerSupply = PowerSupply.new, runtime : RuntimeInfo = RuntimeInfo.new
+    power_supply : PowerSupply = PowerSupply.new, runtime : RuntimeInfo = RuntimeInfo.new,
+    audio_session : AudioSession = AudioSession.new, sensors : Array(Sensor) = [] of Sensor,
+    video_devices : Array(VideoDevice) = [] of VideoDevice, printers : Printers = Printers.new
 
   # Root injection keeps discovery testable without probing devices or executing
   # external commands. Flatpak host paths are mapped only for read-only discovery.
@@ -160,8 +164,26 @@ module SystemView
         graphics: graphics(files), drives: drives(files),
         memory: memory(files), monitors: monitors(files), audio: audio_devices(files), inputs: input_devices(files), desktop: desktop,
         connectivity: connectivity || NetworkDiscovery.scan(files), uptime: uptime_seconds(files.read("/proc/uptime")),
-        power_supply: power_supply(files), runtime: runtime || runtime_info(files)
+        power_supply: power_supply(files), runtime: runtime || runtime_info(files),
+        sensors: sensors(files), video_devices: video_devices(files)
       )
+    end
+
+    def live_snapshot(files : LinuxFiles, data : Snapshot) : Snapshot
+      cpus = files.children("/sys/devices/system/cpu").select { |name| name.matches?(/^cpu\d+$/) }
+      clocks = cpu_clocks(files, cpus)
+      processor = data.processor.copy_with(clocks: clocks)
+      graphics = data.graphics.map do |gpu|
+        base = "/sys/bus/pci/devices/#{gpu.address}"
+        gpu.copy_with(clock_mhz: active_graphics_clock(files.read("#{base}/pp_dpm_sclk")),
+          memory_clock_mhz: active_graphics_clock(files.read("#{base}/pp_dpm_mclk")),
+          pcie_current: pcie_link(files.read("#{base}/current_link_speed"), files.read("#{base}/current_link_width")),
+          utilization: gpu_utilization(files.read("#{base}/gpu_busy_percent")), power_watts: gpu_power(files, base))
+      end
+      meminfo = parse_fields(files.read("/proc/meminfo"), ':')
+      data.copy_with(processor: processor, graphics: graphics,
+        memory: data.memory.copy_with(available: kilobytes(meminfo["MemAvailable"]?)),
+        uptime: uptime_seconds(files.read("/proc/uptime")), power_supply: power_supply(files), sensors: sensors(files))
     end
 
     def runtime_info(files : LinuxFiles, session : String = ENV["XDG_SESSION_TYPE"]? || "",
@@ -471,8 +493,44 @@ module SystemView
           board_model: board_model, model_group: model_group, subsystem_id: subsystem,
           revision: revision, model_source: source,
           clock_mhz: active_graphics_clock(files.read("#{base}/pp_dpm_sclk")),
-          memory_clock_mhz: active_graphics_clock(files.read("#{base}/pp_dpm_mclk")))
+          memory_clock_mhz: active_graphics_clock(files.read("#{base}/pp_dpm_mclk")),
+          pcie_current: pcie_link(files.read("#{base}/current_link_speed"), files.read("#{base}/current_link_width")),
+          pcie_maximum: pcie_link(files.read("#{base}/max_link_speed"), files.read("#{base}/max_link_width")),
+          utilization: gpu_utilization(files.read("#{base}/gpu_busy_percent")),
+          power_watts: gpu_power(files, base))
       end
+    end
+
+    def pcie_link(speed : String, width : String) : String
+      rate = speed.match(/\A(2\.5|5(?:\.0)?|8(?:\.0)?|16(?:\.0)?|32(?:\.0)?|64(?:\.0)?) GT\/s(?:\s|\z)/).try(&.[1])
+      lanes = width.to_u32?
+      generation = case rate.try(&.to_f64?)
+                   when  2.5 then "1.0"
+                   when  5.0 then "2.0"
+                   when  8.0 then "3.0"
+                   when 16.0 then "4.0"
+                   when 32.0 then "5.0"
+                   when 64.0 then "6.0"
+                   end
+      parts = [] of String
+      parts << "PCIe #{generation}" if generation
+      parts << "#{rate} GT/s" if rate
+      parts << "x#{lanes}" if lanes && {1, 2, 4, 8, 12, 16, 32}.includes?(lanes)
+      parts.join(" · ")
+    end
+
+    def gpu_utilization(text : String) : Float64?
+      value = nonnegative_number(text)
+      value && value <= 100 ? value : nil
+    end
+
+    def gpu_power(files : LinuxFiles, base : String) : Float64?
+      files.children("#{base}/hwmon").each do |name|
+        path = "#{base}/hwmon/#{name}"
+        value = nonnegative_number(files.read("#{path}/power1_average")) || nonnegative_number(files.read("#{path}/power1_input"))
+        return value / 1_000_000 if value
+      end
+      nil
     end
 
     def active_graphics_clock(text : String) : UInt64

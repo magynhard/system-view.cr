@@ -5,10 +5,42 @@ module SystemView
     vendor_code : String = "", serial : String = "", graphics_address : String = "",
     number : Int32 = 0, primary : Bool? = nil, current_mode : String = "", current_hz : Float64 = 0.0
   record AudioDevice, name : String, id : String, driver : String, codecs : Array(String)
+  record AudioSession, server : String = "", output : String = "", input : String = ""
   record InputDevice, name : String, kind : String, bus : String, vendor_id : String,
     product_id : String, handlers : String
+  record Sensor, id : String, chip : String, label : String, kind : String, value : Float64?
+  record VideoDevice, name : String, device : String, kind : String = ""
 
   module Inventory
+    def sensors(files : LinuxFiles) : Array(Sensor)
+      files.children("/sys/class/hwmon").flat_map do |chip|
+        base = "/sys/class/hwmon/#{chip}"
+        chip_name = files.read("#{base}/name").presence || chip
+        files.children(base).compact_map do |entry|
+          match = entry.match(/\A(temp|fan)(\d+)_input\z/)
+          next unless match
+          kind, number = match[1], match[2]
+          raw = files.read("#{base}/#{entry}").to_i64?
+          value = raw ? (kind == "temp" ? raw.to_f64 / 1000 : (raw >= 0 ? raw.to_f64 : nil)) : nil
+          label = files.read("#{base}/#{kind}#{number}_label")
+          Sensor.new("#{chip}/#{kind}#{number}", chip_name, label, kind, value)
+        end
+      end
+    end
+
+    def video_devices(files : LinuxFiles) : Array(VideoDevice)
+      files.children("/sys/class/video4linux").compact_map do |entry|
+        next unless entry.matches?(/\Avideo\d+\z/)
+        base = "/sys/class/video4linux/#{entry}"
+        number = files.read("#{base}/dev")
+        properties = number.matches?(/\A\d+:\d+\z/) ? udev_properties(files, "/run/udev/data/c#{number}") : {} of String => String
+        capabilities = properties["ID_V4L_CAPABILITIES"]? || ""
+        next if !capabilities.empty? && !capabilities.split(':').includes?("capture")
+        name = files.read("#{base}/name").presence || properties["ID_V4L_PRODUCT"]? || entry
+        VideoDevice.new(name, "/dev/#{entry}", capabilities.split(':').includes?("capture") ? "capture" : "")
+      end
+    end
+
     def monitors(files : LinuxFiles) : Array(Monitor)
       files.children("/sys/class/drm").compact_map do |entry|
         next unless match = entry.match(/^card\d+-(.+)$/)
@@ -73,7 +105,17 @@ module SystemView
     end
 
     def input_devices(files : LinuxFiles) : Array(InputDevice)
-      files.read("/proc/bus/input/devices").split(/\n\s*\n/).compact_map do |block|
+      blocks = files.read("/proc/bus/input/devices").split(/\n\s*\n/)
+      keyboard_interfaces = blocks.compact_map do |block|
+        handlers = block.match(/^H: Handlers=([^\n]*)$/m).try(&.[1]).to_s.split
+        next unless handlers.includes?("kbd")
+        name = block.match(/^N: Name="([^\n]*)"$/m).try(&.[1]) || ""
+        physical = block.match(/^P: Phys=([^\n]*)$/m).try(&.[1]).to_s.strip
+        ids = block.match(/^I: Bus=([0-9a-f]+) Vendor=([0-9a-f]+) Product=([0-9a-f]+)/m)
+        next if name.empty? || physical.empty? || ids.nil?
+        {name, physical, ids[1], ids[2], ids[3]}
+      end
+      blocks.compact_map do |block|
         name = block.match(/^N: Name="([^\n]*)"$/m).try(&.[1]) || ""
         handlers = block.match(/^H: Handlers=([^\n]*)$/m).try(&.[1]) || ""
         event = handlers.split.find { |handler| handler.matches?(/^event\d+$/) }
@@ -87,6 +129,11 @@ module SystemView
         kind = "mouse" if kind.empty? && handlers.split.any?(&.starts_with?("mouse"))
         next if kind.empty? || name.empty?
         ids = block.match(/^I: Bus=([0-9a-f]+) Vendor=([0-9a-f]+) Product=([0-9a-f]+)/m)
+        physical = block.match(/^P: Phys=([^\n]*)$/m).try(&.[1]).to_s.strip
+        if kind == "mouse" && ids && !physical.empty? && name.ends_with?(" Mouse")
+          identity = {name.rchop(" Mouse"), physical, ids[1], ids[2], ids[3]}
+          next if keyboard_interfaces.includes?(identity)
+        end
         bus = case ids.try(&.[1])
               when "0003" then "USB"
               when "0005" then "Bluetooth"

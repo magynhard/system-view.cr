@@ -39,9 +39,12 @@ class PackagingTests(unittest.TestCase):
             self.assertIn("--filesystem=/run/udev:ro", permissions)
             self.assertIn("--talk-name=org.gnome.Shell", permissions)
             self.assertIn("--talk-name=org.gnome.Mutter.DisplayConfig", permissions)
+            self.assertIn("--talk-name=org.gnome.Settings", permissions)
             self.assertIn("--system-talk-name=org.freedesktop.NetworkManager", permissions)
             self.assertIn("--system-talk-name=org.bluez", permissions)
             self.assertIn("--system-talk-name=org.freedesktop.UDisks2", permissions)
+            self.assertIn("--socket=pulseaudio", permissions)
+            self.assertIn("--socket=cups", permissions)
             self.assertIn("--require-version=1.17.0", permissions)
             for permission in ("--device=all", "--share=network", "--socket=system-bus"):
                 self.assertNotIn(permission, permissions)

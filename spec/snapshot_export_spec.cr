@@ -10,6 +10,7 @@ private def sample_snapshot : SystemView::Snapshot
   gpu = data.graphics.first
   monitor = data.monitors.first
   data.copy_with(runtime: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"),
+    audio_session: SystemView::AudioSession.new(server: "PulseAudio (on PipeWire 1.2)", output: "Speakers", input: "Microphone"),
     graphics: [gpu.copy_with(clock_mhz: 1800_u64, memory_clock_mhz: 1124_u64, opengl: "4.6", glsl: "4.60", opengl_es: "3.2", vulkan: "1.3.280", vulkan_driver: "Example driver")],
     monitors: [monitor.copy_with(graphics_address: gpu.address, current_mode: "1920 × 1080", current_hz: 75.0, number: 1, primary: true)])
 end
@@ -48,6 +49,10 @@ describe SystemView::SnapshotExport do
     text.should contain("### Runtime environment\n- **Session type:** Wayland\n- **System architecture:** x86_64\n- **Virtualization:** KVM/QEMU\n- **Container:** Podman\n- **Application format:** Flatpak")
     text.should contain("### Example Graphics Exact GPU 5000")
     text.should contain("- **Current GPU clock:** 1800 MHz")
+    text.should contain("- **Current PCIe link:** PCIe 3.0 · 8.0 GT/s · x8")
+    text.should contain("- **Maximum PCIe link:** PCIe 4.0 · 16.0 GT/s · x16")
+    text.should contain("- **GPU utilization:** 27.0 %")
+    text.should contain("- **GPU power:** 42.5 W")
     text.should contain("- **OpenGL:** 4.6")
     text.should contain("- **Vulkan:** 1.3.280")
     text.should contain("- **Connected monitors:** Monitor 1 (Primary) · DP-1 · 1920 × 1080 · 75.0 Hz")
@@ -63,6 +68,10 @@ describe SystemView::SnapshotExport do
     text.should contain("### Firmware\n- **BIOS version:** 1.20")
     text.should contain("### Boot and security\n- **Boot mode:** UEFI\n- **Secure Boot:** Active\n- **TPM:** TPM 2.0")
     text.should contain("### Battery · BAT0")
+    text.should contain("## Sensors\n### example_chip")
+    text.should contain("- **CPU Package:** 42.5 °C")
+    text.should contain("- **Fan 1:** 1200 rpm")
+    text.should contain("## Video\n### Example Camera\n- **Name:** Example Camera\n- **Device:** /dev/video0\n- **Type:** Video capture")
     text.should contain("- **Battery health:** 90.0 %")
     text.should contain("- **Estimated time to full:** 30 min")
     text.should contain("- **Manufacturer:** Example Boards\n- **Model:** Board X570")
@@ -74,16 +83,16 @@ describe SystemView::SnapshotExport do
     text.should contain("### Monitor 1 (Primary)")
     text.should contain("- **Current refresh rate:** 75.0 Hz")
     text.should contain("### Example USB Audio")
+    text.should contain("### Audio session\n- **Audio server:** PulseAudio (on PipeWire 1.2)\n- **Default output:** Speakers\n- **Default input:** Microphone")
     text.should contain("### Example Keyboard")
     text.should contain("### Ethernet (LAN) · enp1s0")
-    text.should contain("### enp1s0 · IPv4")
-    text.should contain("- **IP addresses:** 192.0.2.10/24")
-    text.should contain("- **DNS servers:** 192.0.2.53\n  - 192.0.2.54")
-    text.should contain("### enp1s0 · IPv6")
-    text.should contain("### Bluetooth · hci0")
+    text.should contain("- **IPv4 · IP addresses:** 192.0.2.10/24")
+    text.should contain("- **IPv4 · DNS servers:** 192.0.2.53\n  - 192.0.2.54")
+    text.should contain("- **IPv6 · IP addresses:**")
+    text.should contain("## Bluetooth\n### hci0 · Example Bluetooth")
     text.should contain("- **Enabled:** Yes")
     text.should contain("- **Bluetooth version:** 5.3")
-    text.should contain("### Bluetooth · Headphones")
+    text.should contain("### Headphones")
     text.should contain("- **Signal strength:** -48 dBm")
   end
 

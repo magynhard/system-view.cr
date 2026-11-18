@@ -3,7 +3,7 @@ require "./support/fixture_files"
 require "../src/graphics_diagnostics"
 
 GL_REPORT = "Vendor: Example (0x1234)\nDevice: Example GPU (0xabcd)\nAccelerated: yes\nOpenGL core profile version string: 4.6 (Core Profile) Mesa\nOpenGL core profile shading language version string: 4.60\nOpenGL renderer string: Example GPU\nOpenGL ES profile version string: OpenGL ES 3.2\n"
-VK_REPORT = "Vulkan Instance Version: 1.4.999\nGPU0:\napiVersion = 1.3.280\nvendorID = 0x1234\ndeviceID = 0xabcd\ndeviceType = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU\ndriverName = example\ndriverInfo = Driver 1.2\n"
+VK_REPORT = "Vulkan Instance Version: 1.4.999\nGPU0:\napiVersion = 1.3.280\nvendorID = 0x1234\ndeviceID = 0xabcd\ndeviceType = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU\ndriverVersion = 1.2\ndriverName = example\ndriverInfo = Driver 1.2\n"
 
 describe SystemView::GraphicsDiagnostics do
   it "matches hardware PCI IDs and reports the device Vulkan version, not the loader version" do
@@ -19,6 +19,8 @@ describe SystemView::GraphicsDiagnostics do
     result.opengl_es.should eq("OpenGL ES 3.2")
     result.vulkan.should eq("1.3.280")
     result.vulkan_driver.should eq("example · Driver 1.2")
+    result.vulkan_device_type.should eq("PHYSICAL_DEVICE_TYPE_DISCRETE_GPU")
+    result.vulkan_driver_version.should eq("1.2")
     calls.find { |command, _env| command == "glxinfo" }.not_nil![1]["DRI_PRIME"].should eq("pci-0000_01_00_0")
   end
 

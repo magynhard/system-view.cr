@@ -10,6 +10,8 @@ require "../spec/support/display_fixture"
 # cannot detect workers that lack Crystal's I/O execution context.
 class IOFixtureFiles < FixtureFiles
   @cpuinfo_path = File.tempname("system-view-cpuinfo", nil)
+  @clock = Atomic(Int32).new(2_800_000)
+  @temperature = Atomic(Int32).new(42_500)
 
   def initialize
     super
@@ -17,7 +19,18 @@ class IOFixtureFiles < FixtureFiles
   end
 
   def read(path : String) : String
-    path == "/proc/cpuinfo" ? File.read(@cpuinfo_path).strip : super
+    return File.read(@cpuinfo_path).strip if path == "/proc/cpuinfo"
+    return @clock.get.to_s if path == "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    return @temperature.get.to_s if path == "/sys/class/hwmon/hwmon0/temp1_input"
+    super
+  end
+
+  def set_clock(value : String)
+    @clock.set(value.to_i)
+  end
+
+  def set_temperature(value : Int32)
+    @temperature.set(value)
   end
 
   def cleanup
@@ -63,6 +76,7 @@ factory = -> do
   firmware.processors.first.capabilities << "MMX (MMX technology supported)"
   firmware.memory[0] = firmware.memory.first.copy_with(manufacturer: "Corsair")
   requests = Atomic(Int32).new(0)
+  settings_requests = [] of String
   loader = -> do
     attempt = requests.add(1)
     sleep 350.milliseconds
@@ -86,9 +100,14 @@ factory = -> do
   window = SystemView::Window.new(app, files, desktop_name: "GNOME 50.5", firmware_loader: loader,
     network_loader: network_loader, graphics_loader: graphics_loader, display_loader: display_loader,
     drive_health_loader: drive_health_loader,
-    runtime_info: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"))
+    runtime_info: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"),
+    audio_session_loader: -> { SystemView::AudioSession.new(server: "PulseAudio (on PipeWire 1.2)", output: "Speakers", input: "Microphone") },
+    printer_loader: -> { SystemView::Printers.new(names: ["Office_Printer"], available: true) },
+    settings_opener: ->(panel : String) { settings_requests << panel; nil })
   window.present
   phase = -8
+  tracked_clock : Adw::ActionRow? = nil
+  tracked_sensor : Adw::ActionRow? = nil
   ticks = 0
   resize_cycles = 0
   GLib.timeout(200.milliseconds) do
@@ -225,12 +244,13 @@ factory = -> do
             check(navigation.selected_row.not_nil!.name == page, "overview #{title} opens its matching section")
             navigation.select_row(navigation.row_at_index(0))
           end
-          (1..11).each do |index|
+          (1..15).each do |index|
             navigation.select_row(navigation.row_at_index(index))
+            page = navigation.selected_row.not_nil!.name
             detail_rows = descendants(window).select(Adw::ActionRow)
-            if {3, 5, 6, 7, 8, 9, 10}.includes?(index)
+            if {"mainboard", "memory", "monitors", "audio", "inputs", "network", "bluetooth", "system", "sensors"}.includes?(page)
               layouts = descendants(window).select(Gtk::FlowBox)
-              expected_columns = {3, 6, 8, 9, 10}.includes?(index) ? 2 : 3
+              expected_columns = {"mainboard", "monitors", "inputs", "network", "bluetooth", "system"}.includes?(page) ? 2 : 3
               check(!layouts.empty? && layouts.all? { |layout| layout.max_children_per_line == expected_columns }, "detail page #{index} uses at most #{expected_columns} columns")
             end
             check(!detail_rows.empty?, "detail page #{index} has real information")
@@ -242,6 +262,10 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Current GPU clock" && row.subtitle == "1800 MHz" }, "GPU page shows the current clock")
               check(detail_rows.any? { |row| row.title == "OpenGL" && row.subtitle == "4.6" }, "GPU page shows verified OpenGL support")
               check(detail_rows.any? { |row| row.title == "Vulkan" && row.subtitle == "1.3.280" }, "GPU page shows the physical-device Vulkan version")
+              check(detail_rows.any? { |row| row.title == "Current PCIe link" && row.subtitle == "PCIe 3.0 · 8.0 GT/s · x8" }, "GPU page shows the current PCIe link")
+              check(detail_rows.any? { |row| row.title == "Maximum PCIe link" && row.subtitle == "PCIe 4.0 · 16.0 GT/s · x16" }, "GPU page shows the maximum PCIe link")
+              check(detail_rows.any? { |row| row.title == "GPU utilization" && row.subtitle == "27.0 %" }, "GPU utilization is displayed")
+              check(detail_rows.any? { |row| row.title == "GPU power" && row.subtitle == "42.5 W" }, "GPU power is displayed")
               check(detail_rows.any? { |row| row.title == "Connected monitors" && row.subtitle.try(&.includes?("75.0 Hz")) }, "GPU page links its attached displays and refresh rates")
             elsif index == 2
               check(detail_rows.any? { |row| row.title == "Socket" && row.subtitle == "AM4" }, "additional CPU details include the physical socket type")
@@ -260,26 +284,72 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Voltage" && row.subtitle == "1.2 V" }, "precise module voltage is displayed")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("Corsair Vengeance LPX · CMK32GX4M2E3200C16")) }, "RAM manufacturer and series precede the model identifier")
               check(detail_rows.first.title == "Installed RAM" && detail_rows.first.subtitle == "32.0 GiB", "installed capacity comes first on RAM page")
+              memory_group = descendants(window).select(Adw::PreferencesGroup).find { |group| group.title == "Memory" }.not_nil!
+              check(memory_group.parent.is_a?(Gtk::Box), "memory summary spans the full content width")
               check(detail_rows.any? { |row| row.title == "Usable RAM" && row.subtitle == "30.5 GiB" }, "RAM details use base 1024 and GiB")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("TEST-16G-DDR4")) }, "RAM page includes module identification")
               check(detail_rows.count { |row| row.title == "Timings (CL–tRCD–tRP–tRAS)" && row.subtitle == "Not reported" } == 2, "each module exposes missing timings without inferring them from its part number")
             elsif index == 6
               check(detail_rows.any? { |row| row.subtitle == "ExamplePanel" }, "monitor details are populated")
-              check(descendants(window).select(Adw::PreferencesGroup).any? { |group| group.title == "Monitor 2 (Primary)" }, "monitor titles use desktop numbering and primary status instead of the model")
+              check(descendants(window).select(Gtk::Label).any? { |label| label.text == "Monitor 2 (Primary)" && label.has_css_class("heading") }, "monitor heading uses desktop numbering and primary status")
               check(detail_rows.any? { |row| row.title == "Current refresh rate" && row.subtitle == "75.0 Hz" }, "monitor current refresh is distinct from its preferred timing")
+              settings = descendants(window).select(Gtk::Button).find { |button| button.tooltip_text == "Open display settings" }.not_nil!
+              settings.clicked_signal.emit
+              check(settings_requests.last == "display", "monitor settings open the display panel")
             elsif index == 7
               check(detail_rows.any? { |row| row.subtitle == "Example USB Audio" }, "audio details are populated")
-            elsif index == 8
+              driver = detail_rows.find { |row| row.title == "Driver" }.not_nil!
+              codecs = detail_rows.find { |row| row.title == "Codecs" }.not_nil!
+              check(driver.parent == codecs.parent, "audio driver and codecs share a group")
+              sound_settings = descendants(window).select(Gtk::Button).find { |button| button.tooltip_text == "Open sound settings" }.not_nil!
+              sound_settings.clicked_signal.emit
+              check(settings_requests.last == "sound", "sound settings button opens the requested panel")
+              check(detail_rows.any? { |row| row.title == "Audio server" && row.subtitle == "PulseAudio (on PipeWire 1.2)" }, "audio server is displayed")
+              check(detail_rows.any? { |row| row.title == "Default output" && row.subtitle == "Speakers" }, "default audio output is displayed")
+              check(detail_rows.any? { |row| row.title == "Default input" && row.subtitle == "Microphone" }, "default audio input is displayed")
+              { {"Audio server", "audio-card-symbolic"}, {"Default output", "audio-speakers-symbolic"}, {"Default input", "audio-input-microphone-symbolic"} }.each do |title, icon|
+                audio_row = detail_rows.find { |row| row.title == title }.not_nil!
+                check(descendants(audio_row).select(Gtk::Image).any? { |image| image.icon_name == icon }, "#{title} has its audio icon")
+              end
+              check(navigation.row_at_index(8).not_nil!.name == "video", "video follows audio in navigation")
+            elsif page == "inputs"
               check(detail_rows.any? { |row| row.subtitle == "Keyboard" }, "input devices are classified")
-            elsif index == 9
+              { {"Open keyboard settings", "keyboard"}, {"Open mouse and touchpad settings", "mouse"} }.each do |tooltip, panel|
+                button = descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == tooltip }.not_nil!
+                button.clicked_signal.emit
+                check(settings_requests.last == panel, "#{tooltip} opens the matching panel")
+              end
+            elsif page == "network"
               check(detail_rows.any? { |row| row.title == "Link speed" && row.subtitle == "2.5 Gbit/s" }, "LAN link speed uses bits per second")
               check(detail_rows.any? { |row| row.title == "SSID" && row.subtitle == "Test ä" }, "Wi-Fi SSID is decoded correctly")
               check(detail_rows.any? { |row| row.title == "Link speed" && row.subtitle == "866.7 Mbit/s" }, "Wi-Fi link speed is converted from kbit/s")
-              check(detail_rows.any? { |row| row.title == "DNS servers" && row.subtitle == "192.0.2.53\n192.0.2.54" }, "LAN DNS servers stay scoped to their interface")
+              check(detail_rows.any? { |row| row.title == "IPv4 · DNS servers" && row.subtitle == "192.0.2.53\n192.0.2.54" }, "LAN DNS servers stay scoped to their interface")
+              address_groups = descendants(window).select(Adw::PreferencesGroup).select do |group|
+                titles = descendants(group).select(Adw::ActionRow).map(&.title)
+                titles.includes?("IPv4 · IP addresses") && titles.includes?("IPv6 · IP addresses")
+              end
+              check(!address_groups.empty? && address_groups.all? { |group| group.title.to_s.empty? }, "IPv4 and IPv6 share an untitled box per interface")
+              check(!banner.revealed?, "network information needs no hardware unlock banner")
+              check(descendants(window).select(Gtk::Label).any? { |label| label.text == "Ethernet (LAN) · enp1s0 · Wired connection" && label.has_css_class("heading") }, "network headings include the connection profile")
+              check(descendants(window).select(Gtk::Label).any? { |label| label.text == "Ethernet (LAN) · enp2s0" && label.has_css_class("heading") }, "network headings omit missing profiles")
+              { {"Open network settings", "network"} }.each do |tooltip, panel|
+                button = descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == tooltip }.not_nil!
+                button.clicked_signal.emit
+                check(settings_requests.last == panel, "#{tooltip} opens the matching panel")
+              end
+            elsif page == "bluetooth"
               check(detail_rows.any? { |row| row.title == "Bluetooth version" && row.subtitle == "5.3" }, "Bluetooth adapter details are populated")
               check(detail_rows.any? { |row| row.title == "Link speed" && row.subtitle == "Not reported" }, "Bluetooth speed is not guessed from its version")
-              check(!banner.revealed?, "network information needs no hardware unlock banner")
-            elsif index == 10
+              labels = descendants(window).select(Gtk::Label)
+              check(labels.any? { |label| label.text == "hci0 · Example Bluetooth" && label.has_css_class("heading") }, "Bluetooth adapter has a full-width heading with its identifier")
+              check(labels.any? { |label| label.text == "Headphones" && label.has_css_class("heading") }, "Bluetooth device has a full-width heading")
+              descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == "Open Bluetooth settings" }.not_nil!.clicked_signal.emit
+              check(settings_requests.last == "bluetooth", "Bluetooth settings open the matching panel")
+            elsif page == "printers"
+              check(detail_rows.any? { |row| row.title == "Printer" && row.subtitle == "Office_Printer" }, "configured printer is displayed")
+              descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == "Open printer settings" }.not_nil!.clicked_signal.emit
+              check(settings_requests.last == "printers", "printer settings open the matching panel")
+            elsif page == "system"
               check(detail_rows.none? { |row| row.title == "Computer model" }, "OS page omits redundant computer model")
               check(detail_rows.any? { |row| row.title == "Uptime" && row.subtitle == "2 d 4 h 33 min" }, "OS page shows the uptime")
               check(detail_rows.any? { |row| row.title == "Session type" && row.subtitle == "Wayland" }, "OS page shows the session type")
@@ -287,11 +357,22 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Virtualization" && row.subtitle == "KVM/QEMU" }, "OS page shows the virtual machine")
               check(detail_rows.any? { |row| row.title == "Container" && row.subtitle == "Podman" }, "OS page distinguishes the host container")
               check(detail_rows.any? { |row| row.title == "Application format" && row.subtitle == "Flatpak" }, "OS page shows the application format")
-            elsif index == 11
+              descendants(window).select(Gtk::Button).find { |button| button.tooltip_text == "Open system settings" }.not_nil!.clicked_signal.emit
+              check(settings_requests.last == "system", "system settings button opens the system panel")
+            elsif page == "power"
               check(detail_rows.any? { |row| row.title == "Connected" && row.subtitle == "Yes" }, "power adapter status is displayed")
               check(detail_rows.any? { |row| row.title == "Charge" && row.subtitle == "80.0 %" }, "battery charge is displayed")
               check(detail_rows.any? { |row| row.title == "Battery health" && row.subtitle == "90.0 %" }, "battery health is displayed")
               check(detail_rows.any? { |row| row.title == "Estimated time to full" && row.subtitle == "30 min" }, "estimated charging time is displayed")
+              descendants(window).select(Gtk::Button).find { |button| button.tooltip_text == "Open power settings" }.not_nil!.clicked_signal.emit
+              check(settings_requests.last == "power", "power settings button opens the power panel")
+            elsif page == "sensors"
+              check(detail_rows.any? { |row| row.title == "CPU Package" && row.subtitle == "42.5 °C" }, "sensor temperature is displayed")
+              check(detail_rows.any? { |row| row.title == "Fan 1" && row.subtitle == "1200 rpm" }, "fan speed is displayed")
+            elsif page == "video"
+              check(detail_rows.any? { |row| row.title == "Name" && row.subtitle == "Example Camera" }, "video device is displayed")
+              check(detail_rows.any? { |row| row.title == "Device" && row.subtitle == "/dev/video0" }, "video device path is displayed")
+              check(detail_rows.none? { |row| row.subtitle == "Example metadata" }, "metadata-only video endpoints are excluded")
             end
           end
           check(widgets.select(Gtk::MenuButton).any? { |button| button.tooltip_text == "Copy system information" }, "copy menu is available in the header bar")
@@ -332,6 +413,23 @@ factory = -> do
         if window.lookup_action("refresh").not_nil!.enabled?
           check(navigation.selected_row.not_nil!.name == "processor", "refresh preserves selected detail page")
           check(rows.any? { |row| row.subtitle == "Example CPU 9000" }, "asynchronous refresh updates detail data")
+          tracked_clock = rows.find { |row| row.title == "Current clock range" }.not_nil!
+          files.set_clock("1000000")
+          phase = -15
+        end
+      when -15
+        if tracked_clock.try(&.subtitle) == "1.0 GHz – 3.4 GHz"
+          check(rows.any? { |row| row == tracked_clock }, "live clock updates without rebuilding the page")
+          check(navigation.selected_row.not_nil!.name == "processor", "live updates preserve the selected page")
+          navigation.select_row(navigation.row_at_index(14))
+          tracked_sensor = descendants(window).select(Adw::ActionRow).find { |row| row.title == "CPU Package" }.not_nil!
+          files.set_temperature(51_000)
+          phase = -16
+        end
+      when -16
+        if tracked_sensor.try(&.subtitle) == "51.0 °C"
+          check(rows.any? { |row| row == tracked_sensor }, "sensor readings update without rebuilding the page")
+          navigation.select_row(navigation.row_at_index(2))
           window.set_default_size(1040, 780)
           phase = 5
         end
@@ -406,7 +504,11 @@ factory = -> do
       when 8
         monitor_layout = widgets.select(Gtk::FlowBox).first
         monitor_groups = descendants(monitor_layout).select(Adw::PreferencesGroup)
-        check(monitor_groups[0].parent.not_nil!.compute_bounds(monitor_layout).origin.y == monitor_groups[1].parent.not_nil!.compute_bounds(monitor_layout).origin.y, "monitor groups appear side by side at desktop width")
+        monitor_heading = widgets.select(Gtk::Label).find { |label| label.text == "Monitor 2 (Primary)" && label.has_css_class("heading") }.not_nil!
+        check(monitor_heading.parent == monitor_layout.parent && monitor_heading.width >= monitor_layout.width, "monitor heading spans the full width above its boxes")
+        first = monitor_groups[0].parent.not_nil!.compute_bounds(monitor_layout)
+        second = monitor_groups[1].parent.not_nil!.compute_bounds(monitor_layout)
+        check(first.origin.y == second.origin.y && (first.size.width - second.size.width).abs <= 1, "monitor groups have equal-width columns")
         screenshot(window, "system-view-monitors")
         navigation.select_row(navigation.row_at_index(7))
         phase = 9
@@ -420,11 +522,11 @@ factory = -> do
         check(rows.any? { |row| row.title == "Temperature" && row.subtitle == "30.0 °C" }, "drive temperature is displayed")
         check(rows.any? { |row| row.title == "Power-on hours" && row.subtitle == "42" }, "drive power-on hours are displayed")
         screenshot(window, "system-view-drives")
-        navigation.select_row(navigation.row_at_index(8))
+        navigation.select_row(navigation.row_at_index(9))
         phase = 10
       when 10
         screenshot(window, "system-view-inputs")
-        navigation.select_row(navigation.row_at_index(9))
+        navigation.select_row(navigation.row_at_index(10))
         phase = 11
       when 11
         network_layout = widgets.select(Gtk::FlowBox).first
@@ -449,7 +551,7 @@ factory = -> do
       when 13
         if window.lookup_action("refresh").not_nil!.enabled?
           check(navigation.selected_row.not_nil!.name == "network", "refresh keeps the network page selected")
-          check(rows.any? { |row| row.title == "IP addresses" && row.subtitle == "192.0.2.10/24" }, "refresh reloads per-interface network addresses")
+          check(rows.any? { |row| row.title == "IPv4 · IP addresses" && row.subtitle == "192.0.2.10/24" }, "refresh reloads per-interface network addresses")
           phase = 14
         end
       when 14

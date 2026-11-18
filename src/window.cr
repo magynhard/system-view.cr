@@ -5,6 +5,7 @@ require "./graphics_diagnostics"
 require "./display_config"
 require "./export"
 require "./drive_health"
+require "./audio_session"
 
 module SystemView
   class Window < Adw::ApplicationWindow
@@ -31,12 +32,18 @@ module SystemView
     @firmware : FirmwareDetails?
     @firmware_message = ""
     @two_column_layouts = [] of Gtk::FlowBox
+    @live_updates = [] of Proc(Snapshot, Nil)
+    @live_loading = false
+    @generation = 0_u64
 
     def initialize(app : Gtk::Application, @files : LinuxFiles = LinuxFiles.new, @firmware : FirmwareDetails? = nil, @desktop_name : String? = nil, @firmware_loader : Proc(FirmwareResult)? = nil, @network_loader : Proc(Connectivity)? = nil,
                    @graphics_loader : Proc(Array(GraphicsCard), Array(GraphicsCard))? = nil,
                    @display_loader : Proc(Array(Monitor), Array(Monitor))? = nil,
                    @drive_health_loader : Proc(Array(Drive), Array(Drive))? = nil,
-                   @runtime_info : RuntimeInfo? = nil)
+                   @runtime_info : RuntimeInfo? = nil,
+                   @audio_session_loader : Proc(AudioSession)? = nil,
+                   @settings_opener : Proc(String, Nil)? = nil,
+                   @printer_loader : Proc(Printers)? = nil)
       super(application: app, title: "System View", default_width: 1040, default_height: 780)
       set_size_request(360, 420)
       setup_actions(app)
@@ -64,10 +71,6 @@ module SystemView
         update_controls.call
       end
       update_controls.call
-      refresh_button = Gtk::Button.new_from_icon_name("view-refresh-symbolic")
-      refresh_button.tooltip_text = translate("Refresh")
-      refresh_button.action_name = "win.refresh"
-      header.pack_end(refresh_button)
       copy_button = Gtk::MenuButton.new
       copy_button.icon_name = "edit-copy-symbolic"
       copy_button.tooltip_text = translate("Copy system information")
@@ -82,6 +85,7 @@ module SystemView
       menu.tooltip_text = translate("Main menu")
       menu.primary = true
       model = Gio::Menu.new
+      model.append(translate("Refresh"), "win.refresh")
       model.append(translate("About System View"), "win.about")
       model.append(translate("Close"), "win.close")
       menu.menu_model = model
@@ -136,6 +140,14 @@ module SystemView
       end
       @navigation.select_row(@navigation.row_at_index(0))
       reload
+      GLib.timeout(1.second) do
+        if @closed
+          false
+        else
+          refresh_live
+          true
+        end
+      end
     end
 
     private def navigation_controls : Gtk::Box
@@ -229,10 +241,14 @@ module SystemView
         {"memory", translate("Memory"), "system-view-memory-symbolic"},
         {"monitors", translate("Monitors"), "video-display-symbolic"},
         {"audio", translate("Audio"), "audio-card-symbolic"},
+        {"video", translate("Video"), "camera-web-symbolic"},
         {"inputs", translate("Input Devices"), "input-keyboard-symbolic"},
         {"network", translate("Network"), "network-wired-symbolic"},
-        {"system", translate("Operating System"), "preferences-system-symbolic"},
+        {"bluetooth", translate("Bluetooth"), "bluetooth-symbolic"},
+        {"system", translate("Operating System"), "emblem-system-symbolic"},
         {"power", translate("Power"), "battery-symbolic"},
+        {"sensors", translate("Sensors"), "temperature-symbolic"},
+        {"printers", translate("Printers"), "printer-symbolic"},
       }
       entries.each do |id, title, icon|
         row = Gtk::ListBoxRow.new
@@ -273,6 +289,7 @@ module SystemView
 
     private def reload
       return if @loading || @closed
+      @generation += 1
       @loading = true
       @refresh.enabled = false
       results = Channel(Snapshot | Exception).new(1)
@@ -285,7 +302,9 @@ module SystemView
           drives = @drive_health_loader.try(&.call(data.drives)) || DriveHealthDiscovery.scan(data.drives, SystemNetworkBus.new)
           graphics = @graphics_loader.try(&.call(data.graphics)) || GraphicsDiagnostics.scan(data.graphics)
           monitors = @display_loader.try(&.call(data.monitors)) || DisplayConfig.enrich(data.monitors)
-          results.send(data.copy_with(graphics: graphics, monitors: monitors, drives: drives))
+          audio_session = @audio_session_loader.try(&.call) || AudioSessionDiscovery.scan
+          printers = @printer_loader.try(&.call) || PrinterDiscovery.scan
+          results.send(data.copy_with(graphics: graphics, monitors: monitors, drives: drives, audio_session: audio_session, printers: printers))
         rescue error : Exception
           results.send(error)
         end
@@ -310,6 +329,38 @@ module SystemView
               status.title = translate("Could not read system information")
               status.description = result.message || translate("Unknown")
               @body.append(status)
+            end
+            false
+          else
+            true
+          end
+        end
+      end
+    end
+
+    private def refresh_live
+      return if @closed || @loading || @live_loading
+      return unless snapshot = @snapshot
+      @live_loading = true
+      generation = @generation
+      results = Channel(Snapshot?).new(1)
+      Fiber::ExecutionContext::Isolated.new("live-metrics") do
+        begin
+          results.send(Inventory.live_snapshot(@files, snapshot))
+        rescue Exception
+          results.send(nil)
+        end
+      end
+      GLib.timeout(75.milliseconds) do
+        if @closed
+          false
+        else
+          select
+          when result = results.receive
+            @live_loading = false
+            if result && generation == @generation && !@loading
+              @snapshot = result
+              @live_updates.each(&.call(result))
             end
             false
           else
@@ -408,6 +459,7 @@ module SystemView
 
     private def render
       update_unlock_banner
+      @live_updates.clear
       @two_column_layouts.clear
       clear_body
       unless data = @snapshot
@@ -428,18 +480,26 @@ module SystemView
       when "audio"     then audio(data)
       when "inputs"    then inputs(data)
       when "network"   then network(data)
+      when "bluetooth" then bluetooth(data)
       when "system"    then system(data)
       when "power"     then power(data)
+      when "sensors"   then sensors(data)
+      when "printers"  then printers(data)
+      when "video"     then video(data)
       end
     end
 
-    private def heading(title : String, description : String? = nil)
+    private def heading(title : String, description : String? = nil, action : Gtk::Widget? = nil)
       box = Gtk::Box.new(:vertical, 6)
+      title_row = Gtk::Box.new(:horizontal, 12)
       label = Gtk::Label.new(title)
       label.xalign = 0.0
       label.wrap = true
+      label.hexpand = true
       label.add_css_class("title-1")
-      box.append(label)
+      title_row.append(label)
+      title_row.append(action) if action
+      box.append(title_row)
       if description && !description.empty?
         detail = Gtk::Label.new(description)
         detail.xalign = 0.0
@@ -489,6 +549,16 @@ module SystemView
         widget.activated_signal.connect { navigate(page) }
       end
       group.add(widget)
+      widget
+    end
+
+    private def track(widget : Adw::ActionRow, &value : Snapshot -> String)
+      @live_updates << ->(snapshot : Snapshot) do
+        text = value.call(snapshot)
+        text = translate("Unknown") if text.empty?
+        widget.subtitle = text unless widget.subtitle == text
+        nil
+      end
     end
 
     private def navigate(page : String)
@@ -578,7 +648,8 @@ module SystemView
       row(software, translate("Operating System"), data.os, "preferences-system-symbolic", target: "system")
       row(software, translate("Kernel"), data.kernel, "system-view-processor-symbolic", target: "system")
       row(software, translate("Desktop Environment"), data.desktop, "preferences-desktop-display-symbolic", target: "system")
-      row(software, translate("Uptime"), uptime_text(data.uptime), "preferences-system-time-symbolic", target: "system")
+      uptime = row(software, translate("Uptime"), uptime_text(data.uptime), "preferences-system-time-symbolic", target: "system")
+      track(uptime) { |snapshot| uptime_text(snapshot.uptime) }
     end
 
     private def processor(data : Snapshot)
@@ -619,13 +690,13 @@ module SystemView
       row(clocks, translate("Base clock"), frequency(speed.base_khz))
       row(clocks, translate("Minimum clock"), frequency(speed.minimum_khz))
       row(clocks, translate("Maximum clock"), frequency(speed.maximum_khz))
-      current = frequency(speed.current_min_khz)
-      current += " – #{frequency(speed.current_max_khz)}" if speed.current_max_khz > speed.current_min_khz
-      row(clocks, translate("Current clock range"), current)
+      current = row(clocks, translate("Current clock range"), current_clock(speed))
+      track(current) { |snapshot| current_clock(snapshot.processor.clocks) }
       control = group(translate("Clock control"), columns)
       row(control, translate("Available frequency steps"), speed.steps_khz.map { |khz| frequency(khz) }.join(" · "))
       row(control, translate("Frequency driver"), speed.driver)
-      row(control, translate("Governor"), speed.governor)
+      governor = row(control, translate("Governor"), speed.governor)
+      track(governor) { |snapshot| snapshot.processor.clocks.governor }
       boost = speed.boost.nil? ? translate("Unknown") : (speed.boost ? translate("Yes") : translate("No"))
       row(control, translate("Boost enabled"), boost)
       processors.each_with_index do |entry, index|
@@ -670,6 +741,12 @@ module SystemView
     private def frequency(khz : UInt64) : String
       return translate("Unknown") if khz == 0
       khz >= 1_000_000 ? "#{(khz / 1_000_000.0).round(2)} GHz" : "#{(khz / 1000.0).round(1)} MHz"
+    end
+
+    private def current_clock(speed : CpuClocks) : String
+      current = frequency(speed.current_min_khz)
+      current += " – #{frequency(speed.current_max_khz)}" if speed.current_max_khz > speed.current_min_khz
+      current
     end
 
     private def mainboard(data : Snapshot)
@@ -738,10 +815,25 @@ module SystemView
         row(details, translate("Revision"), gpu.revision)
         row(details, translate("PCI address"), gpu.address)
         row(details, translate("Kernel driver"), gpu.driver)
+        pcie = row(details, translate("Current PCIe link"), gpu.pcie_current.presence || translate("Not reported"))
+        track(pcie) { |snapshot| snapshot.graphics.find { |card| card.address == gpu.address }.try(&.pcie_current).presence || translate("Not reported") }
+        row(details, translate("Maximum PCIe link"), gpu.pcie_maximum.presence || translate("Not reported"))
         details = group(translate("Memory and clocks"), columns)
         row(details, translate("Dedicated video memory"), capacity(gpu.memory, binary: true))
-        row(details, translate("Current GPU clock"), gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : translate("Not reported"))
-        row(details, translate("Current video memory clock"), gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : translate("Not reported"))
+        gpu_clock = row(details, translate("Current GPU clock"), gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : translate("Not reported"))
+        track(gpu_clock) do |snapshot|
+          clock = snapshot.graphics.find { |card| card.address == gpu.address }.try(&.clock_mhz) || 0
+          clock > 0 ? "#{clock} MHz" : translate("Not reported")
+        end
+        memory_clock = row(details, translate("Current video memory clock"), gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : translate("Not reported"))
+        track(memory_clock) do |snapshot|
+          clock = snapshot.graphics.find { |card| card.address == gpu.address }.try(&.memory_clock_mhz) || 0
+          clock > 0 ? "#{clock} MHz" : translate("Not reported")
+        end
+        utilization = row(details, translate("GPU utilization"), gpu.utilization.try { |value| "#{value.round(1)} %" } || translate("Not reported"))
+        track(utilization) { |snapshot| snapshot.graphics.find { |card| card.address == gpu.address }.try(&.utilization).try { |value| "#{value.round(1)} %" } || translate("Not reported") }
+        power = row(details, translate("GPU power"), gpu.power_watts.try { |value| "#{value.round(2)} W" } || translate("Not reported"))
+        track(power) { |snapshot| snapshot.graphics.find { |card| card.address == gpu.address }.try(&.power_watts).try { |value| "#{value.round(2)} W" } || translate("Not reported") }
         details = group(translate("Graphics APIs"), columns)
         row(details, translate("OpenGL"), gpu.opengl.empty? ? translate("Not reported") : gpu.opengl)
         row(details, translate("GLSL"), gpu.glsl.empty? ? translate("Not reported") : gpu.glsl)
@@ -749,6 +841,14 @@ module SystemView
         row(details, translate("OpenGL renderer"), gpu.renderer) unless gpu.renderer.empty?
         row(details, translate("Vulkan"), gpu.vulkan.empty? ? translate("Not reported") : gpu.vulkan)
         row(details, translate("Vulkan driver"), gpu.vulkan_driver) unless gpu.vulkan_driver.empty?
+        kind = case gpu.vulkan_device_type
+               when "PHYSICAL_DEVICE_TYPE_DISCRETE_GPU"   then translate("Discrete GPU")
+               when "PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU" then translate("Integrated GPU")
+               when "PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU"    then translate("Virtual GPU")
+               else                                            translate("Not reported")
+               end
+        row(details, translate("Vulkan device type"), kind)
+        row(details, translate("Vulkan driver version"), gpu.vulkan_driver_version.presence || translate("Not reported"))
       end
     end
 
@@ -786,13 +886,14 @@ module SystemView
     private def memory(data : Snapshot)
       heading(translate("Memory"))
       firmware_status
-      columns = group_columns
-      details = group(translate("Memory"), columns)
+      details = group(translate("Memory"))
       row(details, translate("Installed RAM"), capacity(data.memory.installed, binary: true))
       row(details, translate("Usable RAM"), capacity(data.memory.total, binary: true))
-      row(details, translate("Available RAM"), capacity(data.memory.available, binary: true))
+      available = row(details, translate("Available RAM"), capacity(data.memory.available, binary: true))
+      track(available) { |snapshot| capacity(snapshot.memory.available, binary: true) }
       row(details, translate("Swap"), data.memory.swap == 0 ? translate("None") : capacity(data.memory.swap, binary: true))
       unless data.memory.modules.empty?
+        columns = group_columns
         data.memory.modules.each_with_index do |mod, index|
           title = mod.slot.empty? ? translate("Module %{number}", number: index + 1) : mod.slot
           details = group(title, columns)
@@ -828,14 +929,15 @@ module SystemView
     end
 
     private def system(data : Snapshot)
-      heading(translate("Operating System"), data.os)
+      heading(translate("Operating System"), data.os, action: settings_button("system", translate("Open system settings")))
       columns = group_columns(2)
       details = group(translate("System"), columns)
       row(details, translate("Operating System"), data.os)
       row(details, translate("Kernel"), data.kernel)
       row(details, translate("Desktop Environment"), data.desktop)
       row(details, translate("Hostname"), data.hostname)
-      row(details, translate("Uptime"), uptime_text(data.uptime))
+      uptime = row(details, translate("Uptime"), uptime_text(data.uptime))
+      track(uptime) { |snapshot| uptime_text(snapshot.uptime) }
       runtime = group(translate("Runtime environment"), columns)
       row(runtime, translate("Session type"), data.runtime.session)
       row(runtime, translate("System architecture"), data.runtime.architecture)
@@ -846,7 +948,7 @@ module SystemView
     end
 
     private def power(data : Snapshot)
-      heading(translate("Power"))
+      heading(translate("Power"), action: settings_button("power", translate("Open power settings")))
       supply = data.power_supply
       if supply.batteries.empty? && supply.adapters.empty?
         row(group(translate("Power")), translate("Power information"), translate("Not reported"))
@@ -854,21 +956,17 @@ module SystemView
       columns = group_columns(2)
       supply.adapters.each do |adapter|
         details = group(translate("Power adapter") + " · " + adapter.name, columns)
-        row(details, translate("Connected"), enabled(adapter.online))
+        connected = row(details, translate("Connected"), enabled(adapter.online))
+        track(connected) { |snapshot| enabled(snapshot.power_supply.adapters.find { |item| item.name == adapter.name }.try(&.online)) }
       end
       supply.batteries.each do |battery|
         details = group(translate("Battery") + " · " + battery.name, columns)
         row(details, translate("Manufacturer"), battery.vendor) unless battery.vendor.empty?
         row(details, translate("Model"), battery.model) unless battery.model.empty?
-        status = case battery.status
-                 when "Charging"     then translate("Charging")
-                 when "Discharging"  then translate("Discharging")
-                 when "Full"         then translate("Fully charged")
-                 when "Not charging" then translate("Not charging")
-                 else                     translate("Unknown")
-                 end
-        row(details, translate("Status"), status)
-        row(details, translate("Charge"), battery.percent.try { |value| "#{value.round(1)} %" } || translate("Not reported"))
+        status = row(details, translate("Status"), battery_status(battery.status))
+        track(status) { |snapshot| battery_status(snapshot.power_supply.batteries.find { |item| item.name == battery.name }.try(&.status) || "") }
+        charge = row(details, translate("Charge"), battery.percent.try { |value| "#{value.round(1)} %" } || translate("Not reported"))
+        track(charge) { |snapshot| snapshot.power_supply.batteries.find { |item| item.name == battery.name }.try(&.percent).try { |value| "#{value.round(1)} %" } || translate("Not reported") }
         row(details, translate("Full charge capacity"), battery.full.try { |value| "#{value.round(2)} #{battery.unit}" } || translate("Not reported"))
         row(details, translate("Design capacity"), battery.design.try { |value| "#{value.round(2)} #{battery.unit}" } || translate("Not reported"))
         health = if (full = battery.full) && (design = battery.design) && design > 0
@@ -878,21 +976,44 @@ module SystemView
                  end
         row(details, translate("Battery health"), health)
         row(details, translate("Charge cycles"), battery.cycles.try(&.to_s) || translate("Not reported"))
-        row(details, translate("Battery power"), battery.power.try { |value| "#{value.round(2)} W" } || translate("Not reported"))
+        watts = row(details, translate("Battery power"), battery.power.try { |value| "#{value.round(2)} W" } || translate("Not reported"))
+        track(watts) { |snapshot| snapshot.power_supply.batteries.find { |item| item.name == battery.name }.try(&.power).try { |value| "#{value.round(2)} W" } || translate("Not reported") }
         remaining = battery.remaining_seconds.try { |seconds| seconds == 0 ? translate("0 min") : uptime_text(seconds.to_f64) } || translate("Not reported")
         label = battery.status == "Charging" ? translate("Estimated time to full") : translate("Estimated time remaining")
-        row(details, label, remaining)
+        remaining_row = row(details, label, remaining)
+        @live_updates << ->(snapshot : Snapshot) do
+          item = snapshot.power_supply.batteries.find { |entry| entry.name == battery.name }
+          remaining_row.title = item.try(&.status) == "Charging" ? translate("Estimated time to full") : translate("Estimated time remaining")
+          remaining_row.subtitle = item.try(&.remaining_seconds).try { |seconds| seconds == 0 ? translate("0 min") : uptime_text(seconds.to_f64) } || translate("Not reported")
+          nil
+        end
+      end
+    end
+
+    private def battery_status(status : String) : String
+      case status
+      when "Charging"     then translate("Charging")
+      when "Discharging"  then translate("Discharging")
+      when "Full"         then translate("Fully charged")
+      when "Not charging" then translate("Not charging")
+      else                     translate("Unknown")
       end
     end
 
     private def monitors(data : Snapshot)
-      heading(translate("Monitors"))
+      heading(translate("Monitors"), action: settings_button("display", translate("Open display settings")))
       row(group(translate("Monitors")), translate("Monitor"), "") if data.monitors.empty?
       data.monitors.each_with_index do |monitor, index|
+        title = Gtk::Label.new(monitor_title(monitor, index + 1))
+        title.xalign = 0.0
+        title.wrap = true
+        title.add_css_class("heading")
+        @body.append(title)
         columns = group_columns(2)
+        columns.homogeneous = true
         columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
         @two_column_layouts << columns
-        details = group(monitor_title(monitor, index + 1), columns)
+        details = group("", columns)
         row(details, translate("Manufacturer"), monitor.vendor)
         row(details, translate("Model"), monitor.model)
         row(details, translate("Product ID"), monitor.product_id)
@@ -920,7 +1041,11 @@ module SystemView
     end
 
     private def audio(data : Snapshot)
-      heading(translate("Audio"))
+      heading(translate("Audio"), action: settings_button("sound", translate("Open sound settings")))
+      session = group(translate("Audio session"))
+      row(session, translate("Audio server"), data.audio_session.server.presence || translate("Not reported"), "audio-card-symbolic")
+      row(session, translate("Default output"), data.audio_session.output.presence || translate("Not reported"), "audio-speakers-symbolic")
+      row(session, translate("Default input"), data.audio_session.input.presence || translate("Not reported"), "audio-input-microphone-symbolic")
       row(group(translate("Audio")), translate("Audio device"), "") if data.audio.empty?
       data.audio.each do |device|
         title = Gtk::Label.new(device.name)
@@ -934,8 +1059,83 @@ module SystemView
         row(details, translate("Device ID"), device.id)
         details = group("", columns)
         row(details, translate("Driver"), device.driver)
-        details = group("", columns)
         row(details, translate("Codecs"), device.codecs.join("\n"))
+      end
+    end
+
+    private def settings_button(panel : String, tooltip : String) : Gtk::Button
+      button = Gtk::Button.new_from_icon_name("emblem-system-symbolic")
+      button.tooltip_text = tooltip
+      button.valign = :center
+      button.add_css_class("flat")
+      button.clicked_signal.connect { open_settings(panel) }
+      button
+    end
+
+    private def device_heading(title : String, action : Gtk::Widget? = nil)
+      line = Gtk::Box.new(:horizontal, 12)
+      label = Gtk::Label.new(title)
+      label.xalign = 0.0
+      label.wrap = true
+      label.hexpand = true
+      label.add_css_class("heading")
+      line.append(label)
+      line.append(action) if action
+      @body.append(line)
+    end
+
+    private def open_settings(panel : String)
+      if opener = @settings_opener
+        opener.call(panel)
+        return
+      end
+      Fiber::ExecutionContext::Isolated.new("system-settings") do
+        begin
+          bus = Gio.bus_get_sync(:session, nil)
+          parameters = GLib::Variant.parse("('launch-panel', [<('#{panel}', @av [])>], @a{sv} {})")
+          bus.call_sync("org.gnome.Settings", "/org/gnome/Settings", "org.gtk.Actions", "Activate", parameters, nil, :none, 3_000, nil)
+        rescue GLib::Error
+        end
+      end
+    end
+
+    private def sensors(data : Snapshot)
+      heading(translate("Sensors"))
+      if data.sensors.empty?
+        row(group(translate("Sensors")), translate("Sensor readings"), translate("Not reported"))
+        return
+      end
+      columns = group_columns
+      data.sensors.group_by { |sensor| sensor.id.split('/').first }.each_value do |items|
+        details = group(items.first.chip, columns)
+        items.each do |sensor|
+          number = sensor.id.split('/').last.gsub(/\D/, "")
+          label = sensor.label.presence || (sensor.kind == "temp" ? translate("Temperature %{number}", number: number) : translate("Fan %{number}", number: number))
+          reading = row(details, label, sensor_value(sensor))
+          track(reading) do |snapshot|
+            snapshot.sensors.find { |item| item.id == sensor.id }.try { |item| sensor_value(item) } || translate("Not reported")
+          end
+        end
+      end
+    end
+
+    private def sensor_value(sensor : Sensor) : String
+      return translate("Not reported") unless value = sensor.value
+      sensor.kind == "temp" ? "#{value.round(1)} °C" : "#{value.to_i64} rpm"
+    end
+
+    private def video(data : Snapshot)
+      heading(translate("Video"))
+      if data.video_devices.empty?
+        row(group(translate("Video")), translate("Video devices"), translate("Not reported"))
+        return
+      end
+      columns = group_columns(2)
+      data.video_devices.each do |device|
+        details = group(device.name, columns)
+        row(details, translate("Name"), device.name)
+        row(details, translate("Device"), device.device)
+        row(details, translate("Type"), translate("Video capture")) if device.kind == "capture"
       end
     end
 
@@ -943,11 +1143,20 @@ module SystemView
       heading(translate("Input Devices"))
       row(group(translate("Input Devices")), translate("Input device"), "") if data.inputs.empty?
       data.inputs.each do |device|
+        title_row = Gtk::Box.new(:horizontal, 12)
         title = Gtk::Label.new(device.name)
         title.xalign = 0.0
         title.wrap = true
+        title.hexpand = true
         title.add_css_class("heading")
-        @body.append(title)
+        title_row.append(title)
+        case device.kind
+        when "keyboard"
+          title_row.append(settings_button("keyboard", translate("Open keyboard settings")))
+        when "mouse", "touchpad"
+          title_row.append(settings_button("mouse", translate("Open mouse and touchpad settings")))
+        end
+        @body.append(title_row)
         columns = group_columns(2)
         details = group("", columns)
         kind = case device.kind
@@ -968,16 +1177,18 @@ module SystemView
     end
 
     private def network(data : Snapshot)
-      heading(translate("Network"))
-      if data.connectivity.devices.empty? && data.connectivity.bluetooth.empty?
+      heading(translate("Network"), action: settings_button("network", translate("Open network settings")))
+      if data.connectivity.devices.empty?
         row(group(translate("Network")), translate("Network adapters"), translate("None"))
       end
       data.connectivity.devices.each do |device|
+        title = [network_kind(device.kind), device.interface, device.connection].reject(&.empty?).join(" · ")
+        device_heading(title)
         columns = group_columns(2)
         columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
         @two_column_layouts << columns
         columns.homogeneous = true
-        details = group("#{network_kind(device.kind)} · #{device.interface}", columns)
+        details = group("", columns)
         row(details, translate("Model"), device.name) unless device.name.empty?
         row(details, translate("Interface"), device.interface)
         row(details, translate("Status"), network_state(device.state))
@@ -997,15 +1208,35 @@ module SystemView
           row(details, translate("Frequency"), device.frequency_mhz > 0 ? "#{device.frequency_mhz} MHz" : "")
           row(details, translate("Security"), device.security == "open" ? translate("Open network") : device.security)
         end
-        network_addresses(device.interface, device.ipv4, 4, columns)
-        network_addresses(device.interface, device.ipv6, 6, columns)
+        addresses = group("", columns)
+        network_addresses(addresses, device.ipv4, 4)
+        network_addresses(addresses, device.ipv6, 6)
+      end
+    end
+
+    private def printers(data : Snapshot)
+      heading(translate("Printers"), action: settings_button("printers", translate("Open printer settings")))
+      details = group("")
+      if data.printers.names.empty?
+        row(details, translate("Printers"), data.printers.available ? translate("None") : translate("Unknown"))
+      else
+        data.printers.names.each { |name| row(details, translate("Printer"), name) }
+      end
+    end
+
+    private def bluetooth(data : Snapshot)
+      heading(translate("Bluetooth"), action: settings_button("bluetooth", translate("Open Bluetooth settings")))
+      if data.connectivity.bluetooth.empty?
+        row(group(translate("Bluetooth")), translate("Bluetooth adapters"), translate("None"))
       end
       data.connectivity.bluetooth.each do |adapter|
+        title = adapter.name.empty? || adapter.name == adapter.id ? adapter.id : "#{adapter.id} · #{adapter.name}"
+        device_heading(title)
         columns = group_columns(2)
         columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
         @two_column_layouts << columns
         columns.homogeneous = true
-        details = group("#{translate("Bluetooth")} · #{adapter.id}", columns)
+        details = group("", columns)
         row(details, translate("Name"), adapter.name)
         row(details, translate("MAC address"), adapter.address)
         row(details, translate("Kernel driver"), adapter.driver) unless adapter.driver.empty?
@@ -1017,7 +1248,8 @@ module SystemView
         row(details, translate("Pairable"), enabled(adapter.pairable))
         row(details, translate("Connected devices"), adapter.devices.count(&.connected).to_s)
         adapter.devices.each do |device|
-          remote = group("#{translate("Bluetooth")} · #{device.name.presence || device.address}", columns)
+          device_heading(device.name.presence || device.address)
+          remote = group("")
           row(remote, translate("MAC address"), device.address)
           row(remote, translate("Connected"), enabled(device.connected))
           row(remote, translate("Paired"), enabled(device.paired))
@@ -1026,15 +1258,15 @@ module SystemView
       end
     end
 
-    private def network_addresses(interface : String, config : NetworkAddress, version : Int32, columns : Gtk::FlowBox)
-      details = group("#{interface} · IPv#{version}", columns)
+    private def network_addresses(details : Adw::PreferencesGroup, config : NetworkAddress, version : Int32)
       missing = config.available ? translate("None") : translate("Unknown")
-      row(details, translate("IP addresses"), config.addresses.empty? ? missing : config.addresses.join("\n"))
-      row(details, translate("Address configuration"), address_method(config.method))
-      row(details, translate("DHCP"), enabled(config.dhcp))
-      row(details, translate("Gateway"), config.gateway.empty? ? missing : config.gateway)
-      row(details, translate("DNS servers"), config.dns.empty? ? missing : config.dns.join("\n"))
-      row(details, translate("Search domains"), config.domains.join("\n")) unless config.domains.empty?
+      prefix = "IPv#{version} · "
+      row(details, prefix + translate("IP addresses"), config.addresses.empty? ? missing : config.addresses.join("\n"))
+      row(details, prefix + translate("Address configuration"), address_method(config.method))
+      row(details, prefix + translate("DHCP"), enabled(config.dhcp))
+      row(details, prefix + translate("Gateway"), config.gateway.empty? ? missing : config.gateway)
+      row(details, prefix + translate("DNS servers"), config.dns.empty? ? missing : config.dns.join("\n"))
+      row(details, prefix + translate("Search domains"), config.domains.join("\n")) unless config.domains.empty?
     end
 
     private def enabled(value : Bool?) : String

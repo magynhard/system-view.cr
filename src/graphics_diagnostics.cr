@@ -18,7 +18,8 @@ module SystemView::GraphicsDiagnostics
       card.copy_with(opengl: gl["OpenGL core profile version string"]? || gl["OpenGL version string"]? || "",
         glsl: gl["OpenGL core profile shading language version string"]? || gl["OpenGL shading language version string"]? || "",
         opengl_es: gl["OpenGL ES profile version string"]? || "", renderer: gl["OpenGL renderer string"]? || "",
-        vulkan: vk["apiVersion"]? || "", vulkan_driver: [vk["driverName"]? || "", vk["driverInfo"]? || ""].reject(&.empty?).join(" · "))
+        vulkan: vk["apiVersion"]? || "", vulkan_driver: [vk["driverName"]? || "", vk["driverInfo"]? || ""].reject(&.empty?).join(" · "),
+        vulkan_device_type: vk["deviceType"]? || "", vulkan_driver_version: vk["driverVersion"]? || "")
     end
   end
 

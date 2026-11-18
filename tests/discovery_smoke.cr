@@ -5,6 +5,13 @@ require "../src/metadata"
 require "../src/app"
 require "../spec/support/fixture_files"
 
+if ARGV == [SystemView::PrinterDiscovery::HELPER_ARGUMENT]
+  names = SystemView::PrinterDiscovery.cups_names
+  exit 1 unless names
+  puts names.to_json
+  exit
+end
+
 # Exercise the actual child-process path while GTK occupies the main thread.
 # Parser fixtures and injected graphics loaders cannot detect scheduler deadlocks.
 tools = File.tempname("system-view-diagnostic-tools")

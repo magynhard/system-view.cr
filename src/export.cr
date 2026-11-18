@@ -35,15 +35,52 @@ module SystemView
       inputs_section(lines, data)
       lines << "## Network"
       network_section(lines, data)
+      lines << "## Bluetooth"
+      bluetooth_section(lines, data)
+      lines << "## Printers"
+      if data.printers.names.empty?
+        add_rows(lines, [{"Printers", data.printers.available ? "None" : "Unknown"}])
+      else
+        add_rows(lines, data.printers.names.map { |name| {"Printer", name} })
+      end
       lines << "## Operating System"
       system_section(lines, data)
       lines << "## Power"
       power_section(lines, data)
+      lines << "## Sensors"
+      sensors_section(lines, data)
+      lines << "## Video"
+      video_section(lines, data)
       lines.join("\n")
     end
 
     private def report_title(data : Snapshot) : String
       data.hostname.presence || data.os.presence || "Unknown system"
+    end
+
+    private def sensors_section(lines : Array(String), data : Snapshot) : Nil
+      add_rows(lines, [{"Sensor readings", "Not reported"}]) if data.sensors.empty?
+      data.sensors.group_by { |sensor| sensor.id.split('/').first }.each_value do |items|
+        lines << "### #{items.first.chip}"
+        items.each do |sensor|
+          number = sensor.id.split('/').last.gsub(/\D/, "")
+          label = sensor.label.presence || (sensor.kind == "temp" ? "Temperature #{number}" : "Fan #{number}")
+          value = if reading = sensor.value
+                    sensor.kind == "temp" ? "#{reading.round(1)} °C" : "#{reading.to_i64} rpm"
+                  else
+                    "Not reported"
+                  end
+          add_rows(lines, [{label, value}])
+        end
+      end
+    end
+
+    private def video_section(lines : Array(String), data : Snapshot) : Nil
+      add_rows(lines, [{"Video devices", "Not reported"}]) if data.video_devices.empty?
+      data.video_devices.each do |device|
+        lines << "### #{device.name}"
+        add_rows(lines, [{"Name", device.name}, {"Device", device.device}, {"Type", device.kind == "capture" ? "Video capture" : ""}])
+      end
     end
 
     private def power_section(lines : Array(String), data : Snapshot) : Nil
@@ -239,18 +276,28 @@ module SystemView
         lines << "#### PCI and driver"
         add_rows(lines, [{"PCI ID", "#{gpu.vendor_id}:#{gpu.device_id}"},
                          {"Subsystem ID", gpu.subsystem_id}, {"Revision", gpu.revision},
-                         {"PCI address", gpu.address}, {"Kernel driver", gpu.driver}])
+                         {"PCI address", gpu.address}, {"Kernel driver", gpu.driver},
+                         {"Current PCIe link", gpu.pcie_current.presence || "Not reported"}, {"Maximum PCIe link", gpu.pcie_maximum.presence || "Not reported"}])
         lines << "#### Memory and clocks"
         add_rows(lines, [{"Dedicated video memory", capacity(gpu.memory, binary: true)},
                          {"Current GPU clock", gpu.clock_mhz > 0 ? "#{gpu.clock_mhz} MHz" : "Not reported"},
-                         {"Current video memory clock", gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : "Not reported"}])
+                         {"Current video memory clock", gpu.memory_clock_mhz > 0 ? "#{gpu.memory_clock_mhz} MHz" : "Not reported"},
+                         {"GPU utilization", gpu.utilization.try { |value| "#{value.round(1)} %" } || "Not reported"},
+                         {"GPU power", gpu.power_watts.try { |value| "#{value.round(2)} W" } || "Not reported"}])
         lines << "#### Graphics APIs"
+        vk_kind = case gpu.vulkan_device_type
+                  when "PHYSICAL_DEVICE_TYPE_DISCRETE_GPU"   then "Discrete GPU"
+                  when "PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU" then "Integrated GPU"
+                  when "PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU"    then "Virtual GPU"
+                  else                                            "Not reported"
+                  end
         add_rows(lines, [{"OpenGL", gpu.opengl.empty? ? "Not reported" : gpu.opengl},
                          {"GLSL", gpu.glsl.empty? ? "Not reported" : gpu.glsl},
                          {"OpenGL ES", gpu.opengl_es.empty? ? "Not reported" : gpu.opengl_es},
                          {"OpenGL renderer", gpu.renderer},
                          {"Vulkan", gpu.vulkan.empty? ? "Not reported" : gpu.vulkan},
-                         {"Vulkan driver", gpu.vulkan_driver}])
+                         {"Vulkan driver", gpu.vulkan_driver}, {"Vulkan device type", vk_kind},
+                         {"Vulkan driver version", gpu.vulkan_driver_version.presence || "Not reported"}])
       end
     end
 
@@ -420,6 +467,10 @@ module SystemView
     end
 
     private def audio_section(lines : Array(String), data : Snapshot) : Nil
+      lines << "### Audio session"
+      add_rows(lines, [{"Audio server", data.audio_session.server.presence || "Not reported"},
+                       {"Default output", data.audio_session.output.presence || "Not reported"},
+                       {"Default input", data.audio_session.input.presence || "Not reported"}])
       lines << "- **Audio device:** Unknown" if data.audio.empty?
       data.audio.each do |device|
         lines << "### #{device.name}"
@@ -438,9 +489,10 @@ module SystemView
     end
 
     private def network_section(lines : Array(String), data : Snapshot) : Nil
-      lines << "- **Network adapters:** None" if data.connectivity.devices.empty? && data.connectivity.bluetooth.empty?
+      lines << "- **Network adapters:** None" if data.connectivity.devices.empty?
       data.connectivity.devices.each do |device|
-        lines << "### #{network_kind(device.kind)} · #{device.interface}"
+        title = [network_kind(device.kind), device.interface, device.connection].reject(&.empty?).join(" · ")
+        lines << "### #{title}"
         rows = [] of Tuple(String, String)
         rows << {"Model", device.name} unless device.name.empty?
         rows << {"Interface", device.interface}
@@ -462,18 +514,23 @@ module SystemView
           rows << {"Security", device.security == "open" ? "Open network" : device.security}
         end
         add_rows(lines, rows)
-        network_addresses(lines, device.interface, device.ipv4, 4)
-        network_addresses(lines, device.interface, device.ipv6, 6)
+        network_addresses(lines, device.ipv4, 4)
+        network_addresses(lines, device.ipv6, 6)
       end
+    end
+
+    private def bluetooth_section(lines : Array(String), data : Snapshot) : Nil
+      add_rows(lines, [{"Bluetooth adapters", "None"}]) if data.connectivity.bluetooth.empty?
       data.connectivity.bluetooth.each do |adapter|
-        lines << "### Bluetooth · #{adapter.id}"
+        title = adapter.name.empty? || adapter.name == adapter.id ? adapter.id : "#{adapter.id} · #{adapter.name}"
+        lines << "### #{title}"
         add_rows(lines, [{"Name", adapter.name}, {"MAC address", adapter.address},
                          {"Enabled", enabled(adapter.powered)}, {"Bluetooth version", adapter.version},
                          {"Link speed", "Not reported"}, {"Discoverable", enabled(adapter.discoverable)},
                          {"Pairable", enabled(adapter.pairable)},
                          {"Kernel driver", adapter.driver}] + [{"Connected devices", adapter.devices.count(&.connected).to_s}])
         adapter.devices.each do |device|
-          lines << "### Bluetooth · #{device.name.presence || device.address}"
+          lines << "### #{device.name.presence || device.address}"
           device_rows = [{"MAC address", device.address},
                          {"Connected", enabled(device.connected)}, {"Paired", enabled(device.paired)}]
           device_rows << {"Signal strength", "#{device.rssi} dBm"} if device.connected && device.rssi
@@ -482,15 +539,15 @@ module SystemView
       end
     end
 
-    private def network_addresses(lines : Array(String), interface : String, config : NetworkAddress, version : Int32) : Nil
-      lines << "### #{interface} · IPv#{version}"
+    private def network_addresses(lines : Array(String), config : NetworkAddress, version : Int32) : Nil
       missing = config.available ? "None" : "Unknown"
-      add_rows(lines, [{"IP addresses", config.addresses.empty? ? missing : config.addresses.join("\n")},
-                       {"Address configuration", address_method(config.method)},
-                       {"DHCP", enabled(config.dhcp)},
-                       {"Gateway", config.gateway.empty? ? missing : config.gateway},
-                       {"DNS servers", config.dns.empty? ? missing : config.dns.join("\n")},
-                       {"Search domains", config.domains.join("\n")}])
+      prefix = "IPv#{version} · "
+      add_rows(lines, [{prefix + "IP addresses", config.addresses.empty? ? missing : config.addresses.join("\n")},
+                       {prefix + "Address configuration", address_method(config.method)},
+                       {prefix + "DHCP", enabled(config.dhcp)},
+                       {prefix + "Gateway", config.gateway.empty? ? missing : config.gateway},
+                       {prefix + "DNS servers", config.dns.empty? ? missing : config.dns.join("\n")},
+                       {prefix + "Search domains", config.domains.join("\n")}])
     end
 
     private def system_section(lines : Array(String), data : Snapshot) : Nil

@@ -64,6 +64,16 @@ class FixtureFiles < SystemView::LinuxFiles
     @directories["/sys/class/tpm"] = ["tpm0"]
     @files["/sys/class/tpm/tpm0/tpm_version_major"] = "2"
     @directories["/sys/bus/pci/devices"] = ["0000:01:00.0", "0000:02:00.0", "0000:03:00.0"]
+    gpu = "/sys/bus/pci/devices/0000:01:00.0"
+    @files["#{gpu}/current_link_speed"] = "8.0 GT/s PCIe"
+    @files["#{gpu}/current_link_width"] = "8"
+    @files["#{gpu}/max_link_speed"] = "16.0 GT/s PCIe"
+    @files["#{gpu}/max_link_width"] = "16"
+    @files["#{gpu}/gpu_busy_percent"] = "27"
+    @files["#{gpu}/pp_dpm_sclk"] = "1: 1800Mhz *"
+    @files["#{gpu}/pp_dpm_mclk"] = "1: 1124Mhz *"
+    @directories["#{gpu}/hwmon"] = ["hwmon0"]
+    @files["#{gpu}/hwmon/hwmon0/power1_average"] = "42500000"
     {"0000:01:00.0" => {"0x030000", "0x1234", "0xabcd"},
      "0000:02:00.0" => {"0x030200", "0x5678", "0x0001"},
      "0000:03:00.0" => {"0x020000", "0x1234", "0x2222"}}.each do |address, values|
@@ -93,6 +103,19 @@ class FixtureFiles < SystemView::LinuxFiles
     @files["/sys/class/drm/card0-DP-1/edid"] = String.new(self.class.edid)
     @files["/sys/class/drm/card0-HDMI-A-1/status"] = "disconnected"
     @files["/proc/asound/cards"] = " 0 [USBTest        ]: USB-Audio - Example USB Audio\n                      Example Audio at USB\n"
+    @directories["/sys/class/hwmon"] = ["hwmon0"]
+    @directories["/sys/class/hwmon/hwmon0"] = ["temp1_input", "temp1_label", "fan1_input"]
+    @files["/sys/class/hwmon/hwmon0/name"] = "example_chip"
+    @files["/sys/class/hwmon/hwmon0/temp1_label"] = "CPU Package"
+    @files["/sys/class/hwmon/hwmon0/temp1_input"] = "42500"
+    @files["/sys/class/hwmon/hwmon0/fan1_input"] = "1200"
+    @directories["/sys/class/video4linux"] = ["video0", "video1"]
+    @files["/sys/class/video4linux/video0/name"] = "Example Camera"
+    @files["/sys/class/video4linux/video0/dev"] = "81:0"
+    @files["/run/udev/data/c81:0"] = "E:ID_V4L_CAPABILITIES=:capture:\n"
+    @files["/sys/class/video4linux/video1/name"] = "Example metadata"
+    @files["/sys/class/video4linux/video1/dev"] = "81:1"
+    @files["/run/udev/data/c81:1"] = "E:ID_V4L_CAPABILITIES=:metadata:\n"
     @directories["/proc/asound/card0"] = ["codec#0"]
     @files["/proc/asound/card0/codec#0"] = "Codec: Example Codec\nAddress: 0"
     @files["/proc/bus/input/devices"] = "I: Bus=0003 Vendor=1234 Product=5678 Version=0001\nN: Name=\"Example Keyboard\"\nH: Handlers=kbd event3\n\nI: Bus=0003 Vendor=4321 Product=8765 Version=0001\nN: Name=\"Example Mouse\"\nH: Handlers=mouse0 event4\n\nI: Bus=0019 Vendor=0000 Product=0001 Version=0000\nN: Name=\"Power Button\"\nH: Handlers=kbd event0\n"

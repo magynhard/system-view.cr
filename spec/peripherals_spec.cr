@@ -72,6 +72,23 @@ describe "peripheral discovery" do
     SystemView::Inventory.scan(files).inputs.last.kind.should eq("touchpad")
   end
 
+  it "hides a keyboard's duplicate mouse interface only when its physical identity and name match" do
+    files = FixtureFiles.new
+    keyboard = "I: Bus=0003 Vendor=045e Product=082c Version=0111\nN: Name=\"Microsoft Ergonomic Keyboard\"\nP: Phys=usb-1/input0\nH: Handlers=kbd event3\n"
+    duplicate = "I: Bus=0003 Vendor=045e Product=082c Version=0111\nN: Name=\"Microsoft Ergonomic Keyboard Mouse\"\nP: Phys=usb-1/input0\nH: Handlers=event4 mouse0\n"
+    other = duplicate.sub("usb-1/input0", "usb-2/input0").sub("event4 mouse0", "event5 mouse1")
+    files.files["/proc/bus/input/devices"] = [keyboard, duplicate, other].join("\n")
+    inputs = SystemView::Inventory.input_devices(files)
+    inputs.map(&.name).should eq(["Microsoft Ergonomic Keyboard", "Microsoft Ergonomic Keyboard Mouse"])
+    inputs.last.handlers.should contain("event5")
+    files.files["/proc/bus/input/devices"] = [keyboard, duplicate.sub("P: Phys=usb-1/input0", "P: Phys=")].join("\n")
+    SystemView::Inventory.input_devices(files).size.should eq(2)
+    files.files["/sys/class/input/event4/dev"] = "13:68"
+    files.files["/run/udev/data/c13:68"] = "E:ID_INPUT_TOUCHPAD=1\nE:ID_INPUT_MOUSE=1\n"
+    files.files["/proc/bus/input/devices"] = [keyboard, duplicate].join("\n")
+    SystemView::Inventory.input_devices(files).last.kind.should eq("touchpad")
+  end
+
   it "reports only CPU flags shared by all logical processors" do
     files = FixtureFiles.new
     files.files["/proc/cpuinfo"] = "processor: 0\nflags: fpu mmx avx2\n\nprocessor: 1\nflags: fpu mmx\n"

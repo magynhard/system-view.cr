@@ -1,30 +1,74 @@
+<div align="center">
+  <img src="data/icons/de.magynhard.SystemView.svg" width="96" height="96" alt="System View icon">
+</div>
+
 # System View
 
-A native Linux hardware overview built with **Crystal, GTK4 and libadwaita**.
-Inspired by [Disk View](https://github.com/magynhard/disk-view.cr), with the same
-build and packaging foundations.
+[![GitHub Release](https://img.shields.io/github/v/release/magynhard/system-view.cr?style=plastic&color=blue&label=GitHub&logo=github)](https://github.com/magynhard/system-view.cr/releases)
+[![Crystal](https://img.shields.io/badge/_-Crystal-Sub?style=plastic&color=gray&logo=crystal&logoColor=white)](https://crystal-lang.org/)
+[![GTK](https://img.shields.io/badge/_-GTK4-Sub?style=plastic&color=gray&logo=gtk&logoColor=green)](https://www.gtk.org/)
+[![libadwaita](https://img.shields.io/badge/_-libadwaita-Sub?style=plastic&color=gray&logo=gnome&logoColor=white)](https://gnome.pages.gitlab.gnome.org/libadwaita/)
+[![Linux](https://img.shields.io/badge/_-Linux-Sub?style=plastic&color=gray&logo=linux&logoColor=white)](#requirements)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg?style=plastic&logo=mit)](LICENSE)
+
+System View is a native Linux application for exploring your computer's hardware
+and system information. It brings your components, connected devices and useful
+live readings together in a simple GTK4 and libadwaita interface.
+
+> If you want a quick, easy-to-understand overview of what's inside your computer
+> and what's connected to it, System View is for you.
+
+![System View showing the hardware summary in dark mode](doc/screenshot.png)
 
 ## Features
 
-- Open directly to an overview of your processor, mainboard, graphics cards,
-  installed RAM and physical drives, including exact model names where available.
-- Explore Graphics, Processor, Mainboard, Drives, Memory, Monitors, Audio,
-  Input Devices, Network, Operating System and Power pages.
-- Keep navigation alongside the content on wide windows. Below 860 pixels it
-  becomes an overlay, accessible with the sidebar button or **F9**.
-- Read standard hardware information without root privileges. Load additional
-  processor and memory details through explicit desktop authorization when needed.
-- Follow the system's light/dark appearance and language (English and German).
-- Use a custom, embedded GNOME-style application icon, also in standalone builds.
-- Open hardware/system sections directly by activating their overview rows.
-- See RAM generation, monitor summaries and the active desktop version in the overview.
+- Start with a summary of your computer and open a component for more details.
+- Explore your processor, graphics cards, mainboard, drives and memory.
+- View monitors, audio devices, cameras, keyboards, mice and printers.
+- Check network connections, Bluetooth devices, power supplies and sensors.
+- See operating system, desktop environment and runtime information.
+- Watch available values such as processor and graphics clocks, memory usage,
+  temperatures and battery status update automatically.
+- Copy the summary or all information, refresh the inventory, and open relevant
+  GNOME Settings panels from the application.
+- Use a responsive interface that follows your system's light or dark appearance
+  and supports English and German.
 
-## Development
+The information shown depends on your hardware, drivers and system. Values that
+cannot be determined are shown as unknown or not reported.
 
-Requires Crystal **1.21+**, Shards, GTK **4.12+**, libadwaita **1.5+**,
-GObject Introspection, gettext, pkg-config and the usual C build dependencies.
-Install the distribution's PCI ID database for human-readable graphics names.
-AMD model identification additionally uses libdrm's `amdgpu.ids` database.
+## Components at a glance
+
+| Section | What you can see |
+| --- | --- |
+| Graphics | Graphics cards, video memory, clocks, load and graphics API details |
+| Processor | Processor model, cores, threads, clocks and caches |
+| Mainboard | Mainboard, firmware, boot mode and security information |
+| Drives | Physical drives, capacity, connection and available health information |
+| Memory | Installed and available memory, swap and memory module details |
+| Monitors | Connected displays, resolution and refresh rates |
+| Audio | Audio devices, the active sound server and default input and output |
+| Video | Detected cameras and other video capture devices |
+| Input Devices | Keyboards, mice, touchpads, game controllers and other input devices |
+| Network | Ethernet and Wi-Fi connections, addresses and connection details |
+| Bluetooth | Adapters and paired or connected devices |
+| Operating System | Linux distribution, kernel, desktop and runtime environment |
+| Power | Power adapters and battery status, charge and health |
+| Sensors | Available temperature and fan readings |
+| Printers | Printers configured with CUPS |
+
+Standard information is read without administrator privileges. On native and
+AppImage installations, you can choose to unlock additional processor and memory
+details through the system's authorization dialog. This optional action is not
+available in the standalone Flatpak.
+
+## Requirements
+
+Linux with Crystal **1.21+**, Shards, GTK **4.12+**, libadwaita **1.5+**,
+GObject Introspection, gettext, pkg-config and standard C build tools. A graphical
+session is required to run the application. A PCI ID database and the libdrm
+`amdgpu.ids` database help identify graphics hardware. Printer discovery uses the
+CUPS client library.
 
 On Arch Linux / Manjaro:
 
@@ -42,17 +86,67 @@ sudo apt install build-essential pkg-config libgtk-4-dev libadwaita-1-dev \
 ```
 
 Install a compatible Crystal compiler and Shards separately if your distribution
-ships an older version, then:
+ships an older version.
+
+## Run
 
 ```sh
 make setup
 make run
 ```
 
-The executable is `bin/system-view`. Install with `make install PREFIX=~/.local`
-or `sudo make install`; remove it with the matching `make uninstall` command.
+`make setup` installs the Crystal dependencies and generates the GTK bindings.
+To build and run the executable separately:
 
-### Checks
+```sh
+make build
+./bin/system-view
+```
+
+To start the application in English regardless of the system language:
+
+```sh
+SYSTEM_VIEW_LANGUAGE=en ./bin/system-view
+```
+
+Use the header bar to copy information, refresh or open the About dialog.
+
+| Shortcut | Action |
+| --- | --- |
+| Ctrl+R | Refresh hardware information |
+| F9 | Show or hide the sidebar |
+| F1 | About System View |
+| Ctrl+W | Close the window |
+
+## Install
+
+Install the executable, desktop launcher, icon and translations for your user:
+
+```sh
+make install PREFIX="$HOME/.local"
+```
+
+Make sure `~/.local/bin` is on your `PATH`. For a system-wide installation, use
+`sudo make install`. To remove the application, use the corresponding
+`make uninstall PREFIX="$HOME/.local"` or `sudo make uninstall` command.
+
+## Packages
+
+Build an AppImage or a standalone Flatpak bundle with:
+
+```sh
+make appimage
+make flatpak
+```
+
+The packages and their SHA-256 files are created in `dist/`. See
+[Linux packaging](doc/packaging.md) for prerequisites, installation and release
+details. The generated Flatpak manifest is intended for local builds, not a
+Flathub submission.
+
+## Development
+
+Run the project checks with:
 
 ```sh
 make test
@@ -65,195 +159,11 @@ make test-ui
 git diff --check
 ```
 
-`make test-ui` needs Xvfb, `xvfb-run` and `dbus-run-session`. It checks the default
-selection, all detail pages, narrow/wide navigation, refresh and closing during
-discovery. Screenshots are generated under `build/system-view-*.png`.
-It also runs a separate startup regression with actual diagnostic child processes
-and deterministic tool output. This catches subprocess/scheduler deadlocks that
-injected graphics parsers/loaders cannot detect.
+The UI tests require Xvfb, `xvfb-run` and `dbus-run-session` and save screenshots
+under `build/`. Translation catalogs are in `po/`; run `make generate_locales`
+after changing translatable messages.
 
-### Keyboard shortcuts
+## Author and license
 
-| Shortcut | Action |
-| --- | --- |
-| Ctrl+R | Refresh hardware information |
-| F9 | Show/hide sidebar |
-| F1 | About System View |
-| Ctrl+W | Close window |
-
-## Hardware discovery
-
-`src/inventory.cr` contains the GTK-independent data model and Linux reader.
-Discovery runs in a background thread; widgets are updated on GTK's main thread.
-Refresh keeps the selected page. The application only reads system information.
-
-| Component | Sources |
-| --- | --- |
-| Processor | `/proc/cpuinfo`, CPU topology, cpufreq clocks and cache hierarchy in `/sys/devices/system/cpu` |
-| Mainboard / BIOS | Readable DMI attributes in `/sys/class/dmi/id` |
-| Graphics | PCI display controllers in `/sys/bus/pci/devices`, `pci.ids`, libdrm `amdgpu.ids` and optional driver-reported product names |
-| RAM | Cached udev/SMBIOS module sizes in `/run/udev/data/+dmi:id`; `/proc/meminfo` for usable and available memory |
-| Drives | Physical block devices in `/sys/block`, cached udev model/vendor/transport properties; sizes use 512-byte kernel sectors |
-| System | `os-release`, kernel version, hostname, session type, kernel architecture and detectable virtualization or container environment |
-| Monitors | Connected DRM outputs and validated base EDID blocks |
-| Audio | ALSA card and codec metadata in `/proc/asound` |
-| Input devices | `/proc/bus/input/devices` and cached udev classification, without opening event devices |
-| LAN / Wi-Fi | Physical interfaces in `/sys/class/net`, cached udev identification and read-only NetworkManager D-Bus properties |
-| Bluetooth | BlueZ adapter and paired/connected-device properties, with a sysfs adapter fallback |
-| Power | System batteries and adapters in `/sys/class/power_supply`; remaining time is estimated from reported charge or energy and rate |
-
-RAM, swap and video memory use 1024-based IEC units (GiB, MiB); drive capacities
-use decimal GB/TB. Kernel-usable RAM excludes reserved memory and may be below
-installed-module capacity. Driver-reported VRAM may also exclude a reserved part.
-
-Installed RAM is the primary capacity in the overview and on the RAM page. It is
-summed from the cached module sizes, with usable/available memory shown separately.
-The RAM page also lists readable slot labels, manufacturers, series, module part
-numbers, types and configured data rates in MT/s. `data/ram-identifiers.json`
-embeds the supplied 43-prefix manufacturer/series mapping with longest-prefix
-matching. Explicit manufacturer data takes priority; the mapping does not infer
-RAM generation or form factor. Missing or incomplete firmware-cache sizes leave
-installed capacity Unknown; the application never rounds usable memory to guess it
-and never substitutes the motherboard's maximum supported capacity.
-
-CPU details include family/model/stepping, reported minimum/maximum/base clocks,
-the current clock range, available frequency steps, driver, governor and boost
-state. Clock values are snapshots taken on refresh, not live telemetry. Missing
-base clocks remain Unknown. L1 data/instruction and L2/L3 caches show instance
-count, per-instance size, total size, cache-line size and associativity. Shared
-caches are deduplicated by cache identity or shared CPU list, including under SMT.
-
-GPU details distinguish the GPU vendor, card manufacturer, board model and PCI
-model group. AMD device **and revision** IDs are matched against `amdgpu.ids` to
-identify variants sharing the same device ID. Driver product names take priority.
-A generic PCI model group is not claimed as an exact model. Subsystem IDs
-identify card vendors and board variants when the local
-database contains them. A retail edition is not guessed from VRAM capacity.
-
-Graphics details also show the active GPU and video-memory clock when exposed by
-the driver. Optional `glxinfo` (`mesa-utils` on Debian/Ubuntu, `mesa-utils` on Arch)
-and `vulkaninfo` (`vulkan-tools`) diagnostics provide OpenGL, GLSL, OpenGL ES and
-the physical GPU's Vulkan API version/driver. Each command has a two-second
-timeout. Child-process communication uses GIO in the discovery worker so stdout
-and process completion do not depend on Crystal fibers blocked by GTK's main
-loop. The same mechanism is used for the explicit firmware query. OpenGL
-attribution requires a hardware-accelerated renderer with matching
-PCI IDs; ambiguous identical cards/ICDs and software renderers are not attributed
-to physical cards. Missing tools, unsupported diagnostics or failed queries leave
-these fields **Not reported**, not an assertion that the API is unsupported.
-The Flatpak does not execute host tools; optional diagnostic tools must be
-available inside its runtime to report API versions.
-
-The interface presents hardware facts without data-source rows or implementation
-explanations. Drive identification prefers complete cached model strings;
-protocol names such as ATA/USB are not treated as manufacturers. Explicit model
-brand prefixes identify common vendors when ATA metadata omits the manufacturer.
-Connection type (such as SATA or USB) is displayed separately.
-
-Drive health uses cached UDisks2 SMART properties for status, temperature and
-power-on hours when available. The displayed update time indicates the age of
-the cached reading. No SMART update is requested and devices are not opened by
-the application; unsupported or inaccessible values remain Not reported.
-
-CPU socket count means the number of processor packages, not a socket type such
-as AM4. Processor Features lists the additional processor capabilities after
-unlocking. The optional additional-details
-action supplies socket designation/type, voltage, configured/external clocks,
-capabilities and module voltages from `dmidecode`.
-
-### Additional hardware details
-
-On native/AppImage installations, install `dmidecode`, `pkexec` (polkit) and a
-desktop authentication agent. The CPU and RAM pages show an **AdwBanner** with
-**Some hardware details are locked** and a primary **Unlock…** button. Protected
-fields are already visible, blank and disabled. Unlocking starts only the fixed command
-`pkexec --disable-internal-agent /usr/bin/dmidecode --type 4,17`
-(using the installed system dmidecode path). The GUI itself stays unprivileged.
-Numeric DMI types 4 and 17 select processors and memory devices. Compound keyword
-arguments such as `processor,memory` are not supported by dmidecode.
-Nothing is authorized automatically on startup or refresh. Cancellation and a
-120-second timeout stop the request. One successful unlock enables both CPU and
-RAM details, hides both banners, and survives page changes and refresh until the
-window closes. Cancelling or failing authorization leaves the placeholders locked.
-
-The standalone Flatpak does not expose this privileged action or gain host-command
-execution permissions. Its regular inventory and module identification remain
-available; protected fields stay disabled. Unlocking currently requires a
-native/AppImage launch.
-
-Monitor groups are numbered **Monitor 1**, **Monitor 2**, etc., with **(Primary)**
-only when reported by the compositor. On GNOME, a bounded read-only Mutter query
-provides current resolution/refresh rate and the numbering order used by GNOME
-Settings (built-in panels first). Those values are separate from preferred EDID
-timings. With no supported compositor, stable local numbering is used and primary
-status/current timing are not guessed. Repeated connector names across GPUs must
-be unambiguously matched; HDMI-A connector aliases are normalized. The graphics
-page links attached monitors, including available current refresh rates.
-Missing EDID data leaves identity fields Unknown while
-retaining the connector and advertised modes. Audio includes HDMI/DP, onboard and
-USB cards; input classification includes keyboards, mice, gamepads and touch devices.
-
-Missing or inaccessible values appear as **Unknown**. Graphics without a matching
-PCI database entry retain their PCI IDs. Non-PCI graphics are not collected yet.
-Direct SPD data and live utilization graphs are future work. Standard discovery
-reads cached/system metadata without raw-device access. Older udev caches can
-round module voltages to whole volts; these imprecise entries are left Unknown
-until additional firmware details are loaded.
-Virtual mappings, loop devices, software RAID aggregates, optical drives and
-empty removable media are excluded to avoid counting physical capacity twice.
-Virtual machines report the hardware exposed by their hypervisor.
-
-Memory is named **Memory** throughout navigation and in the overview. When every
-installed module has the same known manufacturer and exact part number, their
-common manufacturer/series/model precede capacity in the summary. Incomplete,
-mixed or unidentified module sets do not claim a shared model. The overview hero
-subtitle contains only the operating-system name.
-
-Each module has a CL–tRCD–tRP–tRAS timings row. Standard SMBIOS and its udev cache
-do not provide these timings, so they are currently **Not reported**. The app
-does not infer active timings from a part-number suffix or a vendor's advertised
-profile and does not probe raw SPD devices.
-
-### Network
-
-The Network page and its overview shortcut list Ethernet (LAN), Wi-Fi when
-present, and Bluetooth adapters. Each network interface has its own connection
-status, profile, negotiated link speed in Mbit/s or Gbit/s, MAC/permanent MAC,
-MTU and driver. LAN also reports duplex. IPv4 and IPv6 groups show addresses with
-prefix lengths, address configuration, DHCP, gateway, DNS servers and search
-domains, without mixing settings from different interfaces. An automatic IPv6
-profile alone does not prove DHCPv6 is in use: SLAAC is also possible.
-
-Wi-Fi adds the active SSID, BSSID, signal strength, frequency and advertised
-security. Bluetooth lists power/discoverability/pairing state, reported version,
-address, paired/connected devices and available RSSI. BlueZ does not expose a
-negotiated link bitrate, so Bluetooth speed is shown as **Not reported**, never
-inferred from the Bluetooth version. Link speeds are not internet speed tests.
-
-Discovery only reads existing state: no Wi-Fi scans, Bluetooth discovery,
-connections or configuration changes. NetworkManager/BlueZ are optional;
-physical links and adapters remain visible without them, while unavailable
-configuration is Unknown rather than inferred from a global resolver file.
-Refresh reloads the state in the background. GTK and wrapper finalization stay
-on the original application thread, including when discovery triggers garbage
-collection.
-
-## Packaging and CI
-
-```sh
-make appimage
-make flatpak
-```
-
-AppImage uses an Ubuntu 24.04 container; Flatpak uses GNOME 51 and requires
-Flatpak 1.17+. Build prerequisites, sandbox access and the release procedure are
-documented in [doc/packaging.md](doc/packaging.md).
-
-GitHub Actions builds x86_64 AppImage and standalone Flatpak packages on pushes,
-pull requests, manual runs and published releases. Only published-release runs
-attach the packages and their SHA-256 files to GitHub Releases. The workflow
-becomes active when this project is pushed to its own GitHub repository.
-
-## License
-
-[MIT](LICENSE).
+Created by [Matthäus J. N. Beyrle](https://github.com/magynhard).
+Released under the [MIT License](LICENSE).
