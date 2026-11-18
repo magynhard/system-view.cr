@@ -231,6 +231,7 @@ module SystemView
         {"inputs", translate("Input Devices"), "input-keyboard-symbolic"},
         {"network", translate("Network"), "network-wired-symbolic"},
         {"system", translate("Operating System"), "preferences-system-symbolic"},
+        {"power", translate("Power"), "battery-symbolic"},
       }
       entries.each do |id, title, icon|
         row = Gtk::ListBoxRow.new
@@ -427,6 +428,7 @@ module SystemView
       when "inputs"    then inputs(data)
       when "network"   then network(data)
       when "system"    then system(data)
+      when "power"     then power(data)
       end
     end
 
@@ -832,6 +834,46 @@ module SystemView
       row(details, translate("Desktop Environment"), data.desktop)
       row(details, translate("Hostname"), data.hostname)
       row(details, translate("Uptime"), uptime_text(data.uptime))
+    end
+
+    private def power(data : Snapshot)
+      heading(translate("Power"))
+      supply = data.power_supply
+      if supply.batteries.empty? && supply.adapters.empty?
+        row(group(translate("Power")), translate("Power information"), translate("Not reported"))
+      end
+      columns = group_columns(2)
+      supply.adapters.each do |adapter|
+        details = group(translate("Power adapter") + " · " + adapter.name, columns)
+        row(details, translate("Connected"), enabled(adapter.online))
+      end
+      supply.batteries.each do |battery|
+        details = group(translate("Battery") + " · " + battery.name, columns)
+        row(details, translate("Manufacturer"), battery.vendor) unless battery.vendor.empty?
+        row(details, translate("Model"), battery.model) unless battery.model.empty?
+        status = case battery.status
+                 when "Charging"     then translate("Charging")
+                 when "Discharging"  then translate("Discharging")
+                 when "Full"         then translate("Fully charged")
+                 when "Not charging" then translate("Not charging")
+                 else                     translate("Unknown")
+                 end
+        row(details, translate("Status"), status)
+        row(details, translate("Charge"), battery.percent.try { |value| "#{value.round(1)} %" } || translate("Not reported"))
+        row(details, translate("Full charge capacity"), battery.full.try { |value| "#{value.round(2)} #{battery.unit}" } || translate("Not reported"))
+        row(details, translate("Design capacity"), battery.design.try { |value| "#{value.round(2)} #{battery.unit}" } || translate("Not reported"))
+        health = if (full = battery.full) && (design = battery.design) && design > 0
+                   "#{(full / design * 100).round(1)} %"
+                 else
+                   translate("Not reported")
+                 end
+        row(details, translate("Battery health"), health)
+        row(details, translate("Charge cycles"), battery.cycles.try(&.to_s) || translate("Not reported"))
+        row(details, translate("Battery power"), battery.power.try { |value| "#{value.round(2)} W" } || translate("Not reported"))
+        remaining = battery.remaining_seconds.try { |seconds| seconds == 0 ? translate("0 min") : uptime_text(seconds.to_f64) } || translate("Not reported")
+        label = battery.status == "Charging" ? translate("Estimated time to full") : translate("Estimated time remaining")
+        row(details, label, remaining)
+      end
     end
 
     private def monitors(data : Snapshot)

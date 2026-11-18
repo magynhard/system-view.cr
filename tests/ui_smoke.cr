@@ -224,7 +224,7 @@ factory = -> do
             check(navigation.selected_row.not_nil!.name == page, "overview #{title} opens its matching section")
             navigation.select_row(navigation.row_at_index(0))
           end
-          (1..10).each do |index|
+          (1..11).each do |index|
             navigation.select_row(navigation.row_at_index(index))
             detail_rows = descendants(window).select(Adw::ActionRow)
             if {3, 5, 6, 7, 8, 9}.includes?(index)
@@ -281,6 +281,11 @@ factory = -> do
             elsif index == 10
               check(detail_rows.none? { |row| row.title == "Computer model" }, "OS page omits redundant computer model")
               check(detail_rows.any? { |row| row.title == "Uptime" && row.subtitle == "2 d 4 h 33 min" }, "OS page shows the uptime")
+            elsif index == 11
+              check(detail_rows.any? { |row| row.title == "Connected" && row.subtitle == "Yes" }, "power adapter status is displayed")
+              check(detail_rows.any? { |row| row.title == "Charge" && row.subtitle == "80.0 %" }, "battery charge is displayed")
+              check(detail_rows.any? { |row| row.title == "Battery health" && row.subtitle == "90.0 %" }, "battery health is displayed")
+              check(detail_rows.any? { |row| row.title == "Estimated time to full" && row.subtitle == "30 min" }, "estimated charging time is displayed")
             end
           end
           check(widgets.select(Gtk::MenuButton).any? { |button| button.tooltip_text == "Copy system information" }, "copy menu is available in the header bar")

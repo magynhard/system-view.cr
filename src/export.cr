@@ -37,11 +37,45 @@ module SystemView
       network_section(lines, data)
       lines << "## Operating System"
       system_section(lines, data)
+      lines << "## Power"
+      power_section(lines, data)
       lines.join("\n")
     end
 
     private def report_title(data : Snapshot) : String
       data.hostname.presence || data.os.presence || "Unknown system"
+    end
+
+    private def power_section(lines : Array(String), data : Snapshot) : Nil
+      supply = data.power_supply
+      if supply.batteries.empty? && supply.adapters.empty?
+        add_rows(lines, [{"Power information", "Not reported"}])
+      end
+      supply.adapters.each do |adapter|
+        lines << "### Power adapter · #{adapter.name}"
+        add_rows(lines, [{"Connected", enabled(adapter.online)}])
+      end
+      supply.batteries.each do |battery|
+        lines << "### Battery · #{battery.name}"
+        status = case battery.status
+                 when "Charging", "Discharging", "Not charging" then battery.status
+                 when "Full"                                    then "Fully charged"
+                 else                                                "Unknown"
+                 end
+        health = if (full = battery.full) && (design = battery.design) && design > 0
+                   "#{(full / design * 100).round(1)} %"
+                 else
+                   "Not reported"
+                 end
+        remaining = battery.remaining_seconds.try { |seconds| seconds == 0 ? "0 min" : uptime_text(seconds.to_f64) } || "Not reported"
+        label = battery.status == "Charging" ? "Estimated time to full" : "Estimated time remaining"
+        add_rows(lines, [{"Manufacturer", battery.vendor}, {"Model", battery.model}, {"Status", status},
+                         {"Charge", battery.percent.try { |value| "#{value.round(1)} %" } || "Not reported"},
+                         {"Full charge capacity", battery.full.try { |value| "#{value.round(2)} #{battery.unit}" } || "Not reported"},
+                         {"Design capacity", battery.design.try { |value| "#{value.round(2)} #{battery.unit}" } || "Not reported"},
+                         {"Battery health", health}, {"Charge cycles", battery.cycles.try(&.to_s) || "Not reported"},
+                         {"Battery power", battery.power.try { |value| "#{value.round(2)} W" } || "Not reported"}, {label, remaining}])
+      end
     end
 
     private def add_rows(lines : Array(String), entries : Array(Tuple(String, String))) : Nil

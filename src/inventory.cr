@@ -44,12 +44,18 @@ module SystemView
     manufacturer : String = "", series : String = ""
   record Memory, total : UInt64, available : UInt64, swap : UInt64,
     installed : UInt64 = 0_u64, modules : Array(MemoryModule) = [] of MemoryModule
+  record Battery, name : String, vendor : String = "", model : String = "", status : String = "",
+    percent : Float64? = nil, full : Float64? = nil, design : Float64? = nil,
+    unit : String = "", cycles : UInt64? = nil, power : Float64? = nil, remaining_seconds : UInt64? = nil
+  record PowerAdapter, name : String, online : Bool? = nil
+  record PowerSupply, batteries : Array(Battery) = [] of Battery, adapters : Array(PowerAdapter) = [] of PowerAdapter
   record Snapshot, hostname : String, os : String, kernel : String,
     product : String, processor : Processor, mainboard : Mainboard,
     graphics : Array(GraphicsCard), drives : Array(Drive), memory : Memory,
     monitors : Array(Monitor) = [] of Monitor, audio : Array(AudioDevice) = [] of AudioDevice,
     inputs : Array(InputDevice) = [] of InputDevice, desktop : String = "",
-    connectivity : Connectivity = Connectivity.new, uptime : Float64 = 0.0
+    connectivity : Connectivity = Connectivity.new, uptime : Float64 = 0.0,
+    power_supply : PowerSupply = PowerSupply.new
 
   # Root injection keeps discovery testable without probing devices or executing
   # external commands. Flatpak host paths are mapped only for read-only discovery.
@@ -125,8 +131,69 @@ module SystemView
         mainboard: mainboard(files),
         graphics: graphics(files), drives: drives(files),
         memory: memory(files), monitors: monitors(files), audio: audio_devices(files), inputs: input_devices(files), desktop: desktop,
-        connectivity: connectivity || NetworkDiscovery.scan(files), uptime: uptime_seconds(files.read("/proc/uptime"))
+        connectivity: connectivity || NetworkDiscovery.scan(files), uptime: uptime_seconds(files.read("/proc/uptime")),
+        power_supply: power_supply(files)
       )
+    end
+
+    def power_supply(files : LinuxFiles) : PowerSupply
+      batteries = [] of Battery
+      adapters = [] of PowerAdapter
+      root = "/sys/class/power_supply"
+      files.children(root).each do |name|
+        path = "#{root}/#{name}"
+        next if files.read("#{path}/scope") == "Device"
+        case files.read("#{path}/type")
+        when "Battery"
+          next if files.read("#{path}/present") == "0"
+          status = files.read("#{path}/status")
+          energy_full = positive_number(files.read("#{path}/energy_full"))
+          energy_design = positive_number(files.read("#{path}/energy_full_design"))
+          charge_full = positive_number(files.read("#{path}/charge_full"))
+          charge_design = positive_number(files.read("#{path}/charge_full_design"))
+          energy = energy_full || energy_design
+          full = energy ? energy_full : charge_full
+          design = energy ? energy_design : charge_design
+          unit = energy ? "Wh" : ((charge_full || charge_design) ? "Ah" : "")
+          percent = nonnegative_number(files.read("#{path}/capacity"))
+          percent = nil if percent && percent > 100
+          power = nonnegative_number(files.read("#{path}/power_now"))
+          remaining = nil
+          current_energy = nonnegative_number(files.read("#{path}/energy_now"))
+          if power && power > 0 && current_energy
+            amount = status == "Discharging" ? current_energy : (status == "Charging" && energy_full ? {energy_full - current_energy, 0.0}.max : nil)
+            seconds = amount.try { |value| value / power * 3600 }
+            remaining = seconds.to_u64 if seconds && seconds.finite? && seconds >= 0 && seconds < 31_536_000
+          elsif current = positive_number(files.read("#{path}/current_now"))
+            charge = nonnegative_number(files.read("#{path}/charge_now"))
+            amount = charge ? (status == "Discharging" ? charge : (status == "Charging" && charge_full ? {charge_full - charge, 0.0}.max : nil)) : nil
+            seconds = amount.try { |value| value / current * 3600 }
+            remaining = seconds.to_u64 if seconds && seconds.finite? && seconds >= 0 && seconds < 31_536_000
+          end
+          batteries << Battery.new(name, vendor: files.read("#{path}/manufacturer"), model: files.read("#{path}/model_name"),
+            status: status, percent: percent, full: full.try { |value| value / 1_000_000 },
+            design: design.try { |value| value / 1_000_000 }, unit: unit,
+            cycles: files.read("#{path}/cycle_count").to_u64?, power: power.try { |value| value / 1_000_000 }, remaining_seconds: remaining)
+        when "Mains", "USB", "USB_C", "USB_PD", "USB_PD_DRP", "BrickID"
+          online = case files.read("#{path}/online")
+                   when "1" then true
+                   when "0" then false
+                   else          nil
+                   end
+          adapters << PowerAdapter.new(name, online)
+        end
+      end
+      PowerSupply.new(batteries, adapters)
+    end
+
+    private def nonnegative_number(text : String) : Float64?
+      value = text.to_f64?
+      value && value.finite? && value >= 0 ? value : nil
+    end
+
+    private def positive_number(text : String) : Float64?
+      value = nonnegative_number(text)
+      value && value > 0 ? value : nil
     end
 
     def mainboard(files : LinuxFiles) : Mainboard

@@ -13,6 +13,18 @@ class FixtureFiles < SystemView::LinuxFiles
     @files["/proc/cpuinfo"] = (0..3).map { |i| "processor : #{i}\nmodel name : Example CPU 9000\nvendor_id : ExampleVendor\ncpu family : 25\nmodel : 33\nstepping : 2\nflags : fpu mmx sse sse2 avx2\n" }.join("\n")
     @files["/proc/meminfo"] = "MemTotal: 32000000 kB\nMemAvailable: 16000000 kB\nSwapTotal: 8000000 kB\n"
     @files["/proc/uptime"] = "189234.54 356780.12\n"
+    @directories["/sys/class/power_supply"] = ["AC", "BAT0"]
+    @files["/sys/class/power_supply/AC/type"] = "Mains"
+    @files["/sys/class/power_supply/AC/online"] = "1"
+    @files["/sys/class/power_supply/BAT0/type"] = "Battery"
+    @files["/sys/class/power_supply/BAT0/status"] = "Charging"
+    @files["/sys/class/power_supply/BAT0/capacity"] = "80"
+    @files["/sys/class/power_supply/BAT0/energy_now"] = "40000000"
+    @files["/sys/class/power_supply/BAT0/energy_full"] = "45000000"
+    @files["/sys/class/power_supply/BAT0/energy_full_design"] = "50000000"
+    @files["/sys/class/power_supply/BAT0/power_now"] = "10000000"
+    @files["/sys/class/power_supply/BAT0/cycle_count"] = "123"
+    @files["/sys/class/power_supply/BAT0/model_name"] = "Example Battery"
     @files["/run/udev/data/+dmi:id"] = "E:MEMORY_ARRAY_NUM_DEVICES=4\nE:MEMORY_ARRAY_MAX_CAPACITY=137438953472\n" +
                                        (0..1).map { |i| "E:MEMORY_DEVICE_#{i}_SIZE=17179869184\nE:MEMORY_DEVICE_#{i}_LOCATOR=DIMM #{i}\nE:MEMORY_DEVICE_#{i}_MANUFACTURER=Example Memory\nE:MEMORY_DEVICE_#{i}_PART_NUMBER=TEST-16G-DDR4\nE:MEMORY_DEVICE_#{i}_TYPE=DDR4\nE:MEMORY_DEVICE_#{i}_CONFIGURED_SPEED_MTS=3200\nE:MEMORY_DEVICE_#{i}_CONFIGURED_VOLTAGE=1.35\nE:MEMORY_DEVICE_#{i}_MINIMUM_VOLTAGE=1.2\nE:MEMORY_DEVICE_#{i}_MAXIMUM_VOLTAGE=1.35\n" }.join +
                                        "E:MEMORY_DEVICE_2_PRESENT=0\nE:MEMORY_DEVICE_3_PRESENT=0\n"

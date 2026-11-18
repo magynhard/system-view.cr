@@ -9,7 +9,7 @@ build and packaging foundations.
 - Open directly to an overview of your processor, mainboard, graphics cards,
   installed RAM and physical drives, including exact model names where available.
 - Explore Graphics, Processor, Mainboard, Drives, Memory, Monitors, Audio,
-  Input Devices, Network and Operating System pages.
+  Input Devices, Network, Operating System and Power pages.
 - Keep navigation alongside the content on wide windows. Below 860 pixels it
   becomes an overlay, accessible with the sidebar button or **F9**.
 - Read standard hardware information without root privileges. Load additional
@@ -100,6 +100,7 @@ Refresh keeps the selected page. The application only reads system information.
 | Input devices | `/proc/bus/input/devices` and cached udev classification, without opening event devices |
 | LAN / Wi-Fi | Physical interfaces in `/sys/class/net`, cached udev identification and read-only NetworkManager D-Bus properties |
 | Bluetooth | BlueZ adapter and paired/connected-device properties, with a sysfs adapter fallback |
+| Power | System batteries and adapters in `/sys/class/power_supply`; remaining time is estimated from reported charge or energy and rate |
 
 RAM, swap and video memory use 1024-based IEC units (GiB, MiB); drive capacities
 use decimal GB/TB. Kernel-usable RAM excludes reserved memory and may be below
