@@ -5,16 +5,30 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <name>System View</name>
-  <summary>Identify your computer and its hardware</summary>
-  <summary xml:lang="de">Computer und seine Hardware identifizieren</summary>
+  <summary>View your hardware and system information at a glance</summary>
+  <summary xml:lang="de">Hardware und Systeminformationen übersichtlich anzeigen</summary>
   <developer id="de.magynhard"><name translate="no">Matthäus J. N. Beyrle</name></developer>
   <description>
-    <p>System View presents your processor, mainboard, graphics cards, memory and physical drives in one clear overview.</p>
-    <p>Explore separate pages for hardware identification, processor topology, firmware, graphics drivers and storage capacity. The adaptive sidebar stays visible on wide windows and becomes an overlay on small screens.</p>
-    <p>Information is read without administrator privileges. The interface follows your system language and light or dark appearance.</p>
-    <p xml:lang="de">System View zeigt Prozessor, Mainboard, Grafikkarten, Arbeitsspeicher und physische Laufwerke in einer übersichtlichen Zusammenfassung.</p>
-    <p xml:lang="de">Eigene Seiten bieten Hardware-Identifikation, Prozessortopologie, Firmware, Grafiktreiber und Laufwerkskapazitäten. Die adaptive Seitenleiste bleibt in breiten Fenstern sichtbar und wird auf kleinen Bildschirmen eingeblendet.</p>
-    <p xml:lang="de">Die Informationen werden ohne Administratorrechte gelesen. Die Oberfläche übernimmt Systemsprache sowie helles oder dunkles Erscheinungsbild.</p>
+    <p>All the important information about your computer in one place.</p>
+    <p>System View gives you a clear overview of your computer's hardware and operating system. Quickly find the information you need to troubleshoot a problem, plan an upgrade or ask for support.</p>
+    <p>Explore details about:</p>
+    <ul>
+      <li>Processor, graphics card, mainboard and memory</li>
+      <li>Drives, displays and connected devices</li>
+      <li>Network, Bluetooth, audio and printers</li>
+      <li>Operating system, power supply and available sensors</li>
+    </ul>
+    <p>Depending on your device, System View can also show current readings such as temperatures, clock speeds and memory usage. You can unlock additional processor and memory information with your password when needed.</p>
+    <p xml:lang="de">Alle wichtigen Informationen über deinen Computer an einem Ort.</p>
+    <p xml:lang="de">System View zeigt dir übersichtlich, welche Hardware in deinem Computer steckt und welches System darauf läuft. So findest du schnell die Informationen, die du zum Beispiel für eine Fehlerdiagnose, ein Upgrade oder eine Supportanfrage brauchst.</p>
+    <p xml:lang="de">Entdecke Details zu:</p>
+    <ul>
+      <li xml:lang="de">Prozessor, Grafikkarte, Mainboard und Arbeitsspeicher</li>
+      <li xml:lang="de">Laufwerken, Bildschirmen und angeschlossenen Geräten</li>
+      <li xml:lang="de">Netzwerk, Bluetooth, Audio und Druckern</li>
+      <li xml:lang="de">Betriebssystem, Stromversorgung und verfügbaren Sensoren</li>
+    </ul>
+    <p xml:lang="de">Je nach Gerät zeigt System View auch aktuelle Werte wie Temperaturen, Taktraten und Speicherauslastung an. Zusätzliche Prozessor- und Speicherinformationen kannst du bei Bedarf mit deinem Passwort freischalten.</p>
   </description>
   <launchable type="desktop-id">de.magynhard.SystemView.desktop</launchable>
   <translation type="gettext">de.magynhard.SystemView</translation>
