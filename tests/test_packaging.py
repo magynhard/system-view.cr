@@ -2,6 +2,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -14,8 +15,15 @@ class PackagingTests(unittest.TestCase):
     def test_shard_pins_and_appstream_version_match(self):
         self.assertRegex(packaging.verify(), r"^\d+\.\d+\.\d+(?:[-+].+)?$")
 
+    def test_appstream_references_the_project_screenshot(self):
+        metadata = ET.parse(ROOT / "data/de.magynhard.SystemView.metainfo.xml")
+        screenshot = metadata.find("./screenshots/screenshot[@type='default']/image")
+        self.assertIsNotNone(screenshot)
+        self.assertEqual(screenshot.text, "https://raw.githubusercontent.com/magynhard/system-view.cr/master/doc/screenshot.png")
+        self.assertTrue((ROOT / "doc/screenshot.png").is_file())
+
     def test_downloads_have_sha256_and_https(self):
-        sources = [packaging.PINS[name] for name in ("gc", "linuxdeploy", "gtk_plugin", "appimage_runtime")]
+        sources = [packaging.PINS[name] for name in ("gc", "mesa_demos", "vulkan_tools", "linuxdeploy", "gtk_plugin", "appimage_runtime")]
         sources += [packaging.PINS["crystal"][arch] for arch in ("x86_64", "aarch64")]
         for source in sources:
             self.assertRegex(source["sha256"], r"^[a-f0-9]{64}$")
@@ -45,11 +53,13 @@ class PackagingTests(unittest.TestCase):
             self.assertIn("--system-talk-name=org.freedesktop.UDisks2", permissions)
             self.assertIn("--socket=pulseaudio", permissions)
             self.assertIn("--socket=cups", permissions)
+            self.assertIn("--socket=x11", permissions)
             self.assertIn("--require-version=1.17.0", permissions)
             for permission in ("--device=all", "--share=network", "--socket=system-bus"):
                 self.assertNotIn(permission, permissions)
             self.assertFalse(manifest["separate-locales"])
             module = manifest["modules"][-1]
+            self.assertEqual([item["name"] for item in manifest["modules"]], ["bdw-gc", "glxinfo", "vulkaninfo", "system-view"])
             self.assertEqual(module["name"], "system-view")
             git_sources = [source for source in module["sources"] if source["type"] == "git"]
             self.assertEqual(len(git_sources), len(packaging.PINS["shards"]))

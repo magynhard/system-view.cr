@@ -120,10 +120,18 @@ def flatpak_manifest(destination):
         "appstream-compose": False,
         "command": "system-view",
         "x-local-development-only": "AI-assisted local packaging; NOT a Flathub submission manifest. See doc/packaging.md.",
-        "finish-args": ["--require-version=1.17.0", "--socket=wayland", "--socket=fallback-x11", "--socket=pulseaudio", "--socket=cups", "--share=ipc", "--device=dri", "--filesystem=host-root:ro", "--filesystem=/run/udev:ro", "--talk-name=org.gnome.Shell", "--talk-name=org.gnome.Mutter.DisplayConfig", "--talk-name=org.gnome.Settings", "--system-talk-name=org.freedesktop.NetworkManager", "--system-talk-name=org.bluez", "--system-talk-name=org.freedesktop.UDisks2"],
+        "finish-args": ["--require-version=1.17.0", "--socket=wayland", "--socket=x11", "--socket=pulseaudio", "--socket=cups", "--share=ipc", "--device=dri", "--filesystem=host-root:ro", "--filesystem=/run/udev:ro", "--talk-name=org.gnome.Shell", "--talk-name=org.gnome.Mutter.DisplayConfig", "--talk-name=org.gnome.Settings", "--system-talk-name=org.freedesktop.NetworkManager", "--system-talk-name=org.bluez", "--system-talk-name=org.freedesktop.UDisks2"],
         "cleanup": ["/include", "/lib/pkgconfig", "/lib/*.la", "/share/man", "/share/doc"],
         "modules": [
             {"name": "bdw-gc", "buildsystem": "autotools", "config-opts": ["--disable-static"], "post-install": [f"install -Dm644 README.QUICK /app/share/licenses/{APP_ID}/bdw-gc/README.QUICK"], "sources": [{"type": "archive", **PINS["gc"]}]},
+            {"name": "glxinfo", "buildsystem": "simple", "build-commands": [
+                "cc -D_GNU_SOURCE -O2 -I src/glad/include -I src/util src/xdemos/glxinfo.c src/util/glinfo_common.c src/glad/src/glad.c -o glxinfo $(pkg-config --cflags --libs gl x11) -lm -ldl",
+                "install -Dm755 glxinfo /app/bin/glxinfo",
+                f"install -Dm644 src/xdemos/glxinfo.c /app/share/licenses/{APP_ID}/mesa-demos/glxinfo.c",
+                f"install -Dm644 src/util/glinfo_common.c /app/share/licenses/{APP_ID}/mesa-demos/glinfo_common.c",
+                f"install -Dm644 src/glad/src/glad.c /app/share/licenses/{APP_ID}/mesa-demos/glad.c",
+            ], "sources": [{"type": "archive", **PINS["mesa_demos"]}]},
+            {"name": "vulkaninfo", "buildsystem": "cmake-ninja", "config-opts": ["-DBUILD_CUBE=OFF", "-DBUILD_ICD=OFF", "-DBUILD_TESTS=OFF"], "post-install": [f"install -Dm644 LICENSE.txt /app/share/licenses/{APP_ID}/vulkan-tools/LICENSE.txt"], "sources": [{"type": "archive", **PINS["vulkan_tools"]}]},
             {"name": "system-view", "buildsystem": "simple", "build-options": {"prepend-path": "/run/build/system-view/crystal/bin"}, "build-commands": ["bash scripts/offline-build.sh /app"], "sources": sources},
         ],
     }

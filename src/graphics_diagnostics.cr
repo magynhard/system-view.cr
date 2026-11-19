@@ -14,6 +14,16 @@ module SystemView::GraphicsDiagnostics
       prime = "pci-#{card.address.gsub(/[:.]/, "_")}"
       gl = parse_opengl(runner.call("glxinfo", ["-B"], {"DRI_PRIME" => prime}), card.vendor_id, card.device_id)
       matches = vulkan.select { |device| device["vendorID"]? == "0x#{card.vendor_id}" && device["deviceID"]? == "0x#{card.device_id}" && device["deviceType"]? != "PHYSICAL_DEVICE_TYPE_CPU" }
+      # Some environments expose the same ICD twice. Only collapse identical
+      # reports with a nonzero device UUID; otherwise attribution stays ambiguous.
+      seen = [] of Hash(String, String)
+      matches = matches.reject do |device|
+        uuid = device["deviceUUID"]? || ""
+        identifiable = uuid.matches?(/\A[0-9a-fA-F-]+\z/) && uuid.delete("-0").size > 0
+        duplicate = identifiable && seen.includes?(device)
+        seen << device if identifiable && !duplicate
+        duplicate
+      end
       vk = matches.size == 1 ? matches.first : {} of String => String
       card.copy_with(opengl: gl["OpenGL core profile version string"]? || gl["OpenGL version string"]? || "",
         glsl: gl["OpenGL core profile shading language version string"]? || gl["OpenGL shading language version string"]? || "",

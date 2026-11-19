@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 - 2026-11-19
+
+- Include OpenGL and Vulkan diagnostic tools in the Flatpak package.
+- Make XWayland available for OpenGL diagnostics in Wayland sessions.
+- Recognize identical duplicate Vulkan device reports when a device UUID is available.
+- Add a screenshot to the AppStream metadata and clarify Flatpak installation.
+- Highlight the AppImage and Flatpak downloads in the README.
+
 ## 0.3.0 - 2026-11-19
 
 - Show missing software and installation guidance on the summary and affected

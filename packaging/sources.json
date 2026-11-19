@@ -14,6 +14,14 @@
     "url": "https://github.com/bdwgc/bdwgc/releases/download/v8.2.12/gc-8.2.12.tar.gz",
     "sha256": "42e5194ad06ab6ffb806c83eb99c03462b495d979cda782f3c72c08af833cd4e"
   },
+  "mesa_demos": {
+    "url": "https://archive.mesa3d.org/demos/mesa-demos-9.0.0.tar.xz",
+    "sha256": "3046a3d26a7b051af7ebdd257a5f23bfeb160cad6ed952329cdff1e9f1ed496b"
+  },
+  "vulkan_tools": {
+    "url": "https://github.com/KhronosGroup/Vulkan-Tools/archive/refs/tags/vulkan-sdk-1.4.321.0.tar.gz",
+    "sha256": "f897f76b1fae6b85b567ee86d7bc1ba6f5b1a13d3bfa5fe0f07fdb81609f7b75"
+  },
   "linuxdeploy": {
     "url": "https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-x86_64.AppImage",
     "sha256": "c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d"

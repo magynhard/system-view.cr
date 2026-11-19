@@ -40,6 +40,13 @@ describe SystemView::GraphicsDiagnostics do
     data.all?(&.vulkan.empty?).should be_true
   end
 
+  it "recognizes identical duplicate ICD reports with a device UUID" do
+    card = SystemView::Inventory.graphics(FixtureFiles.new).first
+    report = VK_REPORT + "deviceUUID = 00000000-2900-0000-0000-000000000000\n"
+    runner = ->(_command : String, _args : Array(String), _env : Hash(String, String)) { report + report.sub("GPU0:", "GPU1:") }
+    SystemView::GraphicsDiagnostics.scan([card], runner).first.vulkan.should eq("1.3.280")
+  end
+
   it "retains hardware identification if diagnostics are absent or fail" do
     runner = ->(_command : String, _args : Array(String), _env : Hash(String, String)) { "" }
     card = SystemView::Inventory.graphics(FixtureFiles.new).first

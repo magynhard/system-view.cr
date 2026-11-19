@@ -22,7 +22,22 @@
   <url type="bugtracker">https://github.com/magynhard/system-view.cr/issues</url>
   <content_rating type="oars-1.1"/>
   <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Hardware summary and navigation in System View</caption>
+      <caption xml:lang="de">Hardwareübersicht und Navigation in System View</caption>
+      <image>https://raw.githubusercontent.com/magynhard/system-view.cr/master/doc/screenshot.png</image>
+    </screenshot>
+  </screenshots>
   <releases>
+    <release version="0.3.1" date="2026-11-19">
+      <description>
+        <p>OpenGL and Vulkan diagnostic tools are now included in the Flatpak package, including XWayland access for OpenGL information.</p>
+        <p>Improve Vulkan device identification and add an application screenshot to the software metadata.</p>
+        <p xml:lang="de">Das Flatpak-Paket enthält jetzt Diagnosewerkzeuge für OpenGL und Vulkan sowie XWayland-Zugriff für OpenGL-Informationen.</p>
+        <p xml:lang="de">Die Vulkan-Geräteerkennung wurde verbessert und ein Anwendungsbild zu den Softwaremetadaten hinzugefügt.</p>
+      </description>
+    </release>
     <release version="0.3.0" date="2026-11-19">
       <description>
         <p>See which additional software is needed for hardware information, with installation guidance for supported distributions.</p>

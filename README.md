@@ -20,6 +20,22 @@ live readings together in a simple GTK4 and libadwaita interface.
 
 ![System View showing the hardware summary in dark mode](doc/screenshot.png)
 
+## Download and install
+
+**[Download the latest release](https://github.com/magynhard/system-view.cr/releases/latest)**
+
+Choose an x86_64 package from the release page:
+
+- **AppImage:** Download the `.AppImage` file, make it executable and open it.
+  It requires glibc 2.39 or newer.
+- **Flatpak:** Download the `.flatpak` file and install it with your software
+  manager or `flatpak install --user System_View-*.flatpak`. It requires Flatpak
+  1.17 or newer and the GNOME 51 runtime. Open **System View** from your
+  applications menu, or run `flatpak run de.magynhard.SystemView`.
+
+Both packages include a separate SHA-256 checksum. See
+[Linux packaging](doc/packaging.md) for installation details and alternatives.
+
 ## Features
 
 - Start with a summary of your computer and open a component for more details.
@@ -95,14 +111,12 @@ On NixOS, add `pkgs.mesa-demos`, `pkgs.vulkan-tools`, `pkgs.pulseaudio`,
 `security.polkit.enable` and a graphical authentication agent. The CUPS library
 must be accessible to the application at runtime. Running the AppImage on NixOS
 may require additional compatibility setup; the standalone Flatpak is an
-alternative. Flatpak applications cannot use diagnostic tools installed only on
-the host.
+alternative. The Flatpak includes `glxinfo` and `vulkaninfo`; it cannot use
+diagnostic tools installed only on the host.
 
 ## Run
 
-Download a package from [GitHub Releases](https://github.com/magynhard/system-view.cr/releases)
-and follow the [installation instructions](doc/packaging.md). To build from source,
-see [CONTRIBUTING.md](CONTRIBUTING.md).
+To build and run from source, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 To start the application in English regardless of the system language:
 
@@ -118,16 +132,6 @@ Use the header bar to copy information, refresh or open the About dialog.
 | F9 | Show or hide the sidebar |
 | F1 | About System View |
 | Ctrl+W | Close the window |
-
-## Install
-
-Install an AppImage or standalone Flatpak as described in
-[Linux packaging](doc/packaging.md).
-
-## Packages
-
-Download the AppImage or standalone Flatpak and their SHA-256 files from
-[GitHub Releases](https://github.com/magynhard/system-view.cr/releases).
 
 ## Development
 

@@ -28,6 +28,21 @@ without FUSE use `APPIMAGE_EXTRACT_AND_RUN=1 ./System_View-VERSION-x86_64.AppIma
 
 ## Standalone Flatpak
 
+To install a downloaded release bundle for your user, run:
+
+```sh
+flatpak install --user System_View-0.3.1-x86_64.flatpak
+flatpak run de.magynhard.SystemView
+```
+
+Alternatively, launch System View from the applications menu. Flatpak exports a
+desktop launcher; it does not install `system-view` into `~/.local/bin`. The
+GNOME 51 runtime is a separate dependency and can be installed from Flathub.
+Single-file bundles do not include repository AppStream data, so software
+managers may not show a screenshot when installing directly from a bundle.
+
+### Building the Flatpak
+
 Requires Flatpak 1.17+, flatpak-builder, OSTree, AppStream with compose support,
 Python 3.12+, PyYAML and the GNOME 51 SDK/runtime:
 
@@ -35,7 +50,7 @@ Python 3.12+, PyYAML and the GNOME 51 SDK/runtime:
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user flathub org.gnome.Platform//51 org.gnome.Sdk//51
 make flatpak
-flatpak install --user dist/System_View-0.3.0-x86_64.flatpak
+flatpak install --user dist/System_View-0.3.1-x86_64.flatpak
 flatpak run de.magynhard.SystemView
 ```
 
@@ -43,6 +58,9 @@ The generated local manifest is `build/flatpak/de.magynhard.SystemView.json`.
 Sources are snapshotted without generated files or Git data. Dependency downloads
 are pinned; compilation is offline. GNOME's runtime supplies GTK/libadwaita.
 Flatpak bundles and their `.sha256` files are written under `dist/`.
+The package includes `glxinfo` and `vulkaninfo`; X11 access is provided even in
+Wayland sessions so `glxinfo` can query XWayland. Graphics information remains
+unavailable when the display, driver or GPU attribution cannot be determined.
 
 To verify the packaged app graphically, install the bundle and run it through
 `flatpak run` as shown above. Do not rely on `flatpak-builder --run` for window
