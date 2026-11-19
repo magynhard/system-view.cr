@@ -54,19 +54,26 @@ module SystemView
     @cancelled = false
 
     def self.decoder : String?
-      {"/usr/sbin/dmidecode", "/usr/bin/dmidecode", "/sbin/dmidecode"}.find { |path| File.file?(path) && File::Info.executable?(path) }
+      return nil if OptionalToolSimulation.enabled?
+      {"/usr/sbin/dmidecode", "/usr/bin/dmidecode", "/sbin/dmidecode", "/run/current-system/sw/bin/dmidecode", "/run/current-system/sw/sbin/dmidecode"}.find { |path| File.file?(path) && File::Info.executable?(path) }
+    end
+
+    def self.pkexec : String?
+      return nil if OptionalToolSimulation.enabled?
+      {"/usr/bin/pkexec", "/run/wrappers/bin/pkexec"}.find { |path| File.file?(path) && File::Info.executable?(path) }
     end
 
     def self.available? : Bool
-      !File.file?("/.flatpak-info") && File::Info.executable?("/usr/bin/pkexec") && !decoder.nil?
+      !File.file?("/.flatpak-info") && !pkexec.nil? && !decoder.nil?
     end
 
     def run : FirmwareResult
       decoder = self.class.decoder
-      return FirmwareResult.new unless decoder && self.class.available?
+      pkexec = self.class.pkexec
+      return FirmwareResult.new unless decoder && pkexec && self.class.available?
       process = @mutex.synchronize do
         return FirmwareResult.new(cancelled: true) if @cancelled
-        @process = SubprocessOutput.launch(["/usr/bin/pkexec", "--disable-internal-agent", decoder] + DMI_ARGUMENTS.to_a,
+        @process = SubprocessOutput.launch([pkexec, "--disable-internal-agent", decoder] + DMI_ARGUMENTS.to_a,
           {"LC_ALL" => "C", "LANG" => "C"})
       end
       output = SubprocessOutput.read(process, @cancellable)

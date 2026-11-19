@@ -39,6 +39,7 @@ module SystemView::GraphicsDiagnostics
   end
 
   private def run(command : String, arguments : Array(String), environment : Hash(String, String)) : String
+    return "" if OptionalToolSimulation.enabled?
     executable = Process.find_executable(command)
     timeout = Process.find_executable("timeout")
     return "" unless executable && timeout

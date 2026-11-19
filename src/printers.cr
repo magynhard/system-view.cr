@@ -31,6 +31,7 @@ module SystemView
 
     # This runs only in the bounded child process, never in the GTK process.
     def cups_names : Array(String)?
+      return nil if OptionalToolSimulation.enabled?
       library = LibC.dlopen("libcups.so.2", LibC::RTLD_LAZY)
       return nil if library.null?
       get_ptr = LibC.dlsym(library, "cupsGetDests")
@@ -57,6 +58,7 @@ module SystemView
     end
 
     private def run : String?
+      return nil if OptionalToolSimulation.enabled?
       executable = Process.executable_path
       timeout = Process.find_executable("timeout")
       return nil unless executable && timeout

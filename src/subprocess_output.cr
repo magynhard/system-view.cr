@@ -1,5 +1,11 @@
 require "gi-crystal/gio"
 
+module SystemView::OptionalToolSimulation
+  def self.enabled? : Bool
+    ENV["SYSTEM_VIEW_TEST_MISSING_TOOLS"]? == "1"
+  end
+end
+
 module SystemView::SubprocessOutput
   extend self
 

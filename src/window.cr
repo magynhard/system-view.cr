@@ -6,6 +6,9 @@ require "./display_config"
 require "./export"
 require "./drive_health"
 require "./audio_session"
+require "./settings_availability"
+require "./optional_tools"
+require "./disk_view_launcher"
 
 module SystemView
   class Window < Adw::ApplicationWindow
@@ -16,6 +19,8 @@ module SystemView
     @body = Gtk::Box.new(:vertical, 24)
     @content_scroll = Gtk::ScrolledWindow.new
     @unlock_banner = Adw::Banner.new("")
+    @tools_banner = Adw::Banner.new("")
+    @missing_tools = [] of String
     @subtitle = Adw::WindowTitle.new("System View", "")
     @refresh = Gio::SimpleAction.new("refresh", nil)
     @snapshot : Snapshot?
@@ -35,6 +40,8 @@ module SystemView
     @live_updates = [] of Proc(Snapshot, Nil)
     @live_loading = false
     @generation = 0_u64
+    @settings_available = false
+    @disk_view_available = false
 
     def initialize(app : Gtk::Application, @files : LinuxFiles = LinuxFiles.new, @firmware : FirmwareDetails? = nil, @desktop_name : String? = nil, @firmware_loader : Proc(FirmwareResult)? = nil, @network_loader : Proc(Connectivity)? = nil,
                    @graphics_loader : Proc(Array(GraphicsCard), Array(GraphicsCard))? = nil,
@@ -43,7 +50,11 @@ module SystemView
                    @runtime_info : RuntimeInfo? = nil,
                    @audio_session_loader : Proc(AudioSession)? = nil,
                    @settings_opener : Proc(String, Nil)? = nil,
-                   @printer_loader : Proc(Printers)? = nil)
+                   @printer_loader : Proc(Printers)? = nil,
+                   @settings_availability_loader : Proc(Bool)? = nil,
+                   @optional_tools_loader : Proc(Array(String))? = nil,
+                   @disk_view_available_loader : Proc(Bool)? = nil,
+                   @disk_view_opener : Proc(Nil)? = nil)
       super(application: app, title: "System View", default_width: 1040, default_height: 780)
       set_size_request(360, 420)
       setup_actions(app)
@@ -115,8 +126,14 @@ module SystemView
       @unlock_banner.title = translate("Some hardware details are locked")
       @unlock_banner.use_markup = false
       @unlock_banner.action_name = "win.hardware-details"
+      @tools_banner.title = translate("Some features need additional software")
+      @tools_banner.button_label = translate("More information")
+      @tools_banner.action_name = "win.optional-tools"
+      @tools_banner.use_markup = false
+      style_banner_button(@tools_banner, "suggested-action")
       page = Gtk::Box.new(:vertical, 0)
       page.append(@unlock_banner)
+      page.append(@tools_banner)
       page.append(scroll)
       scroll.vexpand = true
       toolbar = Adw::ToolbarView.new
@@ -207,6 +224,9 @@ module SystemView
       @firmware_action.enabled = @firmware.nil? && unlock_available?
       @firmware_action.activate_signal.connect { load_firmware }
       add_action(@firmware_action)
+      tools_action = Gio::SimpleAction.new("optional-tools", nil)
+      tools_action.activate_signal.connect { show_optional_tools }
+      add_action(tools_action)
       copy_overview = Gio::SimpleAction.new("copy-overview", nil)
       copy_overview.activate_signal.connect { copy_snapshot(false) }
       add_action(copy_overview)
@@ -292,7 +312,7 @@ module SystemView
       @generation += 1
       @loading = true
       @refresh.enabled = false
-      results = Channel(Snapshot | Exception).new(1)
+      results = Channel(Tuple(Snapshot, Bool, Array(String), Bool) | Exception).new(1)
       # Filesystem I/O needs a Crystal execution context, which a raw Thread
       # does not provide. Keep discovery isolated from the GTK main thread.
       Fiber::ExecutionContext::Isolated.new("system-discovery") do
@@ -304,7 +324,18 @@ module SystemView
           monitors = @display_loader.try(&.call(data.monitors)) || DisplayConfig.enrich(data.monitors)
           audio_session = @audio_session_loader.try(&.call) || AudioSessionDiscovery.scan
           printers = @printer_loader.try(&.call) || PrinterDiscovery.scan
-          results.send(data.copy_with(graphics: graphics, monitors: monitors, drives: drives, audio_session: audio_session, printers: printers))
+          settings_available = if loader = @settings_availability_loader
+                                 loader.call
+                               else
+                                 !@settings_opener.nil? || SettingsAvailability.available?
+                               end
+          missing_tools = @optional_tools_loader.try(&.call) || OptionalTools.missing(@files)
+          disk_view_available = if loader = @disk_view_available_loader
+                                  loader.call
+                                else
+                                  DiskViewLauncher.available?
+                                end
+          results.send({data.copy_with(graphics: graphics, monitors: monitors, drives: drives, audio_session: audio_session, printers: printers), settings_available, missing_tools, disk_view_available})
         rescue error : Exception
           results.send(error)
         end
@@ -319,8 +350,8 @@ module SystemView
           when result = results.receive
             @loading = false
             @refresh.enabled = true
-            if result.is_a?(Snapshot)
-              @snapshot = result
+            if result.is_a?(Tuple)
+              @snapshot, @settings_available, @missing_tools, @disk_view_available = result
               render
             else
               clear_body
@@ -431,19 +462,19 @@ module SystemView
 
     private def update_unlock_banner
       @firmware_action.enabled = @firmware.nil? && @firmware_query.nil? && unlock_available?
-      @unlock_banner.revealed = !@snapshot.nil? && @firmware.nil? && {"processor", "memory"}.includes?(@page)
+      @unlock_banner.revealed = !@snapshot.nil? && @firmware.nil? && {"processor", "memory"}.includes?(@page) && !missing_tools_for_page?
       @unlock_banner.button_label = @firmware_query ? translate("Unlocking…") : translate("Unlock…")
       # Style the template button directly to also support libadwaita 1.5/1.6,
       # which do not have AdwBanner:button-style yet.
       Gtk::Button.g_type
-      style_unlock_button(@unlock_banner)
+      style_banner_button(@unlock_banner, "suggested-action")
     end
 
-    private def style_unlock_button(widget : Gtk::Widget)
-      widget.add_css_class("suggested-action") if widget.is_a?(Gtk::Button)
+    private def style_banner_button(widget : Gtk::Widget, css_class : String)
+      widget.add_css_class(css_class) if widget.is_a?(Gtk::Button)
       child = widget.first_child
       while child
-        style_unlock_button(child)
+        style_banner_button(child, css_class)
         child = child.next_sibling
       end
     end
@@ -459,6 +490,7 @@ module SystemView
 
     private def render
       update_unlock_banner
+      @tools_banner.revealed = !@snapshot.nil? && missing_tools_for_page?
       @live_updates.clear
       @two_column_layouts.clear
       clear_body
@@ -487,6 +519,99 @@ module SystemView
       when "printers"  then printers(data)
       when "video"     then video(data)
       end
+    end
+
+    private def missing_tools_for_page? : Bool
+      relevant = case @page
+                 when "overview"            then @missing_tools
+                 when "processor", "memory" then {"dmidecode", "pkexec"}
+                 when "graphics"            then {"glxinfo", "vulkaninfo", "timeout"}
+                 when "audio"               then {"pactl", "timeout"}
+                 when "printers"            then {"libcups", "timeout"}
+                 else                            return false
+                 end
+      relevant.any? { |tool| @missing_tools.includes?(tool) }
+    end
+
+    private def show_optional_tools
+      lines = @missing_tools.map do |tool|
+        explanation = case tool
+                      when "glxinfo"             then translate("OpenGL information")
+                      when "vulkaninfo"          then translate("Vulkan information")
+                      when "pactl"               then translate("Audio server and default devices")
+                      when "timeout"             then translate("Bounded background queries")
+                      when "dmidecode", "pkexec" then translate("Additional processor and memory details")
+                      when "libcups"             then translate("Printer information")
+                      else                            tool
+                      end
+        "#{tool} — #{explanation}"
+      end
+      dialog = Adw::AlertDialog.new(translate("Optional software"), nil)
+      content = Gtk::Box.new(:vertical, 12)
+      details = Gtk::Label.new(lines.join("\n"))
+      details.selectable = true
+      details.wrap = true
+      details.xalign = 0.0
+      content.append(details)
+      if @files.sandboxed?
+        note = Gtk::Label.new(translate("The Flatpak can only use software available inside its sandbox."))
+        note.wrap = true
+        note.xalign = 0.0
+        content.append(note)
+      elsif packages = OptionalTools.nixos_packages(@files, @missing_tools)
+        unless packages.empty?
+          label = Gtk::Label.new(translate("Add these packages to environment.systemPackages in your NixOS configuration:"))
+          label.xalign = 0.0
+          label.wrap = true
+          label.add_css_class("heading")
+          content.append(label)
+          text = Gtk::Label.new("[ #{packages.map { |name| "pkgs.#{name}" }.join(" ")} ]")
+          text.xalign = 0.0
+          text.selectable = true
+          text.wrap = true
+          text.add_css_class("monospace")
+          content.append(text)
+          note = Gtk::Label.new(translate("Apply your configuration with sudo nixos-rebuild switch."))
+          note.xalign = 0.0
+          note.wrap = true
+          note.selectable = true
+          content.append(note)
+        end
+        if @missing_tools.includes?("pkexec")
+          note = Gtk::Label.new(translate("Enable security.polkit.enable and a graphical authentication agent for additional hardware details."))
+          note.xalign = 0.0
+          note.wrap = true
+          note.selectable = true
+          content.append(note)
+        end
+        if @missing_tools.includes?("libcups")
+          note = Gtk::Label.new(translate("The CUPS library must also be available to the application at runtime."))
+          note.xalign = 0.0
+          note.wrap = true
+          content.append(note)
+        end
+      elsif command = OptionalTools.install_command(@files, @missing_tools)
+        label = Gtk::Label.new(translate("Install using your package manager:"))
+        label.xalign = 0.0
+        label.wrap = true
+        label.add_css_class("heading")
+        content.append(label)
+        text = Gtk::Label.new(command)
+        text.xalign = 0.0
+        text.selectable = true
+        text.wrap = true
+        text.add_css_class("monospace")
+        content.append(text)
+      else
+        note = Gtk::Label.new(translate("Install the missing software using your package manager."))
+        note.wrap = true
+        note.xalign = 0.0
+        content.append(note)
+      end
+      dialog.extra_child = content
+      dialog.add_response("close", translate("Close"))
+      dialog.close_response = "close"
+      dialog.present(self)
     end
 
     private def heading(title : String, description : String? = nil, action : Gtk::Widget? = nil)
@@ -853,7 +978,21 @@ module SystemView
     end
 
     private def drives(data : Snapshot)
-      heading(translate("Drives"))
+      action = if @disk_view_available
+                 button = Gtk::Button.new_from_icon_name("emblem-system-symbolic")
+                 button.tooltip_text = translate("Open Disk View")
+                 button.valign = :center
+                 button.add_css_class("flat")
+                 button.clicked_signal.connect do
+                   if opener = @disk_view_opener
+                     opener.call
+                   else
+                     Fiber::ExecutionContext::Isolated.new("disk-view-launch") { DiskViewLauncher.launch }
+                   end
+                 end
+                 button
+               end
+      heading(translate("Drives"), action: action)
       if data.drives.empty?
         row(group(translate("Storage")), translate("Drives"), "")
       end
@@ -1067,6 +1206,7 @@ module SystemView
       button = Gtk::Button.new_from_icon_name("emblem-system-symbolic")
       button.tooltip_text = tooltip
       button.valign = :center
+      button.visible = @settings_available
       button.add_css_class("flat")
       button.clicked_signal.connect { open_settings(panel) }
       button

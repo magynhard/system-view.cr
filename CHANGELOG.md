@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 - 2026-11-19
+
+- Show missing software and installation guidance on the summary and affected
+  pages, with distribution-specific package suggestions.
+- Add package guidance for Arch, Debian, Ubuntu, Fedora, openSUSE and NixOS.
+- Hide GNOME Settings shortcuts when the settings service is unavailable.
+- Add a Disk View shortcut on the Drives page when its desktop entry is available.
+- Support NixOS paths for the optional processor and memory details action.
+- Document runtime requirements and move development instructions to CONTRIBUTING.md.
+
 ## 0.2.0 - 2026-11-18
 
 - Expand the hardware overview with monitors, audio, video, input devices,

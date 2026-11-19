@@ -64,44 +64,45 @@ available in the standalone Flatpak.
 
 ## Requirements
 
-Linux with Crystal **1.21+**, Shards, GTK **4.12+**, libadwaita **1.5+**,
-GObject Introspection, gettext, pkg-config and standard C build tools. A graphical
-session is required to run the application. A PCI ID database and the libdrm
-`amdgpu.ids` database help identify graphics hardware. Printer discovery uses the
-CUPS client library.
+Linux and a graphical session are required. The released packages support x86_64:
+the AppImage requires glibc 2.39 or newer; the Flatpak requires Flatpak 1.17 or
+newer and the GNOME 51 runtime. Optional tools and services provide additional
+hardware information. See [Linux packaging](doc/packaging.md) for details.
 
-On Arch Linux / Manjaro:
-
-```sh
-sudo pacman -S --needed crystal shards gtk4 libadwaita gobject-introspection \
-  gettext pkgconf base-devel gc pcre2 libyaml hwdata appstream desktop-file-utils
-```
-
-On Debian / Ubuntu 24.04 or newer:
+For native and AppImage installations, the following optional packages provide
+OpenGL/Vulkan diagnostics, audio session details, printer information and the
+authorization tools for additional processor and memory details. Coreutils
+provides the `timeout` command used for background queries.
 
 ```sh
-sudo apt install build-essential pkg-config libgtk-4-dev libadwaita-1-dev \
-  libgirepository1.0-dev gobject-introspection libgc-dev libpcre2-dev libyaml-dev \
-  gettext pci.ids appstream desktop-file-utils
+# Arch Linux / Manjaro
+sudo pacman -S --needed mesa-utils vulkan-tools libpulse coreutils dmidecode polkit libcups
+
+# Debian / Ubuntu
+sudo apt install mesa-utils vulkan-tools pulseaudio-utils coreutils dmidecode pkexec libcups2
+
+# Fedora
+sudo dnf install glx-utils vulkan-tools pulseaudio-utils coreutils dmidecode polkit cups-libs
+
+# openSUSE
+sudo zypper install Mesa-demo-x vulkan-tools pulseaudio-utils coreutils dmidecode polkit libcups2
 ```
 
-Install a compatible Crystal compiler and Shards separately if your distribution
-ships an older version.
+On NixOS, add `pkgs.mesa-demos`, `pkgs.vulkan-tools`, `pkgs.pulseaudio`,
+`pkgs.coreutils`, `pkgs.dmidecode` and `pkgs.cups` to your
+`environment.systemPackages`, then apply your configuration with
+`sudo nixos-rebuild switch`. Additional firmware details also need
+`security.polkit.enable` and a graphical authentication agent. The CUPS library
+must be accessible to the application at runtime. Running the AppImage on NixOS
+may require additional compatibility setup; the standalone Flatpak is an
+alternative. Flatpak applications cannot use diagnostic tools installed only on
+the host.
 
 ## Run
 
-```sh
-make setup
-make run
-```
-
-`make setup` installs the Crystal dependencies and generates the GTK bindings.
-To build and run the executable separately:
-
-```sh
-make build
-./bin/system-view
-```
+Download a package from [GitHub Releases](https://github.com/magynhard/system-view.cr/releases)
+and follow the [installation instructions](doc/packaging.md). To build from source,
+see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 To start the application in English regardless of the system language:
 
@@ -120,48 +121,17 @@ Use the header bar to copy information, refresh or open the About dialog.
 
 ## Install
 
-Install the executable, desktop launcher, icon and translations for your user:
-
-```sh
-make install PREFIX="$HOME/.local"
-```
-
-Make sure `~/.local/bin` is on your `PATH`. For a system-wide installation, use
-`sudo make install`. To remove the application, use the corresponding
-`make uninstall PREFIX="$HOME/.local"` or `sudo make uninstall` command.
+Install an AppImage or standalone Flatpak as described in
+[Linux packaging](doc/packaging.md).
 
 ## Packages
 
-Build an AppImage or a standalone Flatpak bundle with:
-
-```sh
-make appimage
-make flatpak
-```
-
-The packages and their SHA-256 files are created in `dist/`. See
-[Linux packaging](doc/packaging.md) for prerequisites, installation and release
-details. The generated Flatpak manifest is intended for local builds, not a
-Flathub submission.
+Download the AppImage or standalone Flatpak and their SHA-256 files from
+[GitHub Releases](https://github.com/magynhard/system-view.cr/releases).
 
 ## Development
 
-Run the project checks with:
-
-```sh
-make test
-make test-packaging
-crystal tool format --check src/ spec/ tests/*.cr
-make validate-metadata
-python3 scripts/packaging.py verify
-make build
-make test-ui
-git diff --check
-```
-
-The UI tests require Xvfb, `xvfb-run` and `dbus-run-session` and save screenshots
-under `build/`. Translation catalogs are in `po/`; run `make generate_locales`
-after changing translatable messages.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and checks.
 
 ## Author and license
 

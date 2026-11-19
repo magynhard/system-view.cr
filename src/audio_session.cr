@@ -26,6 +26,7 @@ module SystemView::AudioSessionDiscovery
   end
 
   private def run(arguments : Array(String)) : String
+    return "" if OptionalToolSimulation.enabled?
     executable = Process.find_executable("pactl")
     timeout = Process.find_executable("timeout")
     return "" unless executable && timeout

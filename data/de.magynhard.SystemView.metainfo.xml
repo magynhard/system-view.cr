@@ -23,6 +23,14 @@
   <content_rating type="oars-1.1"/>
   <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
   <releases>
+    <release version="0.3.0" date="2026-11-19">
+      <description>
+        <p>See which additional software is needed for hardware information, with installation guidance for supported distributions.</p>
+        <p>Open Disk View from the Drives page when available. GNOME Settings shortcuts are shown only when the settings service is available.</p>
+        <p xml:lang="de">Fehlende Software für Hardwareinformationen erkennen und Installationshinweise für unterstützte Distributionen anzeigen.</p>
+        <p xml:lang="de">Disk View bei Verfügbarkeit direkt von der Laufwerksseite öffnen. Verknüpfungen zu GNOME-Einstellungen erscheinen nur, wenn der Einstellungsdienst verfügbar ist.</p>
+      </description>
+    </release>
     <release version="0.2.0" date="2026-11-18">
       <description>
         <p>Explore hardware and connected devices in a clear, adaptive overview.</p>

@@ -77,6 +77,9 @@ factory = -> do
   firmware.memory[0] = firmware.memory.first.copy_with(manufacturer: "Corsair")
   requests = Atomic(Int32).new(0)
   settings_requests = [] of String
+  settings_available = Atomic(Bool).new(true)
+  disk_view_available = Atomic(Bool).new(true)
+  disk_view_requests = Atomic(Int32).new(0)
   loader = -> do
     attempt = requests.add(1)
     sleep 350.milliseconds
@@ -103,6 +106,10 @@ factory = -> do
     runtime_info: SystemView::RuntimeInfo.new(session: "Wayland", architecture: "x86_64", virtualization: "KVM/QEMU", container: "Podman", app_format: "Flatpak"),
     audio_session_loader: -> { SystemView::AudioSession.new(server: "PulseAudio (on PipeWire 1.2)", output: "Speakers", input: "Microphone") },
     printer_loader: -> { SystemView::Printers.new(names: ["Office_Printer"], available: true) },
+    settings_availability_loader: -> { settings_available.get },
+    optional_tools_loader: -> { ["vulkaninfo", "libcups"] },
+    disk_view_available_loader: -> { disk_view_available.get },
+    disk_view_opener: -> { disk_view_requests.add(1); nil },
     settings_opener: ->(panel : String) { settings_requests << panel; nil })
   window.present
   phase = -8
@@ -192,11 +199,18 @@ factory = -> do
       when 0
         if rows.any? { |row| row.subtitle.try(&.includes?("Example CPU 9000")) }
           check(navigation.selected_row.not_nil!.name == "overview", "overview selected on startup")
+          check(widgets.select(Adw::Banner).any? { |item| item.title == "Some features need additional software" && item.revealed? }, "summary shows missing software")
+          notice = widgets.select(Adw::Banner).find { |item| item.title == "Some features need additional software" }.not_nil!
+          check(descendants(notice).select(Gtk::Button).any? { |button| button.has_css_class("suggested-action") }, "optional software button uses primary styling")
           {"Back", "Forward", "Toggle sidebar"}.each do |tooltip|
             button = widgets.select(Gtk::Button).find { |item| item.tooltip_text == tooltip }.not_nil!
             check(button.has_css_class("flat"), "#{tooltip} button uses flat styling")
           end
           screenshot(window, "system-view-overview")
+          window.lookup_action("optional-tools").not_nil!.activate(nil)
+          dialog = descendants(window).select(Adw::AlertDialog).find { |item| item.heading == "Optional software" }.not_nil!
+          check(descendants(dialog.extra_child.not_nil!).select(Gtk::Label).any? { |label| label.selectable? && label.text.includes?("vulkaninfo") }, "optional software details are selectable")
+          dialog.force_close
           check(navigation.row_at_index(0).not_nil!.tooltip_text == "Summary", "navigation names the summary")
           content_controls = widgets.select(Gtk::Box).find { |box| box.name == "content-controls" }.not_nil!
           check(!content_controls.visible?, "sidebar header contains navigation controls while sidebar is open")
@@ -254,6 +268,8 @@ factory = -> do
               check(!layouts.empty? && layouts.all? { |layout| layout.max_children_per_line == expected_columns }, "detail page #{index} uses at most #{expected_columns} columns")
             end
             check(!detail_rows.empty?, "detail page #{index} has real information")
+            missing_banner = descendants(window).select(Adw::Banner).find { |item| item.title == "Some features need additional software" }.not_nil!
+            check(missing_banner.revealed? == {"graphics", "printers"}.includes?(page), "missing software notice is limited to affected page #{page}")
             check(detail_rows.none? { |row| {"Capacity source", "Model identification"}.includes?(row.title) }, "detail page #{index} omits data provenance")
             check(descendants(window).select(Adw::PreferencesGroup).all? { |group| group.description.to_s.empty? }, "detail page #{index} omits implementation explanations")
             if index == 1
@@ -280,6 +296,10 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Boot mode" && row.subtitle == "UEFI" }, "mainboard shows the boot mode")
               check(detail_rows.any? { |row| row.title == "Secure Boot" && row.subtitle == "Active" }, "mainboard shows the Secure Boot state")
               check(detail_rows.any? { |row| row.title == "TPM" && row.subtitle == "TPM 2.0" }, "mainboard shows the TPM version")
+            elsif index == 4
+              disk_button = descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == "Open Disk View" }.not_nil!
+              disk_button.clicked_signal.emit
+              check(disk_view_requests.get == 1, "drive header opens Disk View")
             elsif index == 5
               check(detail_rows.any? { |row| row.title == "Voltage" && row.subtitle == "1.2 V" }, "precise module voltage is displayed")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("Corsair Vengeance LPX · CMK32GX4M2E3200C16")) }, "RAM manufacturer and series precede the model identifier")
@@ -406,6 +426,8 @@ factory = -> do
           item.activate
           check(navigation.selected_row.not_nil!.name == "memory" && !split.show_sidebar?, "overview navigation also works with the collapsed sidebar")
           navigation.select_row(navigation.row_at_index(2))
+          settings_available.set(false)
+          disk_view_available.set(false)
           window.lookup_action("refresh").not_nil!.activate(nil)
           phase = 4
         end
@@ -552,6 +574,11 @@ factory = -> do
         if window.lookup_action("refresh").not_nil!.enabled?
           check(navigation.selected_row.not_nil!.name == "network", "refresh keeps the network page selected")
           check(rows.any? { |row| row.title == "IPv4 · IP addresses" && row.subtitle == "192.0.2.10/24" }, "refresh reloads per-interface network addresses")
+          button = widgets.select(Gtk::Button).find { |item| item.tooltip_text == "Open network settings" }.not_nil!
+          check(!button.visible?, "settings button is hidden when the service becomes unavailable")
+          navigation.select_row(navigation.row_at_index(4))
+          check(descendants(window).select(Gtk::Button).none? { |item| item.tooltip_text == "Open Disk View" }, "Disk View button is hidden when it is unavailable")
+          navigation.select_row(navigation.row_at_index(10))
           phase = 14
         end
       when 14
