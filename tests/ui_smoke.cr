@@ -66,6 +66,12 @@ app = SystemView::App.new
 factory = -> do
   SystemView::RESOURCE._register
   Gtk::IconTheme.for_display(Gdk::Display.default.not_nil!).add_resource_path("/de/magynhard/SystemView/icons")
+  icon_theme = Gtk::IconTheme.for_display(Gdk::Display.default.not_nil!)
+  {"graphics", "processor", "mainboard", "memory"}.each do |name|
+    icon = icon_theme.lookup_icon("system-view-#{name}-symbolic", nil, 16, 1, Gtk::TextDirection::None, Gtk::IconLookupFlags::None)
+    check(icon.file.try(&.uri).try(&.includes?("/icons/scalable/actions/system-view-#{name}-symbolic.svg")) == true,
+      "#{name} icon is loaded from the themed symbolic resources")
+  end
   files = IOFixtureFiles.new
   files.files["/sys/class/dmi/id/sys_vendor"] = "Example Vendor"
   files.files["/sys/class/dmi/id/product_name"] = "Redundant Board"

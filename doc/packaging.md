@@ -31,7 +31,7 @@ without FUSE use `APPIMAGE_EXTRACT_AND_RUN=1 ./System_View-VERSION-x86_64.AppIma
 To install a downloaded release bundle for your user, run:
 
 ```sh
-flatpak install --user System_View-0.3.1-x86_64.flatpak
+flatpak install --user System_View-0.3.2-x86_64.flatpak
 flatpak run de.magynhard.SystemView
 ```
 
@@ -50,7 +50,7 @@ Python 3.12+, PyYAML and the GNOME 51 SDK/runtime:
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user flathub org.gnome.Platform//51 org.gnome.Sdk//51
 make flatpak
-flatpak install --user dist/System_View-0.3.1-x86_64.flatpak
+flatpak install --user dist/System_View-0.3.2-x86_64.flatpak
 flatpak run de.magynhard.SystemView
 ```
 
@@ -82,10 +82,11 @@ fall back to their sandbox-visible read-only views when necessary. Information
 hidden by the host or sandbox remains Unknown. Check the hardware inventory on
 the intended host after installation.
 
-The optional pkexec/dmidecode action is available only in native/AppImage launches
-with the host tools and a desktop authorization agent installed. The standalone
-Flatpak deliberately has no host-spawn or privileged-helper integration. It still
-reads CPU flags, monitor/audio/input metadata and cached module information.
+The optional pkexec/dmidecode action requires the host tools and a desktop
+authorization agent. The Flatpak uses `flatpak-spawn --host` to run the same
+fixed read-only query on the host after authorization. The permission to access
+`org.freedesktop.Flatpak` permits host command execution outside the sandbox and
+therefore makes the sandbox unsuitable as a security boundary for this app.
 
 This is a local/standalone packaging manifest, **not a Flathub submission**. No
 Flathub submission or publication is configured. Compiler architectures are

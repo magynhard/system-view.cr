@@ -5,6 +5,13 @@ describe SystemView::Firmware do
   it "uses the numeric processor and memory types accepted by dmidecode" do
     SystemView::FirmwareQuery::DMI_ARGUMENTS.should eq({"--type", "4,17"})
   end
+
+  it "runs only the fixed authorized query on the host when sandboxed" do
+    SystemView::FirmwareQuery.command("/usr/bin/pkexec", "/usr/bin/dmidecode", true).should eq(
+      ["flatpak-spawn", "--host", "--watch-bus", "--env=LC_ALL=C", "--env=LANG=C", "/usr/bin/pkexec", "--disable-internal-agent", "/usr/bin/dmidecode", "--type", "4,17"])
+    SystemView::FirmwareQuery.command("/usr/bin/pkexec", "/usr/bin/dmidecode", false).should eq(
+      ["/usr/bin/pkexec", "--disable-internal-agent", "/usr/bin/dmidecode", "--type", "4,17"])
+  end
   it "extracts processor socket, voltage, clocks, flags and characteristics" do
     text = "Handle 0x0016, DMI type 4, 48 bytes\nProcessor Information\n\tSocket Designation: AM4\n\tVoltage: 1.1 V\n\tExternal Clock: 100 MHz\n\tMax Speed: 4650 MHz\n\tCurrent Speed: 3400 MHz\n\tUpgrade: Socket AM4\n\tFlags:\n\t\tMMX (MMX technology supported)\n\t\tSSE2 (Streaming SIMD extensions 2)\n\tCharacteristics:\n\t\t64-bit capable\n\t\tMulti-Core\n"
     data = SystemView::Firmware.parse(text)

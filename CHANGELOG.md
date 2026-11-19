@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 - 2026-11-19
+
+- Enable the authorized processor and memory details query in Flatpak using host-installed tools.
+- Place custom hardware icons in the icon theme so they follow the active appearance.
+
 ## 0.3.1 - 2026-11-19
 
 - Include OpenGL and Vulkan diagnostic tools in the Flatpak package.

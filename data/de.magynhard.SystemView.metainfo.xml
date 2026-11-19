@@ -30,6 +30,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.3.2" date="2026-11-19">
+      <description>
+        <p>Unlock additional processor and memory details in the Flatpak using the host's installed tools and authorization.</p>
+        <p>Improve the appearance of hardware icons in dark and light themes.</p>
+        <p xml:lang="de">Zusätzliche Prozessor- und Speicherinformationen im Flatpak mit den installierten Werkzeugen und einer Autorisierung des Hostsystems freischalten.</p>
+        <p xml:lang="de">Die Darstellung der Hardware-Symbole in hellen und dunklen Designs wurde verbessert.</p>
+      </description>
+    </release>
     <release version="0.3.1" date="2026-11-19">
       <description>
         <p>OpenGL and Vulkan diagnostic tools are now included in the Flatpak package, including XWayland access for OpenGL information.</p>

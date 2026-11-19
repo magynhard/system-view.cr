@@ -2,9 +2,9 @@
 <gresources>
   <gresource prefix="/de/magynhard/SystemView">
     <file>icons/de.magynhard.SystemView.svg</file>
-    <file>icons/system-view-processor-symbolic.svg</file>
-    <file>icons/system-view-memory-symbolic.svg</file>
-    <file>icons/system-view-mainboard-symbolic.svg</file>
-    <file>icons/system-view-graphics-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-processor-symbolic.svg">icons/system-view-processor-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-memory-symbolic.svg">icons/system-view-memory-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-mainboard-symbolic.svg">icons/system-view-mainboard-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-graphics-symbolic.svg">icons/system-view-graphics-symbolic.svg</file>
   </gresource>
 </gresources>

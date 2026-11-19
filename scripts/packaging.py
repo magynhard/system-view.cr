@@ -120,7 +120,7 @@ def flatpak_manifest(destination):
         "appstream-compose": False,
         "command": "system-view",
         "x-local-development-only": "AI-assisted local packaging; NOT a Flathub submission manifest. See doc/packaging.md.",
-        "finish-args": ["--require-version=1.17.0", "--socket=wayland", "--socket=x11", "--socket=pulseaudio", "--socket=cups", "--share=ipc", "--device=dri", "--filesystem=host-root:ro", "--filesystem=/run/udev:ro", "--talk-name=org.gnome.Shell", "--talk-name=org.gnome.Mutter.DisplayConfig", "--talk-name=org.gnome.Settings", "--system-talk-name=org.freedesktop.NetworkManager", "--system-talk-name=org.bluez", "--system-talk-name=org.freedesktop.UDisks2"],
+        "finish-args": ["--require-version=1.17.0", "--socket=wayland", "--socket=x11", "--socket=pulseaudio", "--socket=cups", "--share=ipc", "--device=dri", "--filesystem=host-root:ro", "--filesystem=/run/udev:ro", "--talk-name=org.freedesktop.Flatpak", "--talk-name=org.gnome.Shell", "--talk-name=org.gnome.Mutter.DisplayConfig", "--talk-name=org.gnome.Settings", "--system-talk-name=org.freedesktop.NetworkManager", "--system-talk-name=org.bluez", "--system-talk-name=org.freedesktop.UDisks2"],
         "cleanup": ["/include", "/lib/pkgconfig", "/lib/*.la", "/share/man", "/share/doc"],
         "modules": [
             {"name": "bdw-gc", "buildsystem": "autotools", "config-opts": ["--disable-static"], "post-install": [f"install -Dm644 README.QUICK /app/share/licenses/{APP_ID}/bdw-gc/README.QUICK"], "sources": [{"type": "archive", **PINS["gc"]}]},

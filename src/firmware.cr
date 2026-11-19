@@ -53,18 +53,29 @@ module SystemView
     @cancellable = Gio::Cancellable.new
     @cancelled = false
 
-    def self.decoder : String?
+    def self.decoder(sandboxed : Bool = File.file?("/.flatpak-info")) : String?
       return nil if OptionalToolSimulation.enabled?
-      {"/usr/sbin/dmidecode", "/usr/bin/dmidecode", "/sbin/dmidecode", "/run/current-system/sw/bin/dmidecode", "/run/current-system/sw/sbin/dmidecode"}.find { |path| File.file?(path) && File::Info.executable?(path) }
+      {"/usr/sbin/dmidecode", "/usr/bin/dmidecode", "/sbin/dmidecode", "/run/current-system/sw/bin/dmidecode", "/run/current-system/sw/sbin/dmidecode"}.find { |path| executable?(path, sandboxed) }
     end
 
-    def self.pkexec : String?
+    def self.pkexec(sandboxed : Bool = File.file?("/.flatpak-info")) : String?
       return nil if OptionalToolSimulation.enabled?
-      {"/usr/bin/pkexec", "/run/wrappers/bin/pkexec"}.find { |path| File.file?(path) && File::Info.executable?(path) }
+      {"/usr/bin/pkexec", "/run/wrappers/bin/pkexec"}.find { |path| executable?(path, sandboxed) }
+    end
+
+    private def self.executable?(path : String, sandboxed : Bool) : Bool
+      candidate = sandboxed ? "/run/host/root#{path}" : path
+      File.file?(candidate) && File::Info.executable?(candidate)
+    end
+
+    def self.command(pkexec : String, decoder : String, sandboxed : Bool) : Array(String)
+      prefix = sandboxed ? ["flatpak-spawn", "--host", "--watch-bus", "--env=LC_ALL=C", "--env=LANG=C"] : [] of String
+      prefix + [pkexec, "--disable-internal-agent", decoder] + DMI_ARGUMENTS.to_a
     end
 
     def self.available? : Bool
-      !File.file?("/.flatpak-info") && !pkexec.nil? && !decoder.nil?
+      sandboxed = File.file?("/.flatpak-info")
+      (!sandboxed || !Process.find_executable("flatpak-spawn").nil?) && !pkexec(sandboxed).nil? && !decoder(sandboxed).nil?
     end
 
     def run : FirmwareResult
@@ -73,7 +84,7 @@ module SystemView
       return FirmwareResult.new unless decoder && pkexec && self.class.available?
       process = @mutex.synchronize do
         return FirmwareResult.new(cancelled: true) if @cancelled
-        @process = SubprocessOutput.launch([pkexec, "--disable-internal-agent", decoder] + DMI_ARGUMENTS.to_a,
+        @process = SubprocessOutput.launch(self.class.command(pkexec, decoder, File.file?("/.flatpak-info")),
           {"LC_ALL" => "C", "LANG" => "C"})
       end
       output = SubprocessOutput.read(process, @cancellable)

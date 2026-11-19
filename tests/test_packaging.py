@@ -45,6 +45,7 @@ class PackagingTests(unittest.TestCase):
             permissions = manifest["finish-args"]
             self.assertIn("--filesystem=host-root:ro", permissions)
             self.assertIn("--filesystem=/run/udev:ro", permissions)
+            self.assertIn("--talk-name=org.freedesktop.Flatpak", permissions)
             self.assertIn("--talk-name=org.gnome.Shell", permissions)
             self.assertIn("--talk-name=org.gnome.Mutter.DisplayConfig", permissions)
             self.assertIn("--talk-name=org.gnome.Settings", permissions)
