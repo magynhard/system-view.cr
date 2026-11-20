@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4 - 2026-11-20
+
+- Improve repeated Disk View launches from the AppImage.
+- Show the Disk View shortcut in Flatpak when its host desktop entry is available.
+
 ## 0.3.3 - 2026-11-20
 
 - Add interface translations for 42 additional languages and localize the application metadata.

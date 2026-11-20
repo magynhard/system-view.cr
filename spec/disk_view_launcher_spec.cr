@@ -1,5 +1,7 @@
 require "spec"
 require "../src/disk_view_launcher"
+require "../src/subprocess_output"
+require "file_utils"
 
 describe SystemView::DiskViewLauncher do
   it "removes AppImage resources from the launched application's environment" do
@@ -17,7 +19,9 @@ describe SystemView::DiskViewLauncher do
     original = values.keys.to_h { |name| {name, ENV[name]?} }
     begin
       values.each { |name, value| ENV[name] = value }
-      environment = SystemView::DiskViewLauncher.launch_context.environment.to_a
+      launcher = Gio::SubprocessLauncher.new(Gio::SubprocessFlags::StdoutPipe | Gio::SubprocessFlags::StderrSilence)
+      SystemView::DiskViewLauncher.clean_appimage_environment(launcher)
+      environment = SystemView::SubprocessOutput.read(launcher.spawnv(["/usr/bin/env"])).lines.map(&.chomp)
       environment.should contain("PATH=/usr/bin")
       environment.should contain("LD_LIBRARY_PATH=/opt/custom/lib")
       environment.should contain("LD_PRELOAD=/opt/custom/libtest.so")
@@ -42,10 +46,26 @@ describe SystemView::DiskViewLauncher do
     appdir = ENV["APPDIR"]?
     begin
       ENV.delete("APPDIR")
-      environment = SystemView::DiskViewLauncher.launch_context.environment.to_a
+      launcher = Gio::SubprocessLauncher.new(Gio::SubprocessFlags::StdoutPipe | Gio::SubprocessFlags::StderrSilence)
+      SystemView::DiskViewLauncher.clean_appimage_environment(launcher)
+      environment = SystemView::SubprocessOutput.read(launcher.spawnv(["/usr/bin/env"])).lines.map(&.chomp)
       environment.should contain("PATH=#{ENV["PATH"]}")
     ensure
       ENV["APPDIR"] = appdir if appdir
+    end
+  end
+
+  it "finds a host Flatpak desktop entry without exposing a sandbox path" do
+    root = File.tempname("system-view-host")
+    directory = File.join(root, "home/test/.local/share/flatpak/exports/share/applications")
+    begin
+      FileUtils.mkdir_p(directory)
+      SystemView::DiskViewLauncher.host_desktop_file("/home/test", "", root).should be_nil
+      File.write(File.join(directory, SystemView::DiskViewLauncher::DESKTOP_ID), "[Desktop Entry]\n")
+      SystemView::DiskViewLauncher.host_desktop_file("/home/test", "", root).should eq(
+        "/home/test/.local/share/flatpak/exports/share/applications/de.magynhard.DiskView.desktop")
+    ensure
+      FileUtils.rm_rf(root)
     end
   end
 end

@@ -27,6 +27,17 @@ reports.each do |name, report|
   File.chmod(path, 0o755)
 end
 ENV["PATH"] = "#{tools}:#{ENV["PATH"]? || "/usr/bin:/bin"}"
+ENV["XDG_DATA_HOME"] = tools
+ENV["APPDIR"] = File.join(tools, "appdir")
+ENV["APPIMAGE"] = File.join(tools, "SystemView.AppImage")
+ENV["LD_LIBRARY_PATH"] = "#{ENV["APPDIR"]}/usr/lib:#{ENV["LD_LIBRARY_PATH"]? || "/usr/lib"}"
+FileUtils.mkdir_p(File.join(tools, "applications"))
+launch_log = File.join(tools, "disk-view-launches")
+fake_disk_view = File.join(tools, "fake-disk-view")
+File.write(fake_disk_view, "#!/bin/sh\nprintf 'launch\\n' >> '#{launch_log}'\n")
+File.chmod(fake_disk_view, 0o755)
+File.write(File.join(tools, "applications", SystemView::DiskViewLauncher::DESKTOP_ID),
+  "[Desktop Entry]\nType=Application\nName=Disk View test\nExec=#{fake_disk_view}\n")
 
 def discovery_widgets(widget : Gtk::Widget) : Array(Gtk::Widget)
   result = [widget] of Gtk::Widget
@@ -64,12 +75,22 @@ factory = -> do
       elsif phase == 1
         raise "OpenGL subprocess output was lost" unless rows.any? { |row| row.title == "OpenGL" && row.subtitle == "4.6" }
         raise "Vulkan subprocess output was lost" unless rows.any? { |row| row.title == "Vulkan" && row.subtitle == "1.3.280" }
-        puts "PASS: real graphics subprocesses complete while the GTK loop is running"
+        navigation = tree.select(Gtk::ListBox).find { |list| list.has_css_class("navigation-sidebar") }.not_nil!
+        navigation.select_row(navigation.row_at_index(4))
+        phase = 2
+      elsif phase == 2
+        button = tree.select(Gtk::Button).find { |item| item.tooltip_text == "Open Disk View" }.not_nil!
+        button.clicked_signal.emit
+        button.clicked_signal.emit
+        GC.collect
+        phase = 3
+      elsif phase == 3 && File.file?(launch_log) && File.read(launch_log).lines.size >= 2
+        puts "PASS: real graphics subprocesses and repeated Disk View launches complete while GTK is running"
         window.close
         app.quit
-        phase = 2
+        phase = 4
       end
-      phase < 2
+      phase < 4
     rescue error
       STDERR.puts(error.inspect_with_backtrace)
       exit(1)

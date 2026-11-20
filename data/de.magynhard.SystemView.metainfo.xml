@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.3.4" date="2026-11-20">
+      <description>
+        <p>Improve opening Disk View from the AppImage and add the Disk View shortcut to Flatpak when available on the host.</p>
+        <p xml:lang="de">Das Öffnen von Disk View aus dem AppImage verbessert und die Verknüpfung im Flatpak ergänzt, wenn Disk View auf dem Host verfügbar ist.</p>
+        <p xml:lang="ar">تحسين فتح Disk View من AppImage وإضافة اختصاره في Flatpak عند توفره على النظام المضيف.</p>
+        <p xml:lang="bg">Подобрено е отварянето на Disk View от AppImage и е добавен пряк път във Flatpak, когато приложението е налично на хоста.</p>
+        <p xml:lang="bn">AppImage থেকে Disk View খোলা উন্নত করা হয়েছে এবং হোস্টে উপলব্ধ থাকলে Flatpak-এ এর শর্টকাট দেখানো হয়।</p>
+        <p xml:lang="cs">Vylepšeno otevírání Disk View z AppImage a přidán odkaz ve Flatpaku, pokud je aplikace dostupná v hostitelském systému.</p>
+        <p xml:lang="da">Forbedret åbning af Disk View fra AppImage og tilføjet en genvej i Flatpak, når programmet findes på værten.</p>
+        <p xml:lang="el">Βελτιώθηκε το άνοιγμα του Disk View από το AppImage και προστέθηκε συντόμευση στο Flatpak όταν είναι διαθέσιμο στον κεντρικό υπολογιστή.</p>
+        <p xml:lang="es">Se mejoró la apertura de Disk View desde AppImage y se añadió un acceso directo en Flatpak cuando está disponible en el sistema anfitrión.</p>
+        <p xml:lang="et">Disk View avamist AppImage'ist on parandatud ja Flatpakis lisatud otsetee, kui rakendus on hostis saadaval.</p>
+        <p xml:lang="fa">باز کردن Disk View از AppImage بهبود یافت و در صورت وجود آن روی میزبان، میان‌برش به Flatpak اضافه شد.</p>
+        <p xml:lang="fi">Disk View'n avaamista AppImagesta on parannettu ja Flatpakiin lisätty pikakuvake, kun sovellus on saatavilla isäntäkoneella.</p>
+        <p xml:lang="fr">Amélioration de l’ouverture de Disk View depuis l’AppImage et ajout de son raccourci dans le Flatpak lorsqu’il est disponible sur l’hôte.</p>
+        <p xml:lang="ga">Feabhsaíodh oscailt Disk View ón AppImage agus cuireadh aicearra leis an Flatpak nuair atá sé ar fáil ar an óstríomhaire.</p>
+        <p xml:lang="he">פתיחת Disk View מתוך AppImage שופרה ונוסף קיצור דרך ב־Flatpak כאשר היישום זמין במערכת המארחת.</p>
+        <p xml:lang="hi">AppImage से Disk View खोलना बेहतर किया गया है और होस्ट पर उपलब्ध होने पर Flatpak में उसका शॉर्टकट दिखाया जाता है।</p>
+        <p xml:lang="hr">Poboljšano je otvaranje Disk Viewa iz AppImagea i dodan prečac u Flatpaku kada je dostupan na glavnom sustavu.</p>
+        <p xml:lang="hu">Javult a Disk View megnyitása az AppImage-ből, és a Flatpakban is megjelenik a parancsikon, ha az alkalmazás elérhető a gazdagépen.</p>
+        <p xml:lang="id">Pembukaan Disk View dari AppImage diperbaiki dan pintasannya ditambahkan ke Flatpak jika tersedia di sistem host.</p>
+        <p xml:lang="is">Opnun Disk View úr AppImage var bætt og flýtileið bætt við í Flatpak þegar forritið er tiltækt á hýsilkerfinu.</p>
+        <p xml:lang="it">Migliorata l'apertura di Disk View dall'AppImage e aggiunto il collegamento nel Flatpak quando disponibile sul sistema host.</p>
+        <p xml:lang="ja">AppImageからDisk Viewを開く動作を改善し、ホストで利用可能な場合にFlatpakにもショートカットを追加しました。</p>
+        <p xml:lang="ko">AppImage에서 Disk View를 여는 동작을 개선하고 호스트에서 사용할 수 있을 때 Flatpak에 바로가기를 추가했습니다.</p>
+        <p xml:lang="lt">Patobulintas „Disk View“ atidarymas iš „AppImage“ ir pridėta nuoroda „Flatpak“ pakete, kai programa yra pagrindinėje sistemoje.</p>
+        <p xml:lang="lv">Uzlabota Disk View atvēršana no AppImage un Flatpak pievienota saīsne, ja lietotne ir pieejama resursdatorā.</p>
+        <p xml:lang="ms">Pembukaan Disk View daripada AppImage ditambah baik dan pintasan ditambah dalam Flatpak apabila tersedia pada hos.</p>
+        <p xml:lang="nb">Forbedret åpning av Disk View fra AppImage og lagt til en snarvei i Flatpak når programmet finnes på vertssystemet.</p>
+        <p xml:lang="nl">Het openen van Disk View vanuit de AppImage is verbeterd en de Flatpak toont een snelkoppeling wanneer de app op de host beschikbaar is.</p>
+        <p xml:lang="pl">Ulepszono otwieranie Disk View z AppImage i dodano skrót w pakiecie Flatpak, gdy aplikacja jest dostępna w systemie gospodarza.</p>
+        <p xml:lang="pt">Melhorada a abertura do Disk View a partir da AppImage e adicionado um atalho no Flatpak quando disponível no anfitrião.</p>
+        <p xml:lang="pt_BR">Melhorada a abertura do Disk View a partir do AppImage e adicionado um atalho no Flatpak quando disponível no sistema anfitrião.</p>
+        <p xml:lang="ro">A fost îmbunătățită deschiderea Disk View din AppImage și adăugată o scurtătură în Flatpak când aplicația este disponibilă pe gazdă.</p>
+        <p xml:lang="ru">Улучшен запуск Disk View из AppImage и добавлен ярлык во Flatpak, если приложение доступно в основной системе.</p>
+        <p xml:lang="sk">Vylepšené otváranie Disk View z AppImage a pridaný odkaz vo Flatpaku, ak je aplikácia dostupná na hostiteľskom systéme.</p>
+        <p xml:lang="sr">Побољшано је отварање Disk View-а из AppImage-а и додата пречица у Flatpak-у када је програм доступан на домаћину.</p>
+        <p xml:lang="sv">Öppning av Disk View från AppImage har förbättrats och en genväg lagts till i Flatpak när programmet finns på värdsystemet.</p>
+        <p xml:lang="ta">AppImage இலிருந்து Disk View திறப்பது மேம்படுத்தப்பட்டது; புரவலனில் கிடைத்தால் Flatpak இல் அதன் குறுக்குவழி சேர்க்கப்படும்.</p>
+        <p xml:lang="th">ปรับปรุงการเปิด Disk View จาก AppImage และเพิ่มทางลัดใน Flatpak เมื่อมีแอปบนโฮสต์</p>
+        <p xml:lang="tr">Disk View'ın AppImage içinden açılması iyileştirildi ve ana sistemde mevcutsa Flatpak'e kısayolu eklendi.</p>
+        <p xml:lang="uk">Покращено відкриття Disk View з AppImage та додано ярлик у Flatpak, якщо програма доступна в основній системі.</p>
+        <p xml:lang="ur">AppImage سے Disk View کھولنا بہتر بنایا گیا اور میزبان پر دستیاب ہونے پر Flatpak میں اس کا شارٹ کٹ شامل کیا گیا۔</p>
+        <p xml:lang="vi">Cải thiện việc mở Disk View từ AppImage và thêm lối tắt trong Flatpak khi ứng dụng có trên máy chủ.</p>
+        <p xml:lang="zh_CN">改进从 AppImage 打开 Disk View 的方式，并在主机上安装了 Disk View 时在 Flatpak 中显示快捷入口。</p>
+        <p xml:lang="zh_TW">改善從 AppImage 開啟 Disk View 的方式，並在主機上安裝 Disk View 時於 Flatpak 中顯示捷徑。</p>
+      </description>
+    </release>
     <release version="0.3.3" date="2026-11-20">
       <description>
         <p>Add translations for 42 additional languages and improve application metadata.</p>
