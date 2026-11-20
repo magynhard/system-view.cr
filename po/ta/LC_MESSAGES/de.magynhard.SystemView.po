@@ -1,0 +1,1177 @@
+# Tamil translations for System package.
+# Copyright (C) 2026 Matthäus J. N. Beyrle
+# This file is distributed under the same license as the System View package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: System View\n"
+"Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
+"POT-Creation-Date: 2026-11-19 07:37+0100\n"
+"PO-Revision-Date: 2026-11-19 07:37+0100\n"
+"Last-Translator: OpenCode\n"
+"Language-Team: System View translators\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/window.cr:87
+msgid "Copy system information"
+msgstr "கணினித் தகவல்களை நகலெடு"
+
+#: src/window.cr:90
+msgid "Copy summary"
+msgstr "சுருக்கத்தை நகலெடு"
+
+#: src/window.cr:91
+msgid "Copy all information"
+msgstr "அனைத்துத் தகவல்களையும் நகலெடு"
+
+#: src/window.cr:96
+msgid "Main menu"
+msgstr "முதன்மை பட்டி"
+
+#: src/window.cr:99
+msgid "Refresh"
+msgstr "புதுப்பி"
+
+#: src/window.cr:100
+msgid "About System View"
+msgstr "System View பற்றி"
+
+#: src/window.cr:101 src/window.cr:612
+msgid "Close"
+msgstr "மூடு"
+
+#: src/window.cr:126
+msgid "Some hardware details are locked"
+msgstr "சில வன்பொருள் விவரங்கள் பூட்டப்பட்டுள்ளன"
+
+#: src/window.cr:129
+msgid "Some features need additional software"
+msgstr "சில அம்சங்களுக்கு கூடுதல் மென்பொருள் தேவை"
+
+#: src/window.cr:130
+msgid "More information"
+msgstr "மேலும் தகவல்"
+
+#: src/window.cr:174
+msgid "Toggle sidebar"
+msgstr "பக்கப்பட்டியை மாற்று"
+
+#: src/window.cr:182
+msgid "Back"
+msgstr "பின்னால்"
+
+#: src/window.cr:187
+msgid "Forward"
+msgstr "முன்னால்"
+
+#: src/window.cr:210
+msgid "Your system and hardware at a glance."
+msgstr "உங்கள் கணினி மற்றும் வன்பொருளை ஒரே பார்வையில் காண்க."
+
+#: src/window.cr:256
+msgid "Summary"
+msgstr "சுருக்கம்"
+
+#: src/window.cr:257 src/window.cr:752 src/window.cr:910 src/window.cr:912
+msgid "Graphics"
+msgstr "வரைகலை"
+
+#: src/window.cr:258 src/window.cr:745 src/window.cr:781
+msgid "Processor"
+msgstr "செயலி"
+
+#: src/window.cr:259 src/window.cr:746 src/window.cr:878
+msgid "Mainboard"
+msgstr "மதர்போர்டு"
+
+#: src/window.cr:260 src/window.cr:995 src/window.cr:997
+msgid "Drives"
+msgstr "இயக்கிகள்"
+
+#: src/window.cr:261 src/window.cr:760 src/window.cr:1026 src/window.cr:1028
+msgid "Memory"
+msgstr "நினைவகம்"
+
+#: src/window.cr:262 src/window.cr:756 src/window.cr:1143 src/window.cr:1144
+msgid "Monitors"
+msgstr "காட்சித்திரைகள்"
+
+#: src/window.cr:263 src/window.cr:1183 src/window.cr:1188
+msgid "Audio"
+msgstr "ஒலி"
+
+#: src/window.cr:264 src/window.cr:1268 src/window.cr:1270
+msgid "Video"
+msgstr "காணொளி"
+
+#: src/window.cr:265 src/window.cr:1283 src/window.cr:1284
+msgid "Input Devices"
+msgstr "உள்ளீட்டு சாதனங்கள்"
+
+#: src/window.cr:266 src/window.cr:771 src/window.cr:1320 src/window.cr:1322
+msgid "Network"
+msgstr "பிணையம்"
+
+#: src/window.cr:267 src/window.cr:769 src/window.cr:1368 src/window.cr:1370
+msgid "Bluetooth"
+msgstr "புளூடூத்"
+
+#: src/window.cr:268 src/window.cr:773 src/window.cr:1071 src/window.cr:1074
+msgid "Operating System"
+msgstr "இயக்க முறைமை"
+
+#: src/window.cr:269 src/window.cr:1090 src/window.cr:1093
+msgid "Power"
+msgstr "மின்சாரம்"
+
+#: src/window.cr:270 src/window.cr:1243 src/window.cr:1245
+msgid "Sensors"
+msgstr "உணரிகள்"
+
+#: src/window.cr:271 src/window.cr:1358 src/window.cr:1361
+msgid "Printers"
+msgstr "அச்சுப்பொறிகள்"
+
+#: src/window.cr:360
+msgid "Could not read system information"
+msgstr "கணினித் தகவல்களைப் படிக்க முடியவில்லை"
+
+#: src/window.cr:361 src/window.cr:663 src/window.cr:683 src/window.cr:720
+#: src/window.cr:724 src/window.cr:750 src/window.cr:754 src/window.cr:825
+#: src/window.cr:867 src/window.cr:893 src/window.cr:898 src/window.cr:1138
+#: src/window.cr:1361 src/window.cr:1402 src/window.cr:1413 src/window.cr:1417
+#: src/window.cr:1421 src/window.cr:1452 src/window.cr:1465 src/window.cr:1470
+msgid "Unknown"
+msgstr "தெரியாதது"
+
+#: src/window.cr:434
+msgid "Authentication cancelled."
+msgstr "அங்கீகாரம் ரத்து செய்யப்பட்டது."
+
+#: src/window.cr:434 src/window.cr:442
+msgid "Hardware details could not be unlocked."
+msgstr "வன்பொருள் விவரங்களைத் திறக்க முடியவில்லை."
+
+#: src/window.cr:466
+msgid "Unlocking…"
+msgstr "திறக்கிறது…"
+
+#: src/window.cr:466
+msgid "Unlock…"
+msgstr "திற…"
+
+#: src/window.cr:500
+msgid "Reading system information…"
+msgstr "கணினித் தகவல்களைப் படிக்கிறது…"
+
+#: src/window.cr:539
+msgid "OpenGL information"
+msgstr "OpenGL தகவல்"
+
+#: src/window.cr:540
+msgid "Vulkan information"
+msgstr "Vulkan தகவல்"
+
+#: src/window.cr:541
+msgid "Audio server and default devices"
+msgstr "ஒலி சேவையகம் மற்றும் இயல்புநிலை சாதனங்கள்"
+
+#: src/window.cr:542
+msgid "Bounded background queries"
+msgstr "வரம்புள்ள பின்னணி வினவல்கள்"
+
+#: src/window.cr:543
+msgid "Additional processor and memory details"
+msgstr "செயலி மற்றும் நினைவகத்தின் கூடுதல் விவரங்கள்"
+
+#: src/window.cr:544
+msgid "Printer information"
+msgstr "அச்சுப்பொறித் தகவல்"
+
+#: src/window.cr:549
+msgid "Optional software"
+msgstr "விருப்ப மென்பொருள்"
+
+#: src/window.cr:557
+msgid "The Flatpak can only use software available inside its sandbox."
+msgstr "Flatpak அதன் தனிமைப்படுத்தப்பட்ட சூழலில் உள்ள மென்பொருளை மட்டுமே பயன்படுத்த முடியும்."
+
+#: src/window.cr:563
+msgid "" 
+"Add these packages to environment.systemPackages in your NixOS configuration:"
+msgstr "இந்தப் பொதிகளை உங்கள் NixOS அமைப்பில் உள்ள environment.systemPackages-இல் சேர்க்கவும்:"
+
+#: src/window.cr:574
+msgid "Apply your configuration with sudo nixos-rebuild switch."
+msgstr "sudo nixos-rebuild switch மூலம் உங்கள் அமைப்பைப் பயன்படுத்தவும்."
+
+#: src/window.cr:581
+msgid "" 
+"Enable security.polkit.enable and a graphical authentication agent for "
+"additional hardware details."
+msgstr "கூடுதல் வன்பொருள் விவரங்களைப் பெற security.polkit.enable மற்றும் வரைகலை அங்கீகார முகவரைச் செயல்படுத்தவும்."
+
+#: src/window.cr:588
+msgid "The CUPS library must also be available to the application at runtime."
+msgstr "இயக்க நேரத்தில் பயன்பாட்டிற்கு CUPS நூலகமும் கிடைக்க வேண்டும்."
+
+#: src/window.cr:594
+msgid "Install using your package manager:"
+msgstr "உங்கள் பொதிமேலாளரைப் பயன்படுத்தி நிறுவவும்:"
+
+#: src/window.cr:606
+msgid "Install the missing software using your package manager."
+msgstr "காணாமல் போன மென்பொருளை பொதிமேலாளர் மூலம் நிறுவவும்."
+
+#: src/window.cr:742
+msgid "Hardware summary"
+msgstr "வன்பொருள் சுருக்கம்"
+
+#: src/window.cr:744
+msgid "%{cores} cores · %{threads} threads"
+msgstr "%{cores} கருக்கள் · %{threads} இழைகள்"
+
+#: src/window.cr:762 src/window.cr:997
+msgid "Storage"
+msgstr "சேமிப்பகம்"
+
+#: src/window.cr:771 src/window.cr:1033 src/window.cr:1322 src/window.cr:1361
+#: src/window.cr:1370 src/window.cr:1402
+msgid "None"
+msgstr "எதுவுமில்லை"
+
+#: src/window.cr:772 src/window.cr:1073
+msgid "System"
+msgstr "கணினி"
+
+#: src/window.cr:774 src/window.cr:1075
+msgid "Kernel"
+msgstr "கரு"
+
+#: src/window.cr:775 src/window.cr:1076
+msgid "Desktop Environment"
+msgstr "பணிமேசைச் சூழல்"
+
+#: src/window.cr:776 src/window.cr:1078
+msgid "Uptime"
+msgstr "இயங்கிய நேரம்"
+
+#: src/window.cr:784 src/window.cr:881 src/window.cr:923
+msgid "Identification"
+msgstr "அடையாளம்"
+
+#: src/window.cr:786 src/window.cr:883 src/window.cr:1007 src/window.cr:1061
+#: src/window.cr:1104 src/window.cr:1157 src/window.cr:1332
+msgid "Model"
+msgstr "மாதிரி"
+
+#: src/window.cr:787 src/window.cr:882 src/window.cr:1008 src/window.cr:1103
+#: src/window.cr:1156
+msgid "Manufacturer"
+msgstr "உற்பத்தியாளர்"
+
+#: src/window.cr:788
+msgid "Architecture"
+msgstr "கட்டமைப்பு"
+
+#: src/window.cr:789
+msgid "CPU family"
+msgstr "CPU குடும்பம்"
+
+#: src/window.cr:790
+msgid "Model ID"
+msgstr "மாதிரி ID"
+
+#: src/window.cr:791
+msgid "Stepping"
+msgstr "படிநிலை"
+
+#: src/window.cr:792
+msgid "Topology and socket"
+msgstr "இடவியல் மற்றும் சாக்கெட்"
+
+#: src/window.cr:793
+msgid "Physical cores"
+msgstr "இயற்பியல் கருக்கள்"
+
+#: src/window.cr:794
+msgid "Logical processors"
+msgstr "தருக்கச் செயலிகள்"
+
+#: src/window.cr:795
+msgid "Socket count"
+msgstr "சாக்கெட்டுகளின் எண்ணிக்கை"
+
+#: src/window.cr:804 src/window.cr:809
+msgid "Socket"
+msgstr "சாக்கெட்"
+
+#: src/window.cr:805 src/window.cr:810
+msgid "Socket type"
+msgstr "சாக்கெட் வகை"
+
+#: src/window.cr:808
+msgid "Socket %{number}"
+msgstr "சாக்கெட் %{number}"
+
+#: src/window.cr:813
+msgid "Clock speed"
+msgstr "கடிகார வேகம்"
+
+#: src/window.cr:815
+msgid "Base clock"
+msgstr "அடிப்படைக் கடிகாரம்"
+
+#: src/window.cr:816
+msgid "Minimum clock"
+msgstr "குறைந்தபட்சக் கடிகாரம்"
+
+#: src/window.cr:817 src/window.cr:836
+msgid "Maximum clock"
+msgstr "அதிகபட்சக் கடிகாரம்"
+
+#: src/window.cr:818
+msgid "Current clock range"
+msgstr "தற்போதைய கடிகார வரம்பு"
+
+#: src/window.cr:820
+msgid "Clock control"
+msgstr "கடிகாரக் கட்டுப்பாடு"
+
+#: src/window.cr:821
+msgid "Available frequency steps"
+msgstr "கிடைக்கும் அதிர்வெண் படிகள்"
+
+#: src/window.cr:822
+msgid "Frequency driver"
+msgstr "அதிர்வெண் இயக்கி"
+
+#: src/window.cr:823
+msgid "Governor"
+msgstr "கட்டுப்படுத்தி"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "Yes"
+msgstr "ஆம்"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "No"
+msgstr "இல்லை"
+
+#: src/window.cr:826
+msgid "Boost enabled"
+msgstr "முடுக்கம் செயல்படுத்தப்பட்டது"
+
+#: src/window.cr:828
+msgid "Additional processor information"
+msgstr "கூடுதல் செயலித் தகவல்"
+
+#: src/window.cr:830 src/window.cr:858
+msgid "%{section} · Socket %{number}"
+msgstr "%{section} · சாக்கெட் %{number}"
+
+#: src/window.cr:833 src/window.cr:1063
+msgid "Voltage"
+msgstr "மின்னழுத்தம்"
+
+#: src/window.cr:834
+msgid "External clock"
+msgstr "வெளிப்புறக் கடிகாரம்"
+
+#: src/window.cr:835
+msgid "Configured clock"
+msgstr "அமைக்கப்பட்ட கடிகாரம்"
+
+#: src/window.cr:838
+msgid "Caches"
+msgstr "தற்காலிக நினைவகங்கள்"
+
+#: src/window.cr:839
+msgid "Cache information"
+msgstr "தற்காலிக நினைவகத் தகவல்"
+
+#: src/window.cr:842
+msgid "Data"
+msgstr "தரவு"
+
+#: src/window.cr:843
+msgid "Instructions"
+msgstr "கட்டளைகள்"
+
+#: src/window.cr:844
+msgid "Data and instructions"
+msgstr "தரவும் கட்டளைகளும்"
+
+#: src/window.cr:847
+msgid "L%{level} cache (%{type})"
+msgstr "L%{level} தற்காலிக நினைவகம் (%{type})"
+
+#: src/window.cr:849
+msgid "%{count} × %{size} · %{total} total"
+msgstr "%{count} × %{size} · மொத்தம் %{total}"
+
+#: src/window.cr:851
+msgid "%{size} cache lines"
+msgstr "%{size} தற்காலிக நினைவக வரிகள்"
+
+#: src/window.cr:852
+msgid "%{ways}-way associative"
+msgstr "%{ways}-வழி தொடர்புடையது"
+
+#: src/window.cr:856
+msgid "Processor features"
+msgstr "செயலி அம்சங்கள்"
+
+#: src/window.cr:861
+msgid "Processor Features"
+msgstr "செயலி அம்சங்கள்"
+
+#: src/window.cr:862
+msgid "Characteristics"
+msgstr "பண்புகள்"
+
+#: src/window.cr:884 src/window.cr:940
+msgid "Revision"
+msgstr "திருத்தம்"
+
+#: src/window.cr:885
+msgid "Firmware"
+msgstr "நிலைநிரல்"
+
+#: src/window.cr:886
+msgid "BIOS vendor"
+msgstr "BIOS உற்பத்தியாளர்"
+
+#: src/window.cr:887
+msgid "BIOS version"
+msgstr "BIOS பதிப்பு"
+
+#: src/window.cr:888
+msgid "BIOS date"
+msgstr "BIOS தேதி"
+
+#: src/window.cr:889
+msgid "Boot and security"
+msgstr "துவக்கமும் பாதுகாப்பும்"
+
+#: src/window.cr:892
+msgid "Legacy BIOS"
+msgstr "மரபுவழி BIOS"
+
+#: src/window.cr:895
+msgid "Boot mode"
+msgstr "துவக்க முறை"
+
+#: src/window.cr:896
+msgid "Secure Boot"
+msgstr "பாதுகாப்பான துவக்கம்"
+
+#: src/window.cr:900
+msgid "Not detected"
+msgstr "கண்டறியப்படவில்லை"
+
+#: src/window.cr:902
+msgid "Detected"
+msgstr "கண்டறியப்பட்டது"
+
+#: src/window.cr:906
+msgid "TPM"
+msgstr "TPM"
+
+#: src/window.cr:912
+msgid "Display controller"
+msgstr "காட்சிக் கட்டுப்படுத்தி"
+
+#: src/window.cr:924
+msgid "GPU model"
+msgstr "GPU மாதிரி"
+
+#: src/window.cr:925
+msgid "GPU manufacturer"
+msgstr "GPU உற்பத்தியாளர்"
+
+#: src/window.cr:926
+msgid "Card manufacturer"
+msgstr "அட்டை உற்பத்தியாளர்"
+
+#: src/window.cr:927
+msgid "Board model"
+msgstr "பலகை மாதிரி"
+
+#: src/window.cr:928
+msgid "Model group"
+msgstr "மாதிரிக் குழு"
+
+#: src/window.cr:935
+msgid "Connected monitors"
+msgstr "இணைக்கப்பட்ட காட்சித்திரைகள்"
+
+#: src/window.cr:937
+msgid "PCI and driver"
+msgstr "PCI மற்றும் இயக்கி"
+
+#: src/window.cr:938
+msgid "PCI ID"
+msgstr "PCI ID"
+
+#: src/window.cr:939
+msgid "Subsystem ID"
+msgstr "துணை அமைப்பு ID"
+
+#: src/window.cr:941
+msgid "PCI address"
+msgstr "PCI முகவரி"
+
+#: src/window.cr:942 src/window.cr:1343 src/window.cr:1382
+msgid "Kernel driver"
+msgstr "கரு இயக்கி"
+
+#: src/window.cr:943
+msgid "Current PCIe link"
+msgstr "தற்போதைய PCIe இணைப்பு"
+
+#: src/window.cr:943 src/window.cr:944 src/window.cr:945 src/window.cr:948
+#: src/window.cr:951 src/window.cr:953 src/window.cr:956 src/window.cr:958
+#: src/window.cr:959 src/window.cr:960 src/window.cr:961 src/window.cr:963
+#: src/window.cr:964 src/window.cr:965 src/window.cr:967 src/window.cr:973
+#: src/window.cr:976 src/window.cr:1017 src/window.cr:1019 src/window.cr:1020
+#: src/window.cr:1021 src/window.cr:1062 src/window.cr:1093 src/window.cr:1107
+#: src/window.cr:1108 src/window.cr:1109 src/window.cr:1110 src/window.cr:1114
+#: src/window.cr:1117 src/window.cr:1118 src/window.cr:1119 src/window.cr:1120
+#: src/window.cr:1126 src/window.cr:1162 src/window.cr:1163 src/window.cr:1185
+#: src/window.cr:1186 src/window.cr:1187 src/window.cr:1245 src/window.cr:1256
+#: src/window.cr:1263 src/window.cr:1270 src/window.cr:1386
+msgid "Not reported"
+msgstr "தெரிவிக்கப்படவில்லை"
+
+#: src/window.cr:945
+msgid "Maximum PCIe link"
+msgstr "அதிகபட்ச PCIe இணைப்பு"
+
+#: src/window.cr:946
+msgid "Memory and clocks"
+msgstr "நினைவகமும் கடிகாரங்களும்"
+
+#: src/window.cr:947
+msgid "Dedicated video memory"
+msgstr "தனிப்பட்ட காணொளி நினைவகம்"
+
+#: src/window.cr:948
+msgid "Current GPU clock"
+msgstr "தற்போதைய GPU கடிகாரம்"
+
+#: src/window.cr:953
+msgid "Current video memory clock"
+msgstr "தற்போதைய காணொளி நினைவகக் கடிகாரம்"
+
+#: src/window.cr:958
+msgid "GPU utilization"
+msgstr "GPU பயன்பாடு"
+
+#: src/window.cr:960
+msgid "GPU power"
+msgstr "GPU மின்திறன்"
+
+#: src/window.cr:962
+msgid "Graphics APIs"
+msgstr "வரைகலை APIகள்"
+
+#: src/window.cr:963
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: src/window.cr:964
+msgid "GLSL"
+msgstr "GLSL"
+
+#: src/window.cr:965
+msgid "OpenGL ES"
+msgstr "OpenGL ES"
+
+#: src/window.cr:966
+msgid "OpenGL renderer"
+msgstr "OpenGL வரைவி"
+
+#: src/window.cr:967
+msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/window.cr:968
+msgid "Vulkan driver"
+msgstr "Vulkan இயக்கி"
+
+#: src/window.cr:970
+msgid "Discrete GPU"
+msgstr "தனி GPU"
+
+#: src/window.cr:971
+msgid "Integrated GPU"
+msgstr "ஒருங்கிணைந்த GPU"
+
+#: src/window.cr:972
+msgid "Virtual GPU"
+msgstr "மெய்நிகர் GPU"
+
+#: src/window.cr:975
+msgid "Vulkan device type"
+msgstr "Vulkan சாதன வகை"
+
+#: src/window.cr:976
+msgid "Vulkan driver version"
+msgstr "Vulkan இயக்கி பதிப்பு"
+
+#: src/window.cr:983
+msgid "Open Disk View"
+msgstr "Disk View-ஐத் திற"
+
+#: src/window.cr:1010
+msgid "Capacity"
+msgstr "கொள்ளளவு"
+
+#: src/window.cr:1011 src/window.cr:1278 src/window.cr:1311
+msgid "Type"
+msgstr "வகை"
+
+#: src/window.cr:1013 src/window.cr:1159 src/window.cr:1312
+msgid "Connection"
+msgstr "இணைப்பு"
+
+#: src/window.cr:1014 src/window.cr:1277
+msgid "Device"
+msgstr "சாதனம்"
+
+#: src/window.cr:1015
+msgid "Removable"
+msgstr "அகற்றக்கூடியது"
+
+#: src/window.cr:1017
+msgid "Warning"
+msgstr "எச்சரிக்கை"
+
+#: src/window.cr:1017
+msgid "OK"
+msgstr "சரி"
+
+#: src/window.cr:1018
+msgid "Status (SMART)"
+msgstr "நிலை (SMART)"
+
+#: src/window.cr:1019
+msgid "Temperature"
+msgstr "வெப்பநிலை"
+
+#: src/window.cr:1020
+msgid "Power-on hours"
+msgstr "இயங்கிய மணிநேரங்கள்"
+
+#: src/window.cr:1021
+msgid "Last updated"
+msgstr "கடைசியாகப் புதுப்பிக்கப்பட்டது"
+
+#: src/window.cr:1029
+msgid "Installed RAM"
+msgstr "நிறுவப்பட்ட RAM"
+
+#: src/window.cr:1030
+msgid "Usable RAM"
+msgstr "பயன்படுத்தக்கூடிய RAM"
+
+#: src/window.cr:1031
+msgid "Available RAM"
+msgstr "கிடைக்கும் RAM"
+
+#: src/window.cr:1033
+msgid "Swap"
+msgstr "மாற்றிடம்"
+
+#: src/window.cr:1037
+msgid "Module %{number}"
+msgstr "%{number} தொகுதி"
+
+#: src/window.cr:1062
+msgid "Timings (CL–tRCD–tRP–tRAS)"
+msgstr "நேர அளவுகள் (CL–tRCD–tRP–tRAS)"
+
+#: src/window.cr:1064
+msgid "Minimum voltage"
+msgstr "குறைந்தபட்ச மின்னழுத்தம்"
+
+#: src/window.cr:1065
+msgid "Maximum voltage"
+msgstr "அதிகபட்ச மின்னழுத்தம்"
+
+#: src/window.cr:1071
+msgid "Open system settings"
+msgstr "கணினி அமைப்புகளைத் திற"
+
+#: src/window.cr:1077
+msgid "Hostname"
+msgstr "புரவலன் பெயர்"
+
+#: src/window.cr:1080
+msgid "Runtime environment"
+msgstr "இயக்கச் சூழல்"
+
+#: src/window.cr:1081
+msgid "Session type"
+msgstr "அமர்வு வகை"
+
+#: src/window.cr:1082
+msgid "System architecture"
+msgstr "கணினிக் கட்டமைப்பு"
+
+#: src/window.cr:1083
+msgid "Virtual machine"
+msgstr "மெய்நிகர் இயந்திரம்"
+
+#: src/window.cr:1084
+msgid "Virtualization"
+msgstr "மெய்நிகராக்கம்"
+
+#: src/window.cr:1085
+msgid "Container"
+msgstr "கொள்கலன்"
+
+#: src/window.cr:1086
+msgid "Application format"
+msgstr "பயன்பாட்டு வடிவம்"
+
+#: src/window.cr:1090
+msgid "Open power settings"
+msgstr "மின்சார அமைப்புகளைத் திற"
+
+#: src/window.cr:1093
+msgid "Power information"
+msgstr "மின்சாரத் தகவல்"
+
+#: src/window.cr:1097
+msgid "Power adapter"
+msgstr "மின்சார மாற்றி"
+
+#: src/window.cr:1098 src/window.cr:1394 src/window.cr:1445
+msgid "Connected"
+msgstr "இணைக்கப்பட்டது"
+
+#: src/window.cr:1102
+msgid "Battery"
+msgstr "மின்கலம்"
+
+#: src/window.cr:1105 src/window.cr:1334
+msgid "Status"
+msgstr "நிலை"
+
+#: src/window.cr:1107
+msgid "Charge"
+msgstr "மின்னேற்றம்"
+
+#: src/window.cr:1109
+msgid "Full charge capacity"
+msgstr "முழு மின்னேற்றக் கொள்ளளவு"
+
+#: src/window.cr:1110
+msgid "Design capacity"
+msgstr "வடிவமைப்புக் கொள்ளளவு"
+
+#: src/window.cr:1116
+msgid "Battery health"
+msgstr "மின்கலத்தின் நிலை"
+
+#: src/window.cr:1117
+msgid "Charge cycles"
+msgstr "மின்னேற்றச் சுழற்சிகள்"
+
+#: src/window.cr:1118
+msgid "Battery power"
+msgstr "மின்கல மின்திறன்"
+
+#: src/window.cr:1120 src/window.cr:1126
+msgid "0 min"
+msgstr "0 நிமிடம்"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time to full"
+msgstr "முழுமையாக மின்னேற்றுவதற்கான மதிப்பிடப்பட்ட நேரம்"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time remaining"
+msgstr "மதிப்பிடப்பட்ட மீதமுள்ள நேரம்"
+
+#: src/window.cr:1134
+msgid "Charging"
+msgstr "மின்னேற்றப்படுகிறது"
+
+#: src/window.cr:1135
+msgid "Discharging"
+msgstr "மின்னிறக்கப்படுகிறது"
+
+#: src/window.cr:1136
+msgid "Fully charged"
+msgstr "முழுமையாக மின்னேற்றப்பட்டது"
+
+#: src/window.cr:1137
+msgid "Not charging"
+msgstr "மின்னேற்றப்படவில்லை"
+
+#: src/window.cr:1143
+msgid "Open display settings"
+msgstr "காட்சித்திரை அமைப்புகளைத் திற"
+
+#: src/window.cr:1144
+msgid "Monitor"
+msgstr "மானிட்டர்"
+
+#: src/window.cr:1158 src/window.cr:1315
+msgid "Product ID"
+msgstr "தயாரிப்பு ID"
+
+#: src/window.cr:1160 src/window.cr:1417
+msgid "Active"
+msgstr "செயலில் உள்ளது"
+
+#: src/window.cr:1162
+msgid "Current resolution"
+msgstr "தற்போதைய தெளிவுத்திறன்"
+
+#: src/window.cr:1163
+msgid "Current refresh rate"
+msgstr "தற்போதைய புதுப்பிப்பு விகிதம்"
+
+#: src/window.cr:1164
+msgid "Preferred resolution"
+msgstr "விருப்பமான தெளிவுத்திறன்"
+
+#: src/window.cr:1165
+msgid "Preferred refresh rate"
+msgstr "விருப்பமான புதுப்பிப்பு விகிதம்"
+
+#: src/window.cr:1168
+msgid "Display size"
+msgstr "காட்சித்திரை அளவு"
+
+#: src/window.cr:1170
+msgid "Diagonal"
+msgstr "மூலைவிட்டம்"
+
+#: src/window.cr:1172
+msgid "Supported resolutions"
+msgstr "ஆதரிக்கப்படும் தெளிவுத்திறன்கள்"
+
+#: src/window.cr:1177
+msgid "Monitor %{number}"
+msgstr "%{number} மானிட்டர்"
+
+#: src/window.cr:1178
+msgid "Primary"
+msgstr "முதன்மை"
+
+#: src/window.cr:1183
+msgid "Open sound settings"
+msgstr "ஒலி அமைப்புகளைத் திற"
+
+#: src/window.cr:1184
+msgid "Audio session"
+msgstr "ஒலி அமர்வு"
+
+#: src/window.cr:1185
+msgid "Audio server"
+msgstr "ஒலி சேவையகம்"
+
+#: src/window.cr:1186
+msgid "Default output"
+msgstr "இயல்புநிலை வெளியீடு"
+
+#: src/window.cr:1187
+msgid "Default input"
+msgstr "இயல்புநிலை உள்ளீடு"
+
+#: src/window.cr:1188
+msgid "Audio device"
+msgstr "ஒலி சாதனம்"
+
+#: src/window.cr:1197 src/window.cr:1276 src/window.cr:1380
+msgid "Name"
+msgstr "பெயர்"
+
+#: src/window.cr:1198
+msgid "Device ID"
+msgstr "சாதன ID"
+
+#: src/window.cr:1200
+msgid "Driver"
+msgstr "இயக்கி"
+
+#: src/window.cr:1201
+msgid "Codecs"
+msgstr "கோடெக்குகள்"
+
+#: src/window.cr:1245
+msgid "Sensor readings"
+msgstr "உணரி அளவீடுகள்"
+
+#: src/window.cr:1253
+msgid "Temperature %{number}"
+msgstr "வெப்பநிலை %{number}"
+
+#: src/window.cr:1253
+msgid "Fan %{number}"
+msgstr "%{number} விசிறி"
+
+#: src/window.cr:1270
+msgid "Video devices"
+msgstr "காணொளி சாதனங்கள்"
+
+#: src/window.cr:1278
+msgid "Video capture"
+msgstr "காணொளிப் பதிவு"
+
+#: src/window.cr:1284 src/window.cr:1309
+msgid "Input device"
+msgstr "உள்ளீட்டு சாதனம்"
+
+#: src/window.cr:1295
+msgid "Open keyboard settings"
+msgstr "விசைப்பலகை அமைப்புகளைத் திற"
+
+#: src/window.cr:1297
+msgid "Open mouse and touchpad settings"
+msgstr "சுட்டி மற்றும் தொடுதள அமைப்புகளைத் திற"
+
+#: src/window.cr:1303
+msgid "Keyboard"
+msgstr "விசைப்பலகை"
+
+#: src/window.cr:1304
+msgid "Mouse"
+msgstr "சுட்டி"
+
+#: src/window.cr:1305
+msgid "Gamepad / Joystick"
+msgstr "விளையாட்டுக் கட்டுப்படுத்தி / ஜாய்ஸ்டிக்"
+
+#: src/window.cr:1306
+msgid "Touchpad"
+msgstr "தொடுதளம்"
+
+#: src/window.cr:1307
+msgid "Touchscreen"
+msgstr "தொடுதிரை"
+
+#: src/window.cr:1308
+msgid "Graphics tablet"
+msgstr "வரைகலைப் பலகை"
+
+#: src/window.cr:1314
+msgid "Vendor ID"
+msgstr "விற்பனையாளர் ID"
+
+#: src/window.cr:1320
+msgid "Open network settings"
+msgstr "பிணைய அமைப்புகளைத் திற"
+
+#: src/window.cr:1322
+msgid "Network adapters"
+msgstr "பிணைய அடாப்டர்கள்"
+
+#: src/window.cr:1333
+msgid "Interface"
+msgstr "இடைமுகம்"
+
+#: src/window.cr:1335
+msgid "Connection profile"
+msgstr "இணைப்பு விவரம்"
+
+#: src/window.cr:1336 src/window.cr:1386
+msgid "Link speed"
+msgstr "இணைப்பு வேகம்"
+
+#: src/window.cr:1338
+msgid "Duplex"
+msgstr "இருவழி"
+
+#: src/window.cr:1338
+msgid "Full duplex"
+msgstr "முழு இருவழி"
+
+#: src/window.cr:1338
+msgid "Half duplex"
+msgstr "அரை இருவழி"
+
+#: src/window.cr:1340 src/window.cr:1381 src/window.cr:1393
+msgid "MAC address"
+msgstr "MAC முகவரி"
+
+#: src/window.cr:1341
+msgid "Permanent MAC address"
+msgstr "நிரந்தர MAC முகவரி"
+
+#: src/window.cr:1342
+msgid "MTU"
+msgstr "MTU"
+
+#: src/window.cr:1345
+msgid "SSID"
+msgstr "SSID"
+
+#: src/window.cr:1346
+msgid "Access point (BSSID)"
+msgstr "அணுகுப் புள்ளி (BSSID)"
+
+#: src/window.cr:1347 src/window.cr:1396
+msgid "Signal strength"
+msgstr "சிக்னல் வலிமை"
+
+#: src/window.cr:1348
+msgid "Frequency"
+msgstr "அதிர்வெண்"
+
+#: src/window.cr:1349
+msgid "Security"
+msgstr "பாதுகாப்பு"
+
+#: src/window.cr:1349
+msgid "Open network"
+msgstr "திறந்த பிணையம்"
+
+#: src/window.cr:1358
+msgid "Open printer settings"
+msgstr "அச்சுப்பொறி அமைப்புகளைத் திற"
+
+#: src/window.cr:1363
+msgid "Printer"
+msgstr "அச்சுப்பொறி"
+
+#: src/window.cr:1368
+msgid "Open Bluetooth settings"
+msgstr "புளூடூத் அமைப்புகளைத் திற"
+
+#: src/window.cr:1370
+msgid "Bluetooth adapters"
+msgstr "புளூடூத் அடாப்டர்கள்"
+
+#: src/window.cr:1384
+msgid "Enabled"
+msgstr "செயல்படுத்தப்பட்டது"
+
+#: src/window.cr:1385
+msgid "Bluetooth version"
+msgstr "புளூடூத் பதிப்பு"
+
+#: src/window.cr:1387
+msgid "Discoverable"
+msgstr "கண்டறியக்கூடியது"
+
+#: src/window.cr:1388
+msgid "Pairable"
+msgstr "இணைக்கக்கூடியது"
+
+#: src/window.cr:1389
+msgid "Connected devices"
+msgstr "இணைக்கப்பட்ட சாதனங்கள்"
+
+#: src/window.cr:1395
+msgid "Paired"
+msgstr "இணைக்கப்பட்டது"
+
+#: src/window.cr:1404
+msgid "IP addresses"
+msgstr "IP முகவரிகள்"
+
+#: src/window.cr:1405
+msgid "Address configuration"
+msgstr "முகவரி உள்ளமைவு"
+
+#: src/window.cr:1406 src/window.cr:1460
+msgid "DHCP"
+msgstr "DHCP"
+
+#: src/window.cr:1407
+msgid "Gateway"
+msgstr "நுழைவாயில்"
+
+#: src/window.cr:1408
+msgid "DNS servers"
+msgstr "DNS சேவையகங்கள்"
+
+#: src/window.cr:1409
+msgid "Search domains"
+msgstr "தேடல் களங்கள்"
+
+#: src/window.cr:1417
+msgid "Inactive"
+msgstr "செயலற்றது"
+
+#: src/window.cr:1427
+msgid "%{days} d %{hours} h %{minutes} min"
+msgstr "%{days} நாள் %{hours} மணி %{minutes} நிமிடம்"
+
+#: src/window.cr:1429
+msgid "%{hours} h %{minutes} min"
+msgstr "%{hours} மணி %{minutes} நிமிடம்"
+
+#: src/window.cr:1431
+msgid "%{minutes} min"
+msgstr "%{minutes} நிமிடம்"
+
+#: src/window.cr:1437
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: src/window.cr:1438
+msgid "Bluetooth PAN"
+msgstr "புளூடூத் PAN"
+
+#: src/window.cr:1439
+msgid "Ethernet (LAN)"
+msgstr "ஈதர்நெட் (LAN)"
+
+#: src/window.cr:1446
+msgid "Disconnected"
+msgstr "துண்டிக்கப்பட்டது"
+
+#: src/window.cr:1447
+msgid "Connecting"
+msgstr "இணைக்கிறது"
+
+#: src/window.cr:1448
+msgid "Disconnecting"
+msgstr "துண்டிக்கிறது"
+
+#: src/window.cr:1449
+msgid "Unavailable"
+msgstr "கிடைக்கவில்லை"
+
+#: src/window.cr:1450
+msgid "Unmanaged"
+msgstr "நிர்வகிக்கப்படாதது"
+
+#: src/window.cr:1451
+msgid "Connection failed"
+msgstr "இணைப்பு தோல்வியடைந்தது"
+
+#: src/window.cr:1458
+msgid "Automatic"
+msgstr "தானியங்கி"
+
+#: src/window.cr:1459
+msgid "Manual"
+msgstr "கைமுறை"
+
+#: src/window.cr:1461
+msgid "Link-local"
+msgstr "இணைப்பு உள்ளகம்"
+
+#: src/window.cr:1462
+msgid "Shared"
+msgstr "பகிரப்பட்டது"
+
+#: src/window.cr:1463
+msgid "Disabled"
+msgstr "செயலிழக்கப்பட்டது"
+
+#: src/window.cr:1464
+msgid "Ignored"
+msgstr "புறக்கணிக்கப்பட்டது"

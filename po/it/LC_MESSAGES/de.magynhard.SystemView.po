@@ -1,0 +1,1178 @@
+# Italian translations for System package.
+# Copyright (C) 2026 Matthäus J. N. Beyrle
+# This file is distributed under the same license as the System View package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: System View\n"
+"Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
+"POT-Creation-Date: 2026-11-19 07:37+0100\n"
+"PO-Revision-Date: 2026-11-19 07:37+0100\n"
+"Last-Translator: OpenCode\n"
+"Language-Team: System View translators\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/window.cr:87
+msgid "Copy system information"
+msgstr "Copia le informazioni di sistema"
+
+#: src/window.cr:90
+msgid "Copy summary"
+msgstr "Copia il riepilogo"
+
+#: src/window.cr:91
+msgid "Copy all information"
+msgstr "Copia tutte le informazioni"
+
+#: src/window.cr:96
+msgid "Main menu"
+msgstr "Menu principale"
+
+#: src/window.cr:99
+msgid "Refresh"
+msgstr "Aggiorna"
+
+#: src/window.cr:100
+msgid "About System View"
+msgstr "Informazioni su System View"
+
+#: src/window.cr:101 src/window.cr:612
+msgid "Close"
+msgstr "Chiudi"
+
+#: src/window.cr:126
+msgid "Some hardware details are locked"
+msgstr "Alcuni dettagli hardware sono bloccati"
+
+#: src/window.cr:129
+msgid "Some features need additional software"
+msgstr "Alcune funzionalità richiedono software aggiuntivo"
+
+#: src/window.cr:130
+msgid "More information"
+msgstr "Ulteriori informazioni"
+
+#: src/window.cr:174
+msgid "Toggle sidebar"
+msgstr "Mostra o nascondi la barra laterale"
+
+#: src/window.cr:182
+msgid "Back"
+msgstr "Indietro"
+
+#: src/window.cr:187
+msgid "Forward"
+msgstr "Avanti"
+
+#: src/window.cr:210
+msgid "Your system and hardware at a glance."
+msgstr "Il sistema e l’hardware a colpo d’occhio."
+
+#: src/window.cr:256
+msgid "Summary"
+msgstr "Riepilogo"
+
+#: src/window.cr:257 src/window.cr:752 src/window.cr:910 src/window.cr:912
+msgid "Graphics"
+msgstr "Grafica"
+
+#: src/window.cr:258 src/window.cr:745 src/window.cr:781
+msgid "Processor"
+msgstr "Processore"
+
+#: src/window.cr:259 src/window.cr:746 src/window.cr:878
+msgid "Mainboard"
+msgstr "Scheda madre"
+
+#: src/window.cr:260 src/window.cr:995 src/window.cr:997
+msgid "Drives"
+msgstr "Unità"
+
+#: src/window.cr:261 src/window.cr:760 src/window.cr:1026 src/window.cr:1028
+msgid "Memory"
+msgstr "Memoria"
+
+#: src/window.cr:262 src/window.cr:756 src/window.cr:1143 src/window.cr:1144
+msgid "Monitors"
+msgstr "Monitor"
+
+#: src/window.cr:263 src/window.cr:1183 src/window.cr:1188
+msgid "Audio"
+msgstr "Audio"
+
+#: src/window.cr:264 src/window.cr:1268 src/window.cr:1270
+msgid "Video"
+msgstr "Video"
+
+#: src/window.cr:265 src/window.cr:1283 src/window.cr:1284
+msgid "Input Devices"
+msgstr "Dispositivi di input"
+
+#: src/window.cr:266 src/window.cr:771 src/window.cr:1320 src/window.cr:1322
+msgid "Network"
+msgstr "Rete"
+
+#: src/window.cr:267 src/window.cr:769 src/window.cr:1368 src/window.cr:1370
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/window.cr:268 src/window.cr:773 src/window.cr:1071 src/window.cr:1074
+msgid "Operating System"
+msgstr "Sistema operativo"
+
+#: src/window.cr:269 src/window.cr:1090 src/window.cr:1093
+msgid "Power"
+msgstr "Alimentazione"
+
+#: src/window.cr:270 src/window.cr:1243 src/window.cr:1245
+msgid "Sensors"
+msgstr "Sensori"
+
+#: src/window.cr:271 src/window.cr:1358 src/window.cr:1361
+msgid "Printers"
+msgstr "Stampanti"
+
+#: src/window.cr:360
+msgid "Could not read system information"
+msgstr "Impossibile leggere le informazioni di sistema"
+
+#: src/window.cr:361 src/window.cr:663 src/window.cr:683 src/window.cr:720
+#: src/window.cr:724 src/window.cr:750 src/window.cr:754 src/window.cr:825
+#: src/window.cr:867 src/window.cr:893 src/window.cr:898 src/window.cr:1138
+#: src/window.cr:1361 src/window.cr:1402 src/window.cr:1413 src/window.cr:1417
+#: src/window.cr:1421 src/window.cr:1452 src/window.cr:1465 src/window.cr:1470
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+#: src/window.cr:434
+msgid "Authentication cancelled."
+msgstr "Autenticazione annullata."
+
+#: src/window.cr:434 src/window.cr:442
+msgid "Hardware details could not be unlocked."
+msgstr "Impossibile sbloccare i dettagli hardware."
+
+#: src/window.cr:466
+msgid "Unlocking…"
+msgstr "Sblocco in corso…"
+
+#: src/window.cr:466
+msgid "Unlock…"
+msgstr "Sblocca…"
+
+#: src/window.cr:500
+msgid "Reading system information…"
+msgstr "Lettura delle informazioni di sistema…"
+
+#: src/window.cr:539
+msgid "OpenGL information"
+msgstr "Informazioni OpenGL"
+
+#: src/window.cr:540
+msgid "Vulkan information"
+msgstr "Informazioni Vulkan"
+
+#: src/window.cr:541
+msgid "Audio server and default devices"
+msgstr "Server audio e dispositivi predefiniti"
+
+#: src/window.cr:542
+msgid "Bounded background queries"
+msgstr "Interrogazioni in background con tempo limitato"
+
+#: src/window.cr:543
+msgid "Additional processor and memory details"
+msgstr "Dettagli aggiuntivi su processore e memoria"
+
+#: src/window.cr:544
+msgid "Printer information"
+msgstr "Informazioni sulla stampante"
+
+#: src/window.cr:549
+msgid "Optional software"
+msgstr "Software facoltativo"
+
+#: src/window.cr:557
+msgid "The Flatpak can only use software available inside its sandbox."
+msgstr "Flatpak può usare solo il software disponibile all’interno della sua sandbox."
+
+#: src/window.cr:563
+msgid "" 
+"Add these packages to environment.systemPackages in your NixOS configuration:"
+msgstr "Aggiungi questi pacchetti a environment.systemPackages nella configurazione NixOS:"
+
+#: src/window.cr:574
+msgid "Apply your configuration with sudo nixos-rebuild switch."
+msgstr "Applica la configurazione con sudo nixos-rebuild switch."
+
+#: src/window.cr:581
+msgid "" 
+"Enable security.polkit.enable and a graphical authentication agent for "
+"additional hardware details."
+msgstr "Abilita security.polkit.enable e un agente grafico di autenticazione per ottenere ulteriori dettagli hardware."
+
+#: src/window.cr:588
+msgid "The CUPS library must also be available to the application at runtime."
+msgstr "La libreria CUPS deve essere disponibile all’applicazione anche durante l’esecuzione."
+
+#: src/window.cr:594
+msgid "Install using your package manager:"
+msgstr "Installa usando il gestore pacchetti:"
+
+#: src/window.cr:606
+msgid "Install the missing software using your package manager."
+msgstr "Installa il software mancante usando il gestore pacchetti."
+
+#: src/window.cr:742
+msgid "Hardware summary"
+msgstr "Riepilogo hardware"
+
+#: src/window.cr:744
+msgid "%{cores} cores · %{threads} threads"
+msgstr "%{cores} core · %{threads} thread"
+
+#: src/window.cr:762 src/window.cr:997
+msgid "Storage"
+msgstr "Archiviazione"
+
+#: src/window.cr:771 src/window.cr:1033 src/window.cr:1322 src/window.cr:1361
+#: src/window.cr:1370 src/window.cr:1402
+msgid "None"
+msgstr "Nessuno"
+
+#: src/window.cr:772 src/window.cr:1073
+msgid "System"
+msgstr "Sistema"
+
+#: src/window.cr:774 src/window.cr:1075
+msgid "Kernel"
+msgstr "Kernel"
+
+#: src/window.cr:775 src/window.cr:1076
+msgid "Desktop Environment"
+msgstr "Ambiente desktop"
+
+#: src/window.cr:776 src/window.cr:1078
+msgid "Uptime"
+msgstr "Tempo di attività"
+
+#: src/window.cr:784 src/window.cr:881 src/window.cr:923
+msgid "Identification"
+msgstr "Identificazione"
+
+#: src/window.cr:786 src/window.cr:883 src/window.cr:1007 src/window.cr:1061
+#: src/window.cr:1104 src/window.cr:1157 src/window.cr:1332
+msgid "Model"
+msgstr "Modello"
+
+#: src/window.cr:787 src/window.cr:882 src/window.cr:1008 src/window.cr:1103
+#: src/window.cr:1156
+msgid "Manufacturer"
+msgstr "Produttore"
+
+#: src/window.cr:788
+msgid "Architecture"
+msgstr "Architettura"
+
+#: src/window.cr:789
+msgid "CPU family"
+msgstr "Famiglia CPU"
+
+#: src/window.cr:790
+msgid "Model ID"
+msgstr "ID modello"
+
+#: src/window.cr:791
+msgid "Stepping"
+msgstr "Revisione"
+
+#: src/window.cr:792
+msgid "Topology and socket"
+msgstr "Topologia e socket"
+
+#: src/window.cr:793
+msgid "Physical cores"
+msgstr "Core fisici"
+
+#: src/window.cr:794
+msgid "Logical processors"
+msgstr "Processori logici"
+
+#: src/window.cr:795
+msgid "Socket count"
+msgstr "Numero di socket"
+
+#: src/window.cr:804 src/window.cr:809
+msgid "Socket"
+msgstr "Socket"
+
+#: src/window.cr:805 src/window.cr:810
+msgid "Socket type"
+msgstr "Tipo di socket"
+
+#: src/window.cr:808
+msgid "Socket %{number}"
+msgstr "Socket %{number}"
+
+#: src/window.cr:813
+msgid "Clock speed"
+msgstr "Frequenza di clock"
+
+#: src/window.cr:815
+msgid "Base clock"
+msgstr "Frequenza di base"
+
+#: src/window.cr:816
+msgid "Minimum clock"
+msgstr "Frequenza minima"
+
+#: src/window.cr:817 src/window.cr:836
+msgid "Maximum clock"
+msgstr "Frequenza massima"
+
+#: src/window.cr:818
+msgid "Current clock range"
+msgstr "Intervallo di frequenza attuale"
+
+#: src/window.cr:820
+msgid "Clock control"
+msgstr "Controllo della frequenza"
+
+#: src/window.cr:821
+msgid "Available frequency steps"
+msgstr "Frequenze disponibili"
+
+#: src/window.cr:822
+msgid "Frequency driver"
+msgstr "Driver della frequenza"
+
+#: src/window.cr:823
+msgid "Governor"
+msgstr "Regolatore"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "Yes"
+msgstr "Sì"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "No"
+msgstr "No"
+
+#: src/window.cr:826
+msgid "Boost enabled"
+msgstr "Boost attivo"
+
+#: src/window.cr:828
+msgid "Additional processor information"
+msgstr "Informazioni aggiuntive sul processore"
+
+#: src/window.cr:830 src/window.cr:858
+msgid "%{section} · Socket %{number}"
+msgstr "%{section} · Socket %{number}"
+
+#: src/window.cr:833 src/window.cr:1063
+msgid "Voltage"
+msgstr "Tensione"
+
+#: src/window.cr:834
+msgid "External clock"
+msgstr "Clock esterno"
+
+#: src/window.cr:835
+msgid "Configured clock"
+msgstr "Frequenza configurata"
+
+#: src/window.cr:838
+msgid "Caches"
+msgstr "Cache"
+
+#: src/window.cr:839
+msgid "Cache information"
+msgstr "Informazioni sulla cache"
+
+#: src/window.cr:842
+msgid "Data"
+msgstr "Dati"
+
+#: src/window.cr:843
+msgid "Instructions"
+msgstr "Istruzioni"
+
+#: src/window.cr:844
+msgid "Data and instructions"
+msgstr "Dati e istruzioni"
+
+#: src/window.cr:847
+msgid "L%{level} cache (%{type})"
+msgstr "Cache L%{level} (%{type})"
+
+#: src/window.cr:849
+msgid "%{count} × %{size} · %{total} total"
+msgstr "%{count} × %{size} · %{total} totale"
+
+#: src/window.cr:851
+msgid "%{size} cache lines"
+msgstr "%{size} linee di cache"
+
+#: src/window.cr:852
+msgid "%{ways}-way associative"
+msgstr "Associativa a %{ways} vie"
+
+#: src/window.cr:856
+msgid "Processor features"
+msgstr "Funzionalità del processore"
+
+#: src/window.cr:861
+msgid "Processor Features"
+msgstr "Funzionalità del processore"
+
+#: src/window.cr:862
+msgid "Characteristics"
+msgstr "Caratteristiche"
+
+#: src/window.cr:884 src/window.cr:940
+msgid "Revision"
+msgstr "Revisione"
+
+#: src/window.cr:885
+msgid "Firmware"
+msgstr "Firmware"
+
+#: src/window.cr:886
+msgid "BIOS vendor"
+msgstr "Produttore BIOS"
+
+#: src/window.cr:887
+msgid "BIOS version"
+msgstr "Versione BIOS"
+
+#: src/window.cr:888
+msgid "BIOS date"
+msgstr "Data BIOS"
+
+#: src/window.cr:889
+msgid "Boot and security"
+msgstr "Avvio e sicurezza"
+
+#: src/window.cr:892
+msgid "Legacy BIOS"
+msgstr "BIOS legacy"
+
+#: src/window.cr:895
+msgid "Boot mode"
+msgstr "Modalità di avvio"
+
+#: src/window.cr:896
+msgid "Secure Boot"
+msgstr "Avvio sicuro"
+
+#: src/window.cr:900
+msgid "Not detected"
+msgstr "Non rilevato"
+
+#: src/window.cr:902
+msgid "Detected"
+msgstr "Rilevato"
+
+#: src/window.cr:906
+msgid "TPM"
+msgstr "TPM"
+
+#: src/window.cr:912
+msgid "Display controller"
+msgstr "Controller grafico"
+
+#: src/window.cr:924
+msgid "GPU model"
+msgstr "Modello GPU"
+
+#: src/window.cr:925
+msgid "GPU manufacturer"
+msgstr "Produttore GPU"
+
+#: src/window.cr:926
+msgid "Card manufacturer"
+msgstr "Produttore della scheda"
+
+#: src/window.cr:927
+msgid "Board model"
+msgstr "Modello della scheda"
+
+#: src/window.cr:928
+msgid "Model group"
+msgstr "Gruppo del modello"
+
+#: src/window.cr:935
+msgid "Connected monitors"
+msgstr "Monitor collegati"
+
+#: src/window.cr:937
+msgid "PCI and driver"
+msgstr "PCI e driver"
+
+#: src/window.cr:938
+msgid "PCI ID"
+msgstr "ID PCI"
+
+#: src/window.cr:939
+msgid "Subsystem ID"
+msgstr "ID del sottosistema"
+
+#: src/window.cr:941
+msgid "PCI address"
+msgstr "Indirizzo PCI"
+
+#: src/window.cr:942 src/window.cr:1343 src/window.cr:1382
+msgid "Kernel driver"
+msgstr "Driver del kernel"
+
+#: src/window.cr:943
+msgid "Current PCIe link"
+msgstr "Collegamento PCIe attuale"
+
+#: src/window.cr:943 src/window.cr:944 src/window.cr:945 src/window.cr:948
+#: src/window.cr:951 src/window.cr:953 src/window.cr:956 src/window.cr:958
+#: src/window.cr:959 src/window.cr:960 src/window.cr:961 src/window.cr:963
+#: src/window.cr:964 src/window.cr:965 src/window.cr:967 src/window.cr:973
+#: src/window.cr:976 src/window.cr:1017 src/window.cr:1019 src/window.cr:1020
+#: src/window.cr:1021 src/window.cr:1062 src/window.cr:1093 src/window.cr:1107
+#: src/window.cr:1108 src/window.cr:1109 src/window.cr:1110 src/window.cr:1114
+#: src/window.cr:1117 src/window.cr:1118 src/window.cr:1119 src/window.cr:1120
+#: src/window.cr:1126 src/window.cr:1162 src/window.cr:1163 src/window.cr:1185
+#: src/window.cr:1186 src/window.cr:1187 src/window.cr:1245 src/window.cr:1256
+#: src/window.cr:1263 src/window.cr:1270 src/window.cr:1386
+msgid "Not reported"
+msgstr "Non disponibile"
+
+#: src/window.cr:945
+msgid "Maximum PCIe link"
+msgstr "Collegamento PCIe massimo"
+
+#: src/window.cr:946
+msgid "Memory and clocks"
+msgstr "Memoria e frequenze"
+
+#: src/window.cr:947
+msgid "Dedicated video memory"
+msgstr "Memoria video dedicata"
+
+#: src/window.cr:948
+msgid "Current GPU clock"
+msgstr "Frequenza GPU attuale"
+
+#: src/window.cr:953
+msgid "Current video memory clock"
+msgstr "Frequenza attuale della memoria video"
+
+#: src/window.cr:958
+msgid "GPU utilization"
+msgstr "Utilizzo GPU"
+
+#: src/window.cr:960
+msgid "GPU power"
+msgstr "Potenza GPU"
+
+#: src/window.cr:962
+msgid "Graphics APIs"
+msgstr "API grafiche"
+
+#: src/window.cr:963
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: src/window.cr:964
+msgid "GLSL"
+msgstr "GLSL"
+
+#: src/window.cr:965
+msgid "OpenGL ES"
+msgstr "OpenGL ES"
+
+#: src/window.cr:966
+msgid "OpenGL renderer"
+msgstr "Renderer OpenGL"
+
+#: src/window.cr:967
+msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/window.cr:968
+msgid "Vulkan driver"
+msgstr "Driver Vulkan"
+
+#: src/window.cr:970
+msgid "Discrete GPU"
+msgstr "GPU dedicata"
+
+#: src/window.cr:971
+msgid "Integrated GPU"
+msgstr "GPU integrata"
+
+#: src/window.cr:972
+msgid "Virtual GPU"
+msgstr "GPU virtuale"
+
+#: src/window.cr:975
+msgid "Vulkan device type"
+msgstr "Tipo di dispositivo Vulkan"
+
+#: src/window.cr:976
+msgid "Vulkan driver version"
+msgstr "Versione del driver Vulkan"
+
+#: src/window.cr:983
+msgid "Open Disk View"
+msgstr "Apri Disk View"
+
+#: src/window.cr:1010
+msgid "Capacity"
+msgstr "Capacità"
+
+#: src/window.cr:1011 src/window.cr:1278 src/window.cr:1311
+msgid "Type"
+msgstr "Tipo"
+
+#: src/window.cr:1013 src/window.cr:1159 src/window.cr:1312
+msgid "Connection"
+msgstr "Connessione"
+
+#: src/window.cr:1014 src/window.cr:1277
+msgid "Device"
+msgstr "Dispositivo"
+
+#: src/window.cr:1015
+msgid "Removable"
+msgstr "Rimovibile"
+
+#: src/window.cr:1017
+msgid "Warning"
+msgstr "Avviso"
+
+#: src/window.cr:1017
+msgid "OK"
+msgstr "OK"
+
+#: src/window.cr:1018
+msgid "Status (SMART)"
+msgstr "Stato (SMART)"
+
+#: src/window.cr:1019
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: src/window.cr:1020
+msgid "Power-on hours"
+msgstr "Ore di funzionamento"
+
+#: src/window.cr:1021
+msgid "Last updated"
+msgstr "Ultimo aggiornamento"
+
+#: src/window.cr:1029
+msgid "Installed RAM"
+msgstr "RAM installata"
+
+#: src/window.cr:1030
+msgid "Usable RAM"
+msgstr "RAM utilizzabile"
+
+#: src/window.cr:1031
+msgid "Available RAM"
+msgstr "RAM disponibile"
+
+#: src/window.cr:1033
+msgid "Swap"
+msgstr "Swap"
+
+#: src/window.cr:1037
+msgid "Module %{number}"
+msgstr "Modulo %{number}"
+
+#: src/window.cr:1062
+msgid "Timings (CL–tRCD–tRP–tRAS)"
+msgstr "Timing (CL–tRCD–tRP–tRAS)"
+
+#: src/window.cr:1064
+msgid "Minimum voltage"
+msgstr "Tensione minima"
+
+#: src/window.cr:1065
+msgid "Maximum voltage"
+msgstr "Tensione massima"
+
+#: src/window.cr:1071
+msgid "Open system settings"
+msgstr "Apri le impostazioni di sistema"
+
+#: src/window.cr:1077
+msgid "Hostname"
+msgstr "Nome host"
+
+#: src/window.cr:1080
+msgid "Runtime environment"
+msgstr "Ambiente di runtime"
+
+#: src/window.cr:1081
+msgid "Session type"
+msgstr "Tipo di sessione"
+
+#: src/window.cr:1082
+msgid "System architecture"
+msgstr "Architettura di sistema"
+
+#: src/window.cr:1083
+msgid "Virtual machine"
+msgstr "Macchina virtuale"
+
+#: src/window.cr:1084
+msgid "Virtualization"
+msgstr "Virtualizzazione"
+
+#: src/window.cr:1085
+msgid "Container"
+msgstr "Container"
+
+#: src/window.cr:1086
+msgid "Application format"
+msgstr "Formato dell’applicazione"
+
+#: src/window.cr:1090
+msgid "Open power settings"
+msgstr "Apri le impostazioni di alimentazione"
+
+#: src/window.cr:1093
+msgid "Power information"
+msgstr "Informazioni sull’alimentazione"
+
+#: src/window.cr:1097
+msgid "Power adapter"
+msgstr "Alimentatore"
+
+#: src/window.cr:1098 src/window.cr:1394 src/window.cr:1445
+msgid "Connected"
+msgstr "Collegato"
+
+#: src/window.cr:1102
+msgid "Battery"
+msgstr "Batteria"
+
+#: src/window.cr:1105 src/window.cr:1334
+msgid "Status"
+msgstr "Stato"
+
+#: src/window.cr:1107
+msgid "Charge"
+msgstr "Carica"
+
+#: src/window.cr:1109
+msgid "Full charge capacity"
+msgstr "Capacità di carica completa"
+
+#: src/window.cr:1110
+msgid "Design capacity"
+msgstr "Capacità nominale"
+
+#: src/window.cr:1116
+msgid "Battery health"
+msgstr "Stato della batteria"
+
+#: src/window.cr:1117
+msgid "Charge cycles"
+msgstr "Cicli di carica"
+
+#: src/window.cr:1118
+msgid "Battery power"
+msgstr "Potenza della batteria"
+
+#: src/window.cr:1120 src/window.cr:1126
+msgid "0 min"
+msgstr "0 min"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time to full"
+msgstr "Tempo stimato per la carica completa"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time remaining"
+msgstr "Tempo rimanente stimato"
+
+#: src/window.cr:1134
+msgid "Charging"
+msgstr "In carica"
+
+#: src/window.cr:1135
+msgid "Discharging"
+msgstr "In scarica"
+
+#: src/window.cr:1136
+msgid "Fully charged"
+msgstr "Completamente carica"
+
+#: src/window.cr:1137
+msgid "Not charging"
+msgstr "Non in carica"
+
+#: src/window.cr:1143
+msgid "Open display settings"
+msgstr "Apri le impostazioni dello schermo"
+
+#: src/window.cr:1144
+msgid "Monitor"
+msgstr "Monitor"
+
+#: src/window.cr:1158 src/window.cr:1315
+msgid "Product ID"
+msgstr "ID prodotto"
+
+#: src/window.cr:1160 src/window.cr:1417
+msgid "Active"
+msgstr "Attivo"
+
+#: src/window.cr:1162
+msgid "Current resolution"
+msgstr "Risoluzione attuale"
+
+#: src/window.cr:1163
+msgid "Current refresh rate"
+msgstr "Frequenza di aggiornamento attuale"
+
+#: src/window.cr:1164
+msgid "Preferred resolution"
+msgstr "Risoluzione preferita"
+
+#: src/window.cr:1165
+msgid "Preferred refresh rate"
+msgstr "Frequenza di aggiornamento preferita"
+
+#: src/window.cr:1168
+msgid "Display size"
+msgstr "Dimensioni dello schermo"
+
+#: src/window.cr:1170
+msgid "Diagonal"
+msgstr "Diagonale"
+
+#: src/window.cr:1172
+msgid "Supported resolutions"
+msgstr "Risoluzioni supportate"
+
+#: src/window.cr:1177
+msgid "Monitor %{number}"
+msgstr "Monitor %{number}"
+
+#: src/window.cr:1178
+msgid "Primary"
+msgstr "Principale"
+
+#: src/window.cr:1183
+msgid "Open sound settings"
+msgstr "Apri le impostazioni audio"
+
+#: src/window.cr:1184
+msgid "Audio session"
+msgstr "Sessione audio"
+
+#: src/window.cr:1185
+msgid "Audio server"
+msgstr "Server audio"
+
+#: src/window.cr:1186
+msgid "Default output"
+msgstr "Uscita predefinita"
+
+#: src/window.cr:1187
+msgid "Default input"
+msgstr "Ingresso predefinito"
+
+#: src/window.cr:1188
+msgid "Audio device"
+msgstr "Dispositivo audio"
+
+#: src/window.cr:1197 src/window.cr:1276 src/window.cr:1380
+msgid "Name"
+msgstr "Nome"
+
+#: src/window.cr:1198
+msgid "Device ID"
+msgstr "ID dispositivo"
+
+#: src/window.cr:1200
+msgid "Driver"
+msgstr "Driver"
+
+#: src/window.cr:1201
+msgid "Codecs"
+msgstr "Codec"
+
+#: src/window.cr:1245
+msgid "Sensor readings"
+msgstr "Letture dei sensori"
+
+#: src/window.cr:1253
+msgid "Temperature %{number}"
+msgstr "Temperatura %{number}"
+
+#: src/window.cr:1253
+msgid "Fan %{number}"
+msgstr "Ventola %{number}"
+
+#: src/window.cr:1270
+msgid "Video devices"
+msgstr "Dispositivi video"
+
+#: src/window.cr:1278
+msgid "Video capture"
+msgstr "Acquisizione video"
+
+#: src/window.cr:1284 src/window.cr:1309
+msgid "Input device"
+msgstr "Dispositivo di input"
+
+#: src/window.cr:1295
+msgid "Open keyboard settings"
+msgstr "Apri le impostazioni della tastiera"
+
+#: src/window.cr:1297
+msgid "Open mouse and touchpad settings"
+msgstr "Apri le impostazioni di mouse e touchpad"
+
+#: src/window.cr:1303
+msgid "Keyboard"
+msgstr "Tastiera"
+
+#: src/window.cr:1304
+msgid "Mouse"
+msgstr "Mouse"
+
+#: src/window.cr:1305
+msgid "Gamepad / Joystick"
+msgstr "Gamepad / joystick"
+
+#: src/window.cr:1306
+msgid "Touchpad"
+msgstr "Touchpad"
+
+#: src/window.cr:1307
+msgid "Touchscreen"
+msgstr "Schermo tattile"
+
+#: src/window.cr:1308
+msgid "Graphics tablet"
+msgstr "Tavoletta grafica"
+
+#: src/window.cr:1314
+msgid "Vendor ID"
+msgstr "ID produttore"
+
+#: src/window.cr:1320
+msgid "Open network settings"
+msgstr "Apri le impostazioni di rete"
+
+#: src/window.cr:1322
+msgid "Network adapters"
+msgstr "Schede di rete"
+
+#: src/window.cr:1333
+msgid "Interface"
+msgstr "Interfaccia"
+
+#: src/window.cr:1335
+msgid "Connection profile"
+msgstr "Profilo di connessione"
+
+#: src/window.cr:1336 src/window.cr:1386
+msgid "Link speed"
+msgstr "Velocità di collegamento"
+
+#: src/window.cr:1338
+msgid "Duplex"
+msgstr "Duplex"
+
+#: src/window.cr:1338
+msgid "Full duplex"
+msgstr "Full duplex"
+
+#: src/window.cr:1338
+msgid "Half duplex"
+msgstr "Half duplex"
+
+#: src/window.cr:1340 src/window.cr:1381 src/window.cr:1393
+msgid "MAC address"
+msgstr "Indirizzo MAC"
+
+#: src/window.cr:1341
+msgid "Permanent MAC address"
+msgstr "Indirizzo MAC permanente"
+
+#: src/window.cr:1342
+msgid "MTU"
+msgstr "MTU"
+
+#: src/window.cr:1345
+msgid "SSID"
+msgstr "SSID"
+
+#: src/window.cr:1346
+msgid "Access point (BSSID)"
+msgstr "Punto di accesso (BSSID)"
+
+#: src/window.cr:1347 src/window.cr:1396
+msgid "Signal strength"
+msgstr "Potenza del segnale"
+
+#: src/window.cr:1348
+msgid "Frequency"
+msgstr "Frequenza"
+
+#: src/window.cr:1349
+msgid "Security"
+msgstr "Sicurezza"
+
+#: src/window.cr:1349
+msgid "Open network"
+msgstr "Rete aperta"
+
+#: src/window.cr:1358
+msgid "Open printer settings"
+msgstr "Apri le impostazioni della stampante"
+
+#: src/window.cr:1363
+msgid "Printer"
+msgstr "Stampante"
+
+#: src/window.cr:1368
+msgid "Open Bluetooth settings"
+msgstr "Apri le impostazioni Bluetooth"
+
+#: src/window.cr:1370
+msgid "Bluetooth adapters"
+msgstr "Adattatori Bluetooth"
+
+#: src/window.cr:1384
+msgid "Enabled"
+msgstr "Attivo"
+
+#: src/window.cr:1385
+msgid "Bluetooth version"
+msgstr "Versione Bluetooth"
+
+#: src/window.cr:1387
+msgid "Discoverable"
+msgstr "Rilevabile"
+
+#: src/window.cr:1388
+msgid "Pairable"
+msgstr "Associabile"
+
+#: src/window.cr:1389
+msgid "Connected devices"
+msgstr "Dispositivi collegati"
+
+#: src/window.cr:1395
+msgid "Paired"
+msgstr "Associato"
+
+#: src/window.cr:1404
+msgid "IP addresses"
+msgstr "Indirizzi IP"
+
+#: src/window.cr:1405
+msgid "Address configuration"
+msgstr "Configurazione dell’indirizzo"
+
+#: src/window.cr:1406 src/window.cr:1460
+msgid "DHCP"
+msgstr "DHCP"
+
+#: src/window.cr:1407
+msgid "Gateway"
+msgstr "Gateway"
+
+#: src/window.cr:1408
+msgid "DNS servers"
+msgstr "Server DNS"
+
+#: src/window.cr:1409
+msgid "Search domains"
+msgstr "Domini di ricerca"
+
+#: src/window.cr:1417
+msgid "Inactive"
+msgstr "Inattivo"
+
+#: src/window.cr:1427
+msgid "%{days} d %{hours} h %{minutes} min"
+msgstr "%{days} g %{hours} h %{minutes} min"
+
+#: src/window.cr:1429
+msgid "%{hours} h %{minutes} min"
+msgstr "%{hours} h %{minutes} min"
+
+#: src/window.cr:1431
+msgid "%{minutes} min"
+msgstr "%{minutes} min"
+
+#: src/window.cr:1437
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: src/window.cr:1438
+msgid "Bluetooth PAN"
+msgstr "PAN Bluetooth"
+
+#: src/window.cr:1439
+msgid "Ethernet (LAN)"
+msgstr "Ethernet (LAN)"
+
+#: src/window.cr:1446
+msgid "Disconnected"
+msgstr "Disconnesso"
+
+#: src/window.cr:1447
+msgid "Connecting"
+msgstr "Connessione in corso"
+
+#: src/window.cr:1448
+msgid "Disconnecting"
+msgstr "Disconnessione in corso"
+
+#: src/window.cr:1449
+msgid "Unavailable"
+msgstr "Non disponibile"
+
+#: src/window.cr:1450
+msgid "Unmanaged"
+msgstr "Non gestito"
+
+#: src/window.cr:1451
+msgid "Connection failed"
+msgstr "Connessione non riuscita"
+
+#: src/window.cr:1458
+msgid "Automatic"
+msgstr "Automatico"
+
+#: src/window.cr:1459
+msgid "Manual"
+msgstr "Manuale"
+
+#: src/window.cr:1461
+msgid "Link-local"
+msgstr "Link-local"
+
+#: src/window.cr:1462
+msgid "Shared"
+msgstr "Condiviso"
+
+#: src/window.cr:1463
+msgid "Disabled"
+msgstr "Disattivato"
+
+#: src/window.cr:1464
+msgid "Ignored"
+msgstr "Ignorato"

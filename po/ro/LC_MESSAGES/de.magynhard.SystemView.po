@@ -1,0 +1,1179 @@
+# Romanian translations for System package.
+# Copyright (C) 2026 Matthäus J. N. Beyrle
+# This file is distributed under the same license as the System View package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: System View\n"
+"Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
+"POT-Creation-Date: 2026-11-19 07:37+0100\n"
+"PO-Revision-Date: 2026-11-19 07:37+0100\n"
+"Last-Translator: OpenCode\n"
+"Language-Team: System View translators\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: src/window.cr:87
+msgid "Copy system information"
+msgstr "Copiază informațiile despre sistem"
+
+#: src/window.cr:90
+msgid "Copy summary"
+msgstr "Copiază rezumatul"
+
+#: src/window.cr:91
+msgid "Copy all information"
+msgstr "Copiază toate informațiile"
+
+#: src/window.cr:96
+msgid "Main menu"
+msgstr "Meniul principal"
+
+#: src/window.cr:99
+msgid "Refresh"
+msgstr "Reîmprospătează"
+
+#: src/window.cr:100
+msgid "About System View"
+msgstr "Despre System View"
+
+#: src/window.cr:101 src/window.cr:612
+msgid "Close"
+msgstr "Închide"
+
+#: src/window.cr:126
+msgid "Some hardware details are locked"
+msgstr "Unele detalii hardware sunt blocate"
+
+#: src/window.cr:129
+msgid "Some features need additional software"
+msgstr "Unele funcții necesită software suplimentar"
+
+#: src/window.cr:130
+msgid "More information"
+msgstr "Mai multe informații"
+
+#: src/window.cr:174
+msgid "Toggle sidebar"
+msgstr "Comută bara laterală"
+
+#: src/window.cr:182
+msgid "Back"
+msgstr "Înapoi"
+
+#: src/window.cr:187
+msgid "Forward"
+msgstr "Înainte"
+
+#: src/window.cr:210
+msgid "Your system and hardware at a glance."
+msgstr "Sistemul și componentele hardware dintr-o privire."
+
+#: src/window.cr:256
+msgid "Summary"
+msgstr "Rezumat"
+
+#: src/window.cr:257 src/window.cr:752 src/window.cr:910 src/window.cr:912
+msgid "Graphics"
+msgstr "Grafică"
+
+#: src/window.cr:258 src/window.cr:745 src/window.cr:781
+msgid "Processor"
+msgstr "Procesor"
+
+#: src/window.cr:259 src/window.cr:746 src/window.cr:878
+msgid "Mainboard"
+msgstr "Placă de bază"
+
+#: src/window.cr:260 src/window.cr:995 src/window.cr:997
+msgid "Drives"
+msgstr "Unități"
+
+#: src/window.cr:261 src/window.cr:760 src/window.cr:1026 src/window.cr:1028
+msgid "Memory"
+msgstr "Memorie"
+
+#: src/window.cr:262 src/window.cr:756 src/window.cr:1143 src/window.cr:1144
+msgid "Monitors"
+msgstr "Monitoare"
+
+#: src/window.cr:263 src/window.cr:1183 src/window.cr:1188
+msgid "Audio"
+msgstr "Audio"
+
+#: src/window.cr:264 src/window.cr:1268 src/window.cr:1270
+msgid "Video"
+msgstr "Video"
+
+#: src/window.cr:265 src/window.cr:1283 src/window.cr:1284
+msgid "Input Devices"
+msgstr "Dispozitive de intrare"
+
+#: src/window.cr:266 src/window.cr:771 src/window.cr:1320 src/window.cr:1322
+msgid "Network"
+msgstr "Rețea"
+
+#: src/window.cr:267 src/window.cr:769 src/window.cr:1368 src/window.cr:1370
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/window.cr:268 src/window.cr:773 src/window.cr:1071 src/window.cr:1074
+msgid "Operating System"
+msgstr "Sistem de operare"
+
+#: src/window.cr:269 src/window.cr:1090 src/window.cr:1093
+msgid "Power"
+msgstr "Alimentare"
+
+#: src/window.cr:270 src/window.cr:1243 src/window.cr:1245
+msgid "Sensors"
+msgstr "Senzori"
+
+#: src/window.cr:271 src/window.cr:1358 src/window.cr:1361
+msgid "Printers"
+msgstr "Imprimante"
+
+#: src/window.cr:360
+msgid "Could not read system information"
+msgstr "Nu s-au putut citi informațiile despre sistem"
+
+#: src/window.cr:361 src/window.cr:663 src/window.cr:683 src/window.cr:720
+#: src/window.cr:724 src/window.cr:750 src/window.cr:754 src/window.cr:825
+#: src/window.cr:867 src/window.cr:893 src/window.cr:898 src/window.cr:1138
+#: src/window.cr:1361 src/window.cr:1402 src/window.cr:1413 src/window.cr:1417
+#: src/window.cr:1421 src/window.cr:1452 src/window.cr:1465 src/window.cr:1470
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: src/window.cr:434
+msgid "Authentication cancelled."
+msgstr "Autentificare anulată."
+
+#: src/window.cr:434 src/window.cr:442
+msgid "Hardware details could not be unlocked."
+msgstr "Detaliile hardware nu au putut fi deblocate."
+
+#: src/window.cr:466
+msgid "Unlocking…"
+msgstr "Se deblochează…"
+
+#: src/window.cr:466
+msgid "Unlock…"
+msgstr "Deblochează…"
+
+#: src/window.cr:500
+msgid "Reading system information…"
+msgstr "Se citesc informațiile despre sistem…"
+
+#: src/window.cr:539
+msgid "OpenGL information"
+msgstr "Informații OpenGL"
+
+#: src/window.cr:540
+msgid "Vulkan information"
+msgstr "Informații Vulkan"
+
+#: src/window.cr:541
+msgid "Audio server and default devices"
+msgstr "Server audio și dispozitive implicite"
+
+#: src/window.cr:542
+msgid "Bounded background queries"
+msgstr "Interogări de fundal limitate"
+
+#: src/window.cr:543
+msgid "Additional processor and memory details"
+msgstr "Detalii suplimentare despre procesor și memorie"
+
+#: src/window.cr:544
+msgid "Printer information"
+msgstr "Informații despre imprimantă"
+
+#: src/window.cr:549
+msgid "Optional software"
+msgstr "Software opțional"
+
+#: src/window.cr:557
+msgid "The Flatpak can only use software available inside its sandbox."
+msgstr "Flatpak poate folosi doar software-ul disponibil în spațiul său izolat."
+
+#: src/window.cr:563
+msgid "" 
+"Add these packages to environment.systemPackages in your NixOS configuration:"
+msgstr "Adăugați aceste pachete la environment.systemPackages în configurația NixOS:"
+
+#: src/window.cr:574
+msgid "Apply your configuration with sudo nixos-rebuild switch."
+msgstr "Aplicați configurația cu sudo nixos-rebuild switch."
+
+#: src/window.cr:581
+msgid "" 
+"Enable security.polkit.enable and a graphical authentication agent for "
+"additional hardware details."
+msgstr "Activați security.polkit.enable și un agent grafic de autentificare pentru detalii hardware suplimentare."
+
+#: src/window.cr:588
+msgid "The CUPS library must also be available to the application at runtime."
+msgstr "Biblioteca CUPS trebuie să fie disponibilă aplicației și în timpul execuției."
+
+#: src/window.cr:594
+msgid "Install using your package manager:"
+msgstr "Instalați folosind managerul de pachete:"
+
+#: src/window.cr:606
+msgid "Install the missing software using your package manager."
+msgstr "Instalați software-ul lipsă folosind managerul de pachete."
+
+#: src/window.cr:742
+msgid "Hardware summary"
+msgstr "Rezumat hardware"
+
+#: src/window.cr:744
+msgid "%{cores} cores · %{threads} threads"
+msgstr "%{cores} nuclee · %{threads} fire de execuție"
+
+#: src/window.cr:762 src/window.cr:997
+msgid "Storage"
+msgstr "Stocare"
+
+#: src/window.cr:771 src/window.cr:1033 src/window.cr:1322 src/window.cr:1361
+#: src/window.cr:1370 src/window.cr:1402
+msgid "None"
+msgstr "Niciuna"
+
+#: src/window.cr:772 src/window.cr:1073
+msgid "System"
+msgstr "Sistem"
+
+#: src/window.cr:774 src/window.cr:1075
+msgid "Kernel"
+msgstr "Nucleu"
+
+#: src/window.cr:775 src/window.cr:1076
+msgid "Desktop Environment"
+msgstr "Mediu desktop"
+
+#: src/window.cr:776 src/window.cr:1078
+msgid "Uptime"
+msgstr "Timp de funcționare"
+
+#: src/window.cr:784 src/window.cr:881 src/window.cr:923
+msgid "Identification"
+msgstr "Identificare"
+
+#: src/window.cr:786 src/window.cr:883 src/window.cr:1007 src/window.cr:1061
+#: src/window.cr:1104 src/window.cr:1157 src/window.cr:1332
+msgid "Model"
+msgstr "Model"
+
+#: src/window.cr:787 src/window.cr:882 src/window.cr:1008 src/window.cr:1103
+#: src/window.cr:1156
+msgid "Manufacturer"
+msgstr "Producător"
+
+#: src/window.cr:788
+msgid "Architecture"
+msgstr "Arhitectură"
+
+#: src/window.cr:789
+msgid "CPU family"
+msgstr "Familie CPU"
+
+#: src/window.cr:790
+msgid "Model ID"
+msgstr "ID model"
+
+#: src/window.cr:791
+msgid "Stepping"
+msgstr "Revizie"
+
+#: src/window.cr:792
+msgid "Topology and socket"
+msgstr "Topologie și soclu"
+
+#: src/window.cr:793
+msgid "Physical cores"
+msgstr "Nuclee fizice"
+
+#: src/window.cr:794
+msgid "Logical processors"
+msgstr "Procesoare logice"
+
+#: src/window.cr:795
+msgid "Socket count"
+msgstr "Număr de socluri"
+
+#: src/window.cr:804 src/window.cr:809
+msgid "Socket"
+msgstr "Soclu"
+
+#: src/window.cr:805 src/window.cr:810
+msgid "Socket type"
+msgstr "Tipul soclului"
+
+#: src/window.cr:808
+msgid "Socket %{number}"
+msgstr "Soclul %{number}"
+
+#: src/window.cr:813
+msgid "Clock speed"
+msgstr "Frecvență de ceas"
+
+#: src/window.cr:815
+msgid "Base clock"
+msgstr "Frecvență de bază"
+
+#: src/window.cr:816
+msgid "Minimum clock"
+msgstr "Frecvență minimă"
+
+#: src/window.cr:817 src/window.cr:836
+msgid "Maximum clock"
+msgstr "Frecvență maximă"
+
+#: src/window.cr:818
+msgid "Current clock range"
+msgstr "Intervalul de frecvență curent"
+
+#: src/window.cr:820
+msgid "Clock control"
+msgstr "Controlul frecvenței"
+
+#: src/window.cr:821
+msgid "Available frequency steps"
+msgstr "Pași de frecvență disponibili"
+
+#: src/window.cr:822
+msgid "Frequency driver"
+msgstr "Driver de frecvență"
+
+#: src/window.cr:823
+msgid "Governor"
+msgstr "Guvernator"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "Yes"
+msgstr "Da"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "No"
+msgstr "Nu"
+
+#: src/window.cr:826
+msgid "Boost enabled"
+msgstr "Boost activat"
+
+#: src/window.cr:828
+msgid "Additional processor information"
+msgstr "Informații suplimentare despre procesor"
+
+#: src/window.cr:830 src/window.cr:858
+msgid "%{section} · Socket %{number}"
+msgstr "%{section} · soclul %{number}"
+
+#: src/window.cr:833 src/window.cr:1063
+msgid "Voltage"
+msgstr "Tensiune"
+
+#: src/window.cr:834
+msgid "External clock"
+msgstr "Ceas extern"
+
+#: src/window.cr:835
+msgid "Configured clock"
+msgstr "Ceas configurat"
+
+#: src/window.cr:838
+msgid "Caches"
+msgstr "Memorii cache"
+
+#: src/window.cr:839
+msgid "Cache information"
+msgstr "Informații despre memoria cache"
+
+#: src/window.cr:842
+msgid "Data"
+msgstr "Date"
+
+#: src/window.cr:843
+msgid "Instructions"
+msgstr "Instrucțiuni"
+
+#: src/window.cr:844
+msgid "Data and instructions"
+msgstr "Date și instrucțiuni"
+
+#: src/window.cr:847
+msgid "L%{level} cache (%{type})"
+msgstr "Cache L%{level} (%{type})"
+
+#: src/window.cr:849
+msgid "%{count} × %{size} · %{total} total"
+msgstr "%{count} × %{size} · %{total} în total"
+
+#: src/window.cr:851
+msgid "%{size} cache lines"
+msgstr "%{size} linii cache"
+
+#: src/window.cr:852
+msgid "%{ways}-way associative"
+msgstr "Asociativitate pe %{ways} căi"
+
+#: src/window.cr:856
+msgid "Processor features"
+msgstr "Funcții ale procesorului"
+
+#: src/window.cr:861
+msgid "Processor Features"
+msgstr "Funcții ale procesorului"
+
+#: src/window.cr:862
+msgid "Characteristics"
+msgstr "Caracteristici"
+
+#: src/window.cr:884 src/window.cr:940
+msgid "Revision"
+msgstr "Revizie"
+
+#: src/window.cr:885
+msgid "Firmware"
+msgstr "Firmware"
+
+#: src/window.cr:886
+msgid "BIOS vendor"
+msgstr "Producător BIOS"
+
+#: src/window.cr:887
+msgid "BIOS version"
+msgstr "Versiune BIOS"
+
+#: src/window.cr:888
+msgid "BIOS date"
+msgstr "Dată BIOS"
+
+#: src/window.cr:889
+msgid "Boot and security"
+msgstr "Pornire și securitate"
+
+#: src/window.cr:892
+msgid "Legacy BIOS"
+msgstr "BIOS vechi"
+
+#: src/window.cr:895
+msgid "Boot mode"
+msgstr "Mod de pornire"
+
+#: src/window.cr:896
+msgid "Secure Boot"
+msgstr "Pornire securizată"
+
+#: src/window.cr:900
+msgid "Not detected"
+msgstr "Nedetectat"
+
+#: src/window.cr:902
+msgid "Detected"
+msgstr "Detectat"
+
+#: src/window.cr:906
+msgid "TPM"
+msgstr "TPM"
+
+#: src/window.cr:912
+msgid "Display controller"
+msgstr "Controler de afișare"
+
+#: src/window.cr:924
+msgid "GPU model"
+msgstr "Model GPU"
+
+#: src/window.cr:925
+msgid "GPU manufacturer"
+msgstr "Producător GPU"
+
+#: src/window.cr:926
+msgid "Card manufacturer"
+msgstr "Producătorul plăcii"
+
+#: src/window.cr:927
+msgid "Board model"
+msgstr "Modelul plăcii"
+
+#: src/window.cr:928
+msgid "Model group"
+msgstr "Grup de modele"
+
+#: src/window.cr:935
+msgid "Connected monitors"
+msgstr "Monitoare conectate"
+
+#: src/window.cr:937
+msgid "PCI and driver"
+msgstr "PCI și driver"
+
+#: src/window.cr:938
+msgid "PCI ID"
+msgstr "ID PCI"
+
+#: src/window.cr:939
+msgid "Subsystem ID"
+msgstr "ID subsistem"
+
+#: src/window.cr:941
+msgid "PCI address"
+msgstr "Adresă PCI"
+
+#: src/window.cr:942 src/window.cr:1343 src/window.cr:1382
+msgid "Kernel driver"
+msgstr "Driver de nucleu"
+
+#: src/window.cr:943
+msgid "Current PCIe link"
+msgstr "Legătură PCIe curentă"
+
+#: src/window.cr:943 src/window.cr:944 src/window.cr:945 src/window.cr:948
+#: src/window.cr:951 src/window.cr:953 src/window.cr:956 src/window.cr:958
+#: src/window.cr:959 src/window.cr:960 src/window.cr:961 src/window.cr:963
+#: src/window.cr:964 src/window.cr:965 src/window.cr:967 src/window.cr:973
+#: src/window.cr:976 src/window.cr:1017 src/window.cr:1019 src/window.cr:1020
+#: src/window.cr:1021 src/window.cr:1062 src/window.cr:1093 src/window.cr:1107
+#: src/window.cr:1108 src/window.cr:1109 src/window.cr:1110 src/window.cr:1114
+#: src/window.cr:1117 src/window.cr:1118 src/window.cr:1119 src/window.cr:1120
+#: src/window.cr:1126 src/window.cr:1162 src/window.cr:1163 src/window.cr:1185
+#: src/window.cr:1186 src/window.cr:1187 src/window.cr:1245 src/window.cr:1256
+#: src/window.cr:1263 src/window.cr:1270 src/window.cr:1386
+msgid "Not reported"
+msgstr "Neraportat"
+
+#: src/window.cr:945
+msgid "Maximum PCIe link"
+msgstr "Legătură PCIe maximă"
+
+#: src/window.cr:946
+msgid "Memory and clocks"
+msgstr "Memorie și frecvențe"
+
+#: src/window.cr:947
+msgid "Dedicated video memory"
+msgstr "Memorie video dedicată"
+
+#: src/window.cr:948
+msgid "Current GPU clock"
+msgstr "Frecvență GPU curentă"
+
+#: src/window.cr:953
+msgid "Current video memory clock"
+msgstr "Frecvența curentă a memoriei video"
+
+#: src/window.cr:958
+msgid "GPU utilization"
+msgstr "Utilizare GPU"
+
+#: src/window.cr:960
+msgid "GPU power"
+msgstr "Putere GPU"
+
+#: src/window.cr:962
+msgid "Graphics APIs"
+msgstr "API-uri grafice"
+
+#: src/window.cr:963
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: src/window.cr:964
+msgid "GLSL"
+msgstr "GLSL"
+
+#: src/window.cr:965
+msgid "OpenGL ES"
+msgstr "OpenGL ES"
+
+#: src/window.cr:966
+msgid "OpenGL renderer"
+msgstr "Randor OpenGL"
+
+#: src/window.cr:967
+msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/window.cr:968
+msgid "Vulkan driver"
+msgstr "Driver Vulkan"
+
+#: src/window.cr:970
+msgid "Discrete GPU"
+msgstr "GPU discret"
+
+#: src/window.cr:971
+msgid "Integrated GPU"
+msgstr "GPU integrat"
+
+#: src/window.cr:972
+msgid "Virtual GPU"
+msgstr "GPU virtual"
+
+#: src/window.cr:975
+msgid "Vulkan device type"
+msgstr "Tip dispozitiv Vulkan"
+
+#: src/window.cr:976
+msgid "Vulkan driver version"
+msgstr "Versiune driver Vulkan"
+
+#: src/window.cr:983
+msgid "Open Disk View"
+msgstr "Deschide Disk View"
+
+#: src/window.cr:1010
+msgid "Capacity"
+msgstr "Capacitate"
+
+#: src/window.cr:1011 src/window.cr:1278 src/window.cr:1311
+msgid "Type"
+msgstr "Tip"
+
+#: src/window.cr:1013 src/window.cr:1159 src/window.cr:1312
+msgid "Connection"
+msgstr "Conexiune"
+
+#: src/window.cr:1014 src/window.cr:1277
+msgid "Device"
+msgstr "Dispozitiv"
+
+#: src/window.cr:1015
+msgid "Removable"
+msgstr "Detașabil"
+
+#: src/window.cr:1017
+msgid "Warning"
+msgstr "Avertisment"
+
+#: src/window.cr:1017
+msgid "OK"
+msgstr "OK"
+
+#: src/window.cr:1018
+msgid "Status (SMART)"
+msgstr "Stare (SMART)"
+
+#: src/window.cr:1019
+msgid "Temperature"
+msgstr "Temperatură"
+
+#: src/window.cr:1020
+msgid "Power-on hours"
+msgstr "Ore de funcționare"
+
+#: src/window.cr:1021
+msgid "Last updated"
+msgstr "Ultima actualizare"
+
+#: src/window.cr:1029
+msgid "Installed RAM"
+msgstr "RAM instalată"
+
+#: src/window.cr:1030
+msgid "Usable RAM"
+msgstr "RAM utilizabilă"
+
+#: src/window.cr:1031
+msgid "Available RAM"
+msgstr "RAM disponibilă"
+
+#: src/window.cr:1033
+msgid "Swap"
+msgstr "Swap"
+
+#: src/window.cr:1037
+msgid "Module %{number}"
+msgstr "Modulul %{number}"
+
+#: src/window.cr:1062
+msgid "Timings (CL–tRCD–tRP–tRAS)"
+msgstr "Timpi (CL–tRCD–tRP–tRAS)"
+
+#: src/window.cr:1064
+msgid "Minimum voltage"
+msgstr "Tensiune minimă"
+
+#: src/window.cr:1065
+msgid "Maximum voltage"
+msgstr "Tensiune maximă"
+
+#: src/window.cr:1071
+msgid "Open system settings"
+msgstr "Deschide setările sistemului"
+
+#: src/window.cr:1077
+msgid "Hostname"
+msgstr "Nume gazdă"
+
+#: src/window.cr:1080
+msgid "Runtime environment"
+msgstr "Mediu de execuție"
+
+#: src/window.cr:1081
+msgid "Session type"
+msgstr "Tip sesiune"
+
+#: src/window.cr:1082
+msgid "System architecture"
+msgstr "Arhitectura sistemului"
+
+#: src/window.cr:1083
+msgid "Virtual machine"
+msgstr "Mașină virtuală"
+
+#: src/window.cr:1084
+msgid "Virtualization"
+msgstr "Virtualizare"
+
+#: src/window.cr:1085
+msgid "Container"
+msgstr "Container"
+
+#: src/window.cr:1086
+msgid "Application format"
+msgstr "Formatul aplicației"
+
+#: src/window.cr:1090
+msgid "Open power settings"
+msgstr "Deschide setările de alimentare"
+
+#: src/window.cr:1093
+msgid "Power information"
+msgstr "Informații despre alimentare"
+
+#: src/window.cr:1097
+msgid "Power adapter"
+msgstr "Adaptor de alimentare"
+
+#: src/window.cr:1098 src/window.cr:1394 src/window.cr:1445
+msgid "Connected"
+msgstr "Conectat"
+
+#: src/window.cr:1102
+msgid "Battery"
+msgstr "Baterie"
+
+#: src/window.cr:1105 src/window.cr:1334
+msgid "Status"
+msgstr "Stare"
+
+#: src/window.cr:1107
+msgid "Charge"
+msgstr "Încărcare"
+
+#: src/window.cr:1109
+msgid "Full charge capacity"
+msgstr "Capacitate la încărcare completă"
+
+#: src/window.cr:1110
+msgid "Design capacity"
+msgstr "Capacitate nominală"
+
+#: src/window.cr:1116
+msgid "Battery health"
+msgstr "Starea bateriei"
+
+#: src/window.cr:1117
+msgid "Charge cycles"
+msgstr "Cicluri de încărcare"
+
+#: src/window.cr:1118
+msgid "Battery power"
+msgstr "Puterea bateriei"
+
+#: src/window.cr:1120 src/window.cr:1126
+msgid "0 min"
+msgstr "0 min"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time to full"
+msgstr "Timp estimat până la încărcarea completă"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time remaining"
+msgstr "Timp rămas estimat"
+
+#: src/window.cr:1134
+msgid "Charging"
+msgstr "Se încarcă"
+
+#: src/window.cr:1135
+msgid "Discharging"
+msgstr "Se descarcă"
+
+#: src/window.cr:1136
+msgid "Fully charged"
+msgstr "Încărcată complet"
+
+#: src/window.cr:1137
+msgid "Not charging"
+msgstr "Nu se încarcă"
+
+#: src/window.cr:1143
+msgid "Open display settings"
+msgstr "Deschide setările ecranului"
+
+#: src/window.cr:1144
+msgid "Monitor"
+msgstr "Monitor"
+
+#: src/window.cr:1158 src/window.cr:1315
+msgid "Product ID"
+msgstr "ID produs"
+
+#: src/window.cr:1160 src/window.cr:1417
+msgid "Active"
+msgstr "Activ"
+
+#: src/window.cr:1162
+msgid "Current resolution"
+msgstr "Rezoluție curentă"
+
+#: src/window.cr:1163
+msgid "Current refresh rate"
+msgstr "Rată de reîmprospătare curentă"
+
+#: src/window.cr:1164
+msgid "Preferred resolution"
+msgstr "Rezoluție preferată"
+
+#: src/window.cr:1165
+msgid "Preferred refresh rate"
+msgstr "Rată de reîmprospătare preferată"
+
+#: src/window.cr:1168
+msgid "Display size"
+msgstr "Dimensiunea ecranului"
+
+#: src/window.cr:1170
+msgid "Diagonal"
+msgstr "Diagonală"
+
+#: src/window.cr:1172
+msgid "Supported resolutions"
+msgstr "Rezoluții acceptate"
+
+#: src/window.cr:1177
+msgid "Monitor %{number}"
+msgstr "Monitor %{number}"
+
+#: src/window.cr:1178
+msgid "Primary"
+msgstr "Principal"
+
+#: src/window.cr:1183
+msgid "Open sound settings"
+msgstr "Deschide setările audio"
+
+#: src/window.cr:1184
+msgid "Audio session"
+msgstr "Sesiune audio"
+
+#: src/window.cr:1185
+msgid "Audio server"
+msgstr "Server audio"
+
+#: src/window.cr:1186
+msgid "Default output"
+msgstr "Ieșire implicită"
+
+#: src/window.cr:1187
+msgid "Default input"
+msgstr "Intrare implicită"
+
+#: src/window.cr:1188
+msgid "Audio device"
+msgstr "Dispozitiv audio"
+
+#: src/window.cr:1197 src/window.cr:1276 src/window.cr:1380
+msgid "Name"
+msgstr "Nume"
+
+#: src/window.cr:1198
+msgid "Device ID"
+msgstr "ID dispozitiv"
+
+#: src/window.cr:1200
+msgid "Driver"
+msgstr "Driver"
+
+#: src/window.cr:1201
+msgid "Codecs"
+msgstr "Codecuri"
+
+#: src/window.cr:1245
+msgid "Sensor readings"
+msgstr "Citiri ale senzorilor"
+
+#: src/window.cr:1253
+msgid "Temperature %{number}"
+msgstr "Temperatura %{number}"
+
+#: src/window.cr:1253
+msgid "Fan %{number}"
+msgstr "Ventilatorul %{number}"
+
+#: src/window.cr:1270
+msgid "Video devices"
+msgstr "Dispozitive video"
+
+#: src/window.cr:1278
+msgid "Video capture"
+msgstr "Captură video"
+
+#: src/window.cr:1284 src/window.cr:1309
+msgid "Input device"
+msgstr "Dispozitiv de intrare"
+
+#: src/window.cr:1295
+msgid "Open keyboard settings"
+msgstr "Deschide setările tastaturii"
+
+#: src/window.cr:1297
+msgid "Open mouse and touchpad settings"
+msgstr "Deschide setările mouse-ului și touchpadului"
+
+#: src/window.cr:1303
+msgid "Keyboard"
+msgstr "Tastatură"
+
+#: src/window.cr:1304
+msgid "Mouse"
+msgstr "Mouse"
+
+#: src/window.cr:1305
+msgid "Gamepad / Joystick"
+msgstr "Gamepad / joystick"
+
+#: src/window.cr:1306
+msgid "Touchpad"
+msgstr "Touchpad"
+
+#: src/window.cr:1307
+msgid "Touchscreen"
+msgstr "Ecran tactil"
+
+#: src/window.cr:1308
+msgid "Graphics tablet"
+msgstr "Tabletă grafică"
+
+#: src/window.cr:1314
+msgid "Vendor ID"
+msgstr "ID producător"
+
+#: src/window.cr:1320
+msgid "Open network settings"
+msgstr "Deschide setările de rețea"
+
+#: src/window.cr:1322
+msgid "Network adapters"
+msgstr "Adaptoare de rețea"
+
+#: src/window.cr:1333
+msgid "Interface"
+msgstr "Interfață"
+
+#: src/window.cr:1335
+msgid "Connection profile"
+msgstr "Profil de conexiune"
+
+#: src/window.cr:1336 src/window.cr:1386
+msgid "Link speed"
+msgstr "Viteză de conexiune"
+
+#: src/window.cr:1338
+msgid "Duplex"
+msgstr "Duplex"
+
+#: src/window.cr:1338
+msgid "Full duplex"
+msgstr "Duplex integral"
+
+#: src/window.cr:1338
+msgid "Half duplex"
+msgstr "Semi-duplex"
+
+#: src/window.cr:1340 src/window.cr:1381 src/window.cr:1393
+msgid "MAC address"
+msgstr "Adresă MAC"
+
+#: src/window.cr:1341
+msgid "Permanent MAC address"
+msgstr "Adresă MAC permanentă"
+
+#: src/window.cr:1342
+msgid "MTU"
+msgstr "MTU"
+
+#: src/window.cr:1345
+msgid "SSID"
+msgstr "SSID"
+
+#: src/window.cr:1346
+msgid "Access point (BSSID)"
+msgstr "Punct de acces (BSSID)"
+
+#: src/window.cr:1347 src/window.cr:1396
+msgid "Signal strength"
+msgstr "Intensitatea semnalului"
+
+#: src/window.cr:1348
+msgid "Frequency"
+msgstr "Frecvență"
+
+#: src/window.cr:1349
+msgid "Security"
+msgstr "Securitate"
+
+#: src/window.cr:1349
+msgid "Open network"
+msgstr "Rețea deschisă"
+
+#: src/window.cr:1358
+msgid "Open printer settings"
+msgstr "Deschide setările imprimantei"
+
+#: src/window.cr:1363
+msgid "Printer"
+msgstr "Imprimantă"
+
+#: src/window.cr:1368
+msgid "Open Bluetooth settings"
+msgstr "Deschide setările Bluetooth"
+
+#: src/window.cr:1370
+msgid "Bluetooth adapters"
+msgstr "Adaptoare Bluetooth"
+
+#: src/window.cr:1384
+msgid "Enabled"
+msgstr "Activat"
+
+#: src/window.cr:1385
+msgid "Bluetooth version"
+msgstr "Versiune Bluetooth"
+
+#: src/window.cr:1387
+msgid "Discoverable"
+msgstr "Detectabil"
+
+#: src/window.cr:1388
+msgid "Pairable"
+msgstr "Poate fi asociat"
+
+#: src/window.cr:1389
+msgid "Connected devices"
+msgstr "Dispozitive conectate"
+
+#: src/window.cr:1395
+msgid "Paired"
+msgstr "Asociat"
+
+#: src/window.cr:1404
+msgid "IP addresses"
+msgstr "Adrese IP"
+
+#: src/window.cr:1405
+msgid "Address configuration"
+msgstr "Configurarea adresei"
+
+#: src/window.cr:1406 src/window.cr:1460
+msgid "DHCP"
+msgstr "DHCP"
+
+#: src/window.cr:1407
+msgid "Gateway"
+msgstr "Gateway"
+
+#: src/window.cr:1408
+msgid "DNS servers"
+msgstr "Servere DNS"
+
+#: src/window.cr:1409
+msgid "Search domains"
+msgstr "Domenii de căutare"
+
+#: src/window.cr:1417
+msgid "Inactive"
+msgstr "Inactiv"
+
+#: src/window.cr:1427
+msgid "%{days} d %{hours} h %{minutes} min"
+msgstr "%{days} z %{hours} h %{minutes} min"
+
+#: src/window.cr:1429
+msgid "%{hours} h %{minutes} min"
+msgstr "%{hours} h %{minutes} min"
+
+#: src/window.cr:1431
+msgid "%{minutes} min"
+msgstr "%{minutes} min"
+
+#: src/window.cr:1437
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: src/window.cr:1438
+msgid "Bluetooth PAN"
+msgstr "Bluetooth PAN"
+
+#: src/window.cr:1439
+msgid "Ethernet (LAN)"
+msgstr "Ethernet (LAN)"
+
+#: src/window.cr:1446
+msgid "Disconnected"
+msgstr "Deconectat"
+
+#: src/window.cr:1447
+msgid "Connecting"
+msgstr "Se conectează"
+
+#: src/window.cr:1448
+msgid "Disconnecting"
+msgstr "Se deconectează"
+
+#: src/window.cr:1449
+msgid "Unavailable"
+msgstr "Indisponibil"
+
+#: src/window.cr:1450
+msgid "Unmanaged"
+msgstr "Negestionat"
+
+#: src/window.cr:1451
+msgid "Connection failed"
+msgstr "Conexiunea a eșuat"
+
+#: src/window.cr:1458
+msgid "Automatic"
+msgstr "Automat"
+
+#: src/window.cr:1459
+msgid "Manual"
+msgstr "Manual"
+
+#: src/window.cr:1461
+msgid "Link-local"
+msgstr "Legătură locală"
+
+#: src/window.cr:1462
+msgid "Shared"
+msgstr "Partajat"
+
+#: src/window.cr:1463
+msgid "Disabled"
+msgstr "Dezactivat"
+
+#: src/window.cr:1464
+msgid "Ignored"
+msgstr "Ignorat"

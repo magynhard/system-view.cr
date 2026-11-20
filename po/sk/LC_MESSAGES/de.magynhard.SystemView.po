@@ -1,0 +1,1178 @@
+# Slovak translations for System package.
+# Copyright (C) 2026 Matthäus J. N. Beyrle
+# This file is distributed under the same license as the System View package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: System View\n"
+"Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
+"POT-Creation-Date: 2026-11-19 07:37+0100\n"
+"PO-Revision-Date: 2026-11-19 07:37+0100\n"
+"Last-Translator: OpenCode\n"
+"Language-Team: System View translators\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: src/window.cr:87
+msgid "Copy system information"
+msgstr "Kopírovať informácie o systéme"
+
+#: src/window.cr:90
+msgid "Copy summary"
+msgstr "Kopírovať súhrn"
+
+#: src/window.cr:91
+msgid "Copy all information"
+msgstr "Kopírovať všetky informácie"
+
+#: src/window.cr:96
+msgid "Main menu"
+msgstr "Hlavná ponuka"
+
+#: src/window.cr:99
+msgid "Refresh"
+msgstr "Obnoviť"
+
+#: src/window.cr:100
+msgid "About System View"
+msgstr "O aplikácii System View"
+
+#: src/window.cr:101 src/window.cr:612
+msgid "Close"
+msgstr "Zavrieť"
+
+#: src/window.cr:126
+msgid "Some hardware details are locked"
+msgstr "Niektoré informácie o hardvéri sú uzamknuté"
+
+#: src/window.cr:129
+msgid "Some features need additional software"
+msgstr "Niektoré funkcie vyžadujú ďalší softvér"
+
+#: src/window.cr:130
+msgid "More information"
+msgstr "Ďalšie informácie"
+
+#: src/window.cr:174
+msgid "Toggle sidebar"
+msgstr "Prepnúť bočný panel"
+
+#: src/window.cr:182
+msgid "Back"
+msgstr "Späť"
+
+#: src/window.cr:187
+msgid "Forward"
+msgstr "Vpred"
+
+#: src/window.cr:210
+msgid "Your system and hardware at a glance."
+msgstr "Systém a hardvér na prvý pohľad."
+
+#: src/window.cr:256
+msgid "Summary"
+msgstr "Súhrn"
+
+#: src/window.cr:257 src/window.cr:752 src/window.cr:910 src/window.cr:912
+msgid "Graphics"
+msgstr "Grafika"
+
+#: src/window.cr:258 src/window.cr:745 src/window.cr:781
+msgid "Processor"
+msgstr "Procesor"
+
+#: src/window.cr:259 src/window.cr:746 src/window.cr:878
+msgid "Mainboard"
+msgstr "Základná doska"
+
+#: src/window.cr:260 src/window.cr:995 src/window.cr:997
+msgid "Drives"
+msgstr "Disky"
+
+#: src/window.cr:261 src/window.cr:760 src/window.cr:1026 src/window.cr:1028
+msgid "Memory"
+msgstr "Pamäť"
+
+#: src/window.cr:262 src/window.cr:756 src/window.cr:1143 src/window.cr:1144
+msgid "Monitors"
+msgstr "Monitory"
+
+#: src/window.cr:263 src/window.cr:1183 src/window.cr:1188
+msgid "Audio"
+msgstr "Zvuk"
+
+#: src/window.cr:264 src/window.cr:1268 src/window.cr:1270
+msgid "Video"
+msgstr "Video"
+
+#: src/window.cr:265 src/window.cr:1283 src/window.cr:1284
+msgid "Input Devices"
+msgstr "Vstupné zariadenia"
+
+#: src/window.cr:266 src/window.cr:771 src/window.cr:1320 src/window.cr:1322
+msgid "Network"
+msgstr "Sieť"
+
+#: src/window.cr:267 src/window.cr:769 src/window.cr:1368 src/window.cr:1370
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/window.cr:268 src/window.cr:773 src/window.cr:1071 src/window.cr:1074
+msgid "Operating System"
+msgstr "Operačný systém"
+
+#: src/window.cr:269 src/window.cr:1090 src/window.cr:1093
+msgid "Power"
+msgstr "Napájanie"
+
+#: src/window.cr:270 src/window.cr:1243 src/window.cr:1245
+msgid "Sensors"
+msgstr "Senzory"
+
+#: src/window.cr:271 src/window.cr:1358 src/window.cr:1361
+msgid "Printers"
+msgstr "Tlačiarne"
+
+#: src/window.cr:360
+msgid "Could not read system information"
+msgstr "Nepodarilo sa načítať informácie o systéme"
+
+#: src/window.cr:361 src/window.cr:663 src/window.cr:683 src/window.cr:720
+#: src/window.cr:724 src/window.cr:750 src/window.cr:754 src/window.cr:825
+#: src/window.cr:867 src/window.cr:893 src/window.cr:898 src/window.cr:1138
+#: src/window.cr:1361 src/window.cr:1402 src/window.cr:1413 src/window.cr:1417
+#: src/window.cr:1421 src/window.cr:1452 src/window.cr:1465 src/window.cr:1470
+msgid "Unknown"
+msgstr "Neznáme"
+
+#: src/window.cr:434
+msgid "Authentication cancelled."
+msgstr "Overenie bolo zrušené."
+
+#: src/window.cr:434 src/window.cr:442
+msgid "Hardware details could not be unlocked."
+msgstr "Nepodarilo sa odomknúť informácie o hardvéri."
+
+#: src/window.cr:466
+msgid "Unlocking…"
+msgstr "Odomykanie…"
+
+#: src/window.cr:466
+msgid "Unlock…"
+msgstr "Odomknúť…"
+
+#: src/window.cr:500
+msgid "Reading system information…"
+msgstr "Načítavajú sa informácie o systéme…"
+
+#: src/window.cr:539
+msgid "OpenGL information"
+msgstr "Informácie o OpenGL"
+
+#: src/window.cr:540
+msgid "Vulkan information"
+msgstr "Informácie o Vulkan"
+
+#: src/window.cr:541
+msgid "Audio server and default devices"
+msgstr "Zvukový server a predvolené zariadenia"
+
+#: src/window.cr:542
+msgid "Bounded background queries"
+msgstr "Obmedzené požiadavky na pozadí"
+
+#: src/window.cr:543
+msgid "Additional processor and memory details"
+msgstr "Ďalšie informácie o procesore a pamäti"
+
+#: src/window.cr:544
+msgid "Printer information"
+msgstr "Informácie o tlačiarni"
+
+#: src/window.cr:549
+msgid "Optional software"
+msgstr "Voliteľný softvér"
+
+#: src/window.cr:557
+msgid "The Flatpak can only use software available inside its sandbox."
+msgstr "Flatpak môže používať iba softvér dostupný v jeho izolovanom prostredí."
+
+#: src/window.cr:563
+msgid "" 
+"Add these packages to environment.systemPackages in your NixOS configuration:"
+msgstr "Pridajte tieto balíky do environment.systemPackages v konfigurácii NixOS:"
+
+#: src/window.cr:574
+msgid "Apply your configuration with sudo nixos-rebuild switch."
+msgstr "Použite konfiguráciu príkazom sudo nixos-rebuild switch."
+
+#: src/window.cr:581
+msgid "" 
+"Enable security.polkit.enable and a graphical authentication agent for "
+"additional hardware details."
+msgstr "Ak chcete zobraziť ďalšie informácie o hardvéri, povoľte security.polkit.enable a grafického overovacieho agenta."
+
+#: src/window.cr:588
+msgid "The CUPS library must also be available to the application at runtime."
+msgstr "Knižnica CUPS musí byť aplikácii dostupná aj počas behu."
+
+#: src/window.cr:594
+msgid "Install using your package manager:"
+msgstr "Nainštalujte pomocou správcu balíkov:"
+
+#: src/window.cr:606
+msgid "Install the missing software using your package manager."
+msgstr "Chýbajúci softvér nainštalujte pomocou správcu balíkov."
+
+#: src/window.cr:742
+msgid "Hardware summary"
+msgstr "Súhrn hardvéru"
+
+#: src/window.cr:744
+msgid "%{cores} cores · %{threads} threads"
+msgstr "%{cores} jadier · %{threads} vlákien"
+
+#: src/window.cr:762 src/window.cr:997
+msgid "Storage"
+msgstr "Úložisko"
+
+#: src/window.cr:771 src/window.cr:1033 src/window.cr:1322 src/window.cr:1361
+#: src/window.cr:1370 src/window.cr:1402
+msgid "None"
+msgstr "Žiadne"
+
+#: src/window.cr:772 src/window.cr:1073
+msgid "System"
+msgstr "Systém"
+
+#: src/window.cr:774 src/window.cr:1075
+msgid "Kernel"
+msgstr "Jadro"
+
+#: src/window.cr:775 src/window.cr:1076
+msgid "Desktop Environment"
+msgstr "Pracovné prostredie"
+
+#: src/window.cr:776 src/window.cr:1078
+msgid "Uptime"
+msgstr "Čas behu"
+
+#: src/window.cr:784 src/window.cr:881 src/window.cr:923
+msgid "Identification"
+msgstr "Identifikácia"
+
+#: src/window.cr:786 src/window.cr:883 src/window.cr:1007 src/window.cr:1061
+#: src/window.cr:1104 src/window.cr:1157 src/window.cr:1332
+msgid "Model"
+msgstr "Model"
+
+#: src/window.cr:787 src/window.cr:882 src/window.cr:1008 src/window.cr:1103
+#: src/window.cr:1156
+msgid "Manufacturer"
+msgstr "Výrobca"
+
+#: src/window.cr:788
+msgid "Architecture"
+msgstr "Architektúra"
+
+#: src/window.cr:789
+msgid "CPU family"
+msgstr "Rodina CPU"
+
+#: src/window.cr:790
+msgid "Model ID"
+msgstr "ID modelu"
+
+#: src/window.cr:791
+msgid "Stepping"
+msgstr "Revizia"
+
+#: src/window.cr:792
+msgid "Topology and socket"
+msgstr "Topológia a pätica"
+
+#: src/window.cr:793
+msgid "Physical cores"
+msgstr "Fyzické jadrá"
+
+#: src/window.cr:794
+msgid "Logical processors"
+msgstr "Logické procesory"
+
+#: src/window.cr:795
+msgid "Socket count"
+msgstr "Počet pätíc"
+
+#: src/window.cr:804 src/window.cr:809
+msgid "Socket"
+msgstr "Pätica"
+
+#: src/window.cr:805 src/window.cr:810
+msgid "Socket type"
+msgstr "Typ pätice"
+
+#: src/window.cr:808
+msgid "Socket %{number}"
+msgstr "Pätica %{number}"
+
+#: src/window.cr:813
+msgid "Clock speed"
+msgstr "Taktovacia frekvencia"
+
+#: src/window.cr:815
+msgid "Base clock"
+msgstr "Základná frekvencia"
+
+#: src/window.cr:816
+msgid "Minimum clock"
+msgstr "Minimálna frekvencia"
+
+#: src/window.cr:817 src/window.cr:836
+msgid "Maximum clock"
+msgstr "Maximálna frekvencia"
+
+#: src/window.cr:818
+msgid "Current clock range"
+msgstr "Aktuálny rozsah frekvencie"
+
+#: src/window.cr:820
+msgid "Clock control"
+msgstr "Riadenie frekvencie"
+
+#: src/window.cr:821
+msgid "Available frequency steps"
+msgstr "Dostupné frekvenčné kroky"
+
+#: src/window.cr:822
+msgid "Frequency driver"
+msgstr "Ovládač frekvencie"
+
+#: src/window.cr:823
+msgid "Governor"
+msgstr "Regulátor"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "Yes"
+msgstr "Áno"
+
+#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+msgid "No"
+msgstr "Nie"
+
+#: src/window.cr:826
+msgid "Boost enabled"
+msgstr "Zrýchlenie povolené"
+
+#: src/window.cr:828
+msgid "Additional processor information"
+msgstr "Ďalšie informácie o procesore"
+
+#: src/window.cr:830 src/window.cr:858
+msgid "%{section} · Socket %{number}"
+msgstr "%{section} · pätica %{number}"
+
+#: src/window.cr:833 src/window.cr:1063
+msgid "Voltage"
+msgstr "Napätie"
+
+#: src/window.cr:834
+msgid "External clock"
+msgstr "Externá frekvencia"
+
+#: src/window.cr:835
+msgid "Configured clock"
+msgstr "Nastavená frekvencia"
+
+#: src/window.cr:838
+msgid "Caches"
+msgstr "Vyrovnávacie pamäte"
+
+#: src/window.cr:839
+msgid "Cache information"
+msgstr "Informácie o vyrovnávacej pamäti"
+
+#: src/window.cr:842
+msgid "Data"
+msgstr "Údaje"
+
+#: src/window.cr:843
+msgid "Instructions"
+msgstr "Inštrukcie"
+
+#: src/window.cr:844
+msgid "Data and instructions"
+msgstr "Údaje a inštrukcie"
+
+#: src/window.cr:847
+msgid "L%{level} cache (%{type})"
+msgstr "Vyrovnávacia pamäť L%{level} (%{type})"
+
+#: src/window.cr:849
+msgid "%{count} × %{size} · %{total} total"
+msgstr "%{count} × %{size} · spolu %{total}"
+
+#: src/window.cr:851
+msgid "%{size} cache lines"
+msgstr "%{size} riadkov vyrovnávacej pamäte"
+
+#: src/window.cr:852
+msgid "%{ways}-way associative"
+msgstr "Asociativita %{ways} ciest"
+
+#: src/window.cr:856
+msgid "Processor features"
+msgstr "Funkcie procesora"
+
+#: src/window.cr:861
+msgid "Processor Features"
+msgstr "Funkcie procesora"
+
+#: src/window.cr:862
+msgid "Characteristics"
+msgstr "Vlastnosti"
+
+#: src/window.cr:884 src/window.cr:940
+msgid "Revision"
+msgstr "Revízia"
+
+#: src/window.cr:885
+msgid "Firmware"
+msgstr "Firmvér"
+
+#: src/window.cr:886
+msgid "BIOS vendor"
+msgstr "Výrobca BIOS-u"
+
+#: src/window.cr:887
+msgid "BIOS version"
+msgstr "Verzia BIOS-u"
+
+#: src/window.cr:888
+msgid "BIOS date"
+msgstr "Dátum BIOS-u"
+
+#: src/window.cr:889
+msgid "Boot and security"
+msgstr "Spúšťanie a zabezpečenie"
+
+#: src/window.cr:892
+msgid "Legacy BIOS"
+msgstr "Starší BIOS"
+
+#: src/window.cr:895
+msgid "Boot mode"
+msgstr "Režim spúšťania"
+
+#: src/window.cr:896
+msgid "Secure Boot"
+msgstr "Bezpečné spúšťanie"
+
+#: src/window.cr:900
+msgid "Not detected"
+msgstr "Nezistené"
+
+#: src/window.cr:902
+msgid "Detected"
+msgstr "Zistené"
+
+#: src/window.cr:906
+msgid "TPM"
+msgstr "TPM"
+
+#: src/window.cr:912
+msgid "Display controller"
+msgstr "Grafický radič"
+
+#: src/window.cr:924
+msgid "GPU model"
+msgstr "Model GPU"
+
+#: src/window.cr:925
+msgid "GPU manufacturer"
+msgstr "Výrobca GPU"
+
+#: src/window.cr:926
+msgid "Card manufacturer"
+msgstr "Výrobca karty"
+
+#: src/window.cr:927
+msgid "Board model"
+msgstr "Model dosky"
+
+#: src/window.cr:928
+msgid "Model group"
+msgstr "Skupina modelov"
+
+#: src/window.cr:935
+msgid "Connected monitors"
+msgstr "Pripojené monitory"
+
+#: src/window.cr:937
+msgid "PCI and driver"
+msgstr "PCI a ovládač"
+
+#: src/window.cr:938
+msgid "PCI ID"
+msgstr "ID PCI"
+
+#: src/window.cr:939
+msgid "Subsystem ID"
+msgstr "ID podsystému"
+
+#: src/window.cr:941
+msgid "PCI address"
+msgstr "Adresa PCI"
+
+#: src/window.cr:942 src/window.cr:1343 src/window.cr:1382
+msgid "Kernel driver"
+msgstr "Ovládač jadra"
+
+#: src/window.cr:943
+msgid "Current PCIe link"
+msgstr "Aktuálne pripojenie PCIe"
+
+#: src/window.cr:943 src/window.cr:944 src/window.cr:945 src/window.cr:948
+#: src/window.cr:951 src/window.cr:953 src/window.cr:956 src/window.cr:958
+#: src/window.cr:959 src/window.cr:960 src/window.cr:961 src/window.cr:963
+#: src/window.cr:964 src/window.cr:965 src/window.cr:967 src/window.cr:973
+#: src/window.cr:976 src/window.cr:1017 src/window.cr:1019 src/window.cr:1020
+#: src/window.cr:1021 src/window.cr:1062 src/window.cr:1093 src/window.cr:1107
+#: src/window.cr:1108 src/window.cr:1109 src/window.cr:1110 src/window.cr:1114
+#: src/window.cr:1117 src/window.cr:1118 src/window.cr:1119 src/window.cr:1120
+#: src/window.cr:1126 src/window.cr:1162 src/window.cr:1163 src/window.cr:1185
+#: src/window.cr:1186 src/window.cr:1187 src/window.cr:1245 src/window.cr:1256
+#: src/window.cr:1263 src/window.cr:1270 src/window.cr:1386
+msgid "Not reported"
+msgstr "Neuvedené"
+
+#: src/window.cr:945
+msgid "Maximum PCIe link"
+msgstr "Maximálne pripojenie PCIe"
+
+#: src/window.cr:946
+msgid "Memory and clocks"
+msgstr "Pamäť a frekvencie"
+
+#: src/window.cr:947
+msgid "Dedicated video memory"
+msgstr "Vyhradená videopamäť"
+
+#: src/window.cr:948
+msgid "Current GPU clock"
+msgstr "Aktuálna frekvencia GPU"
+
+#: src/window.cr:953
+msgid "Current video memory clock"
+msgstr "Aktuálna frekvencia videopamäte"
+
+#: src/window.cr:958
+msgid "GPU utilization"
+msgstr "Využitie GPU"
+
+#: src/window.cr:960
+msgid "GPU power"
+msgstr "Príkon GPU"
+
+#: src/window.cr:962
+msgid "Graphics APIs"
+msgstr "Grafické API"
+
+#: src/window.cr:963
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: src/window.cr:964
+msgid "GLSL"
+msgstr "GLSL"
+
+#: src/window.cr:965
+msgid "OpenGL ES"
+msgstr "OpenGL ES"
+
+#: src/window.cr:966
+msgid "OpenGL renderer"
+msgstr "Vykresľovač OpenGL"
+
+#: src/window.cr:967
+msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/window.cr:968
+msgid "Vulkan driver"
+msgstr "Ovládač Vulkan"
+
+#: src/window.cr:970
+msgid "Discrete GPU"
+msgstr "Samostatná GPU"
+
+#: src/window.cr:971
+msgid "Integrated GPU"
+msgstr "Integrovaná GPU"
+
+#: src/window.cr:972
+msgid "Virtual GPU"
+msgstr "Virtuálna GPU"
+
+#: src/window.cr:975
+msgid "Vulkan device type"
+msgstr "Typ zariadenia Vulkan"
+
+#: src/window.cr:976
+msgid "Vulkan driver version"
+msgstr "Verzia ovládača Vulkan"
+
+#: src/window.cr:983
+msgid "Open Disk View"
+msgstr "Otvoriť Disk View"
+
+#: src/window.cr:1010
+msgid "Capacity"
+msgstr "Kapacita"
+
+#: src/window.cr:1011 src/window.cr:1278 src/window.cr:1311
+msgid "Type"
+msgstr "Typ"
+
+#: src/window.cr:1013 src/window.cr:1159 src/window.cr:1312
+msgid "Connection"
+msgstr "Pripojenie"
+
+#: src/window.cr:1014 src/window.cr:1277
+msgid "Device"
+msgstr "Zariadenie"
+
+#: src/window.cr:1015
+msgid "Removable"
+msgstr "Vymeniteľné"
+
+#: src/window.cr:1017
+msgid "Warning"
+msgstr "Upozornenie"
+
+#: src/window.cr:1017
+msgid "OK"
+msgstr "V poriadku"
+
+#: src/window.cr:1018
+msgid "Status (SMART)"
+msgstr "Stav (SMART)"
+
+#: src/window.cr:1019
+msgid "Temperature"
+msgstr "Teplota"
+
+#: src/window.cr:1020
+msgid "Power-on hours"
+msgstr "Hodiny prevádzky"
+
+#: src/window.cr:1021
+msgid "Last updated"
+msgstr "Posledná aktualizácia"
+
+#: src/window.cr:1029
+msgid "Installed RAM"
+msgstr "Nainštalovaná RAM"
+
+#: src/window.cr:1030
+msgid "Usable RAM"
+msgstr "Použiteľná RAM"
+
+#: src/window.cr:1031
+msgid "Available RAM"
+msgstr "Dostupná RAM"
+
+#: src/window.cr:1033
+msgid "Swap"
+msgstr "Odkladací priestor"
+
+#: src/window.cr:1037
+msgid "Module %{number}"
+msgstr "Modul %{number}"
+
+#: src/window.cr:1062
+msgid "Timings (CL–tRCD–tRP–tRAS)"
+msgstr "Časovanie (CL–tRCD–tRP–tRAS)"
+
+#: src/window.cr:1064
+msgid "Minimum voltage"
+msgstr "Minimálne napätie"
+
+#: src/window.cr:1065
+msgid "Maximum voltage"
+msgstr "Maximálne napätie"
+
+#: src/window.cr:1071
+msgid "Open system settings"
+msgstr "Otvoriť systémové nastavenia"
+
+#: src/window.cr:1077
+msgid "Hostname"
+msgstr "Názov hostiteľa"
+
+#: src/window.cr:1080
+msgid "Runtime environment"
+msgstr "Behové prostredie"
+
+#: src/window.cr:1081
+msgid "Session type"
+msgstr "Typ relácie"
+
+#: src/window.cr:1082
+msgid "System architecture"
+msgstr "Architektúra systému"
+
+#: src/window.cr:1083
+msgid "Virtual machine"
+msgstr "Virtuálny počítač"
+
+#: src/window.cr:1084
+msgid "Virtualization"
+msgstr "Virtualizácia"
+
+#: src/window.cr:1085
+msgid "Container"
+msgstr "Kontajner"
+
+#: src/window.cr:1086
+msgid "Application format"
+msgstr "Formát aplikácie"
+
+#: src/window.cr:1090
+msgid "Open power settings"
+msgstr "Otvoriť nastavenia napájania"
+
+#: src/window.cr:1093
+msgid "Power information"
+msgstr "Informácie o napájaní"
+
+#: src/window.cr:1097
+msgid "Power adapter"
+msgstr "Napájací adaptér"
+
+#: src/window.cr:1098 src/window.cr:1394 src/window.cr:1445
+msgid "Connected"
+msgstr "Pripojené"
+
+#: src/window.cr:1102
+msgid "Battery"
+msgstr "Batéria"
+
+#: src/window.cr:1105 src/window.cr:1334
+msgid "Status"
+msgstr "Stav"
+
+#: src/window.cr:1107
+msgid "Charge"
+msgstr "Nabitie"
+
+#: src/window.cr:1109
+msgid "Full charge capacity"
+msgstr "Kapacita pri plnom nabití"
+
+#: src/window.cr:1110
+msgid "Design capacity"
+msgstr "Návrhová kapacita"
+
+#: src/window.cr:1116
+msgid "Battery health"
+msgstr "Stav batérie"
+
+#: src/window.cr:1117
+msgid "Charge cycles"
+msgstr "Počet nabíjacích cyklov"
+
+#: src/window.cr:1118
+msgid "Battery power"
+msgstr "Výkon batérie"
+
+#: src/window.cr:1120 src/window.cr:1126
+msgid "0 min"
+msgstr "0 min"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time to full"
+msgstr "Odhadovaný čas do úplného nabitia"
+
+#: src/window.cr:1121 src/window.cr:1125
+msgid "Estimated time remaining"
+msgstr "Odhadovaný zostávajúci čas"
+
+#: src/window.cr:1134
+msgid "Charging"
+msgstr "Nabíja sa"
+
+#: src/window.cr:1135
+msgid "Discharging"
+msgstr "Vybíja sa"
+
+#: src/window.cr:1136
+msgid "Fully charged"
+msgstr "Plne nabitá"
+
+#: src/window.cr:1137
+msgid "Not charging"
+msgstr "Nenabíja sa"
+
+#: src/window.cr:1143
+msgid "Open display settings"
+msgstr "Otvoriť nastavenia displeja"
+
+#: src/window.cr:1144
+msgid "Monitor"
+msgstr "Monitor"
+
+#: src/window.cr:1158 src/window.cr:1315
+msgid "Product ID"
+msgstr "ID produktu"
+
+#: src/window.cr:1160 src/window.cr:1417
+msgid "Active"
+msgstr "Aktívne"
+
+#: src/window.cr:1162
+msgid "Current resolution"
+msgstr "Aktuálne rozlíšenie"
+
+#: src/window.cr:1163
+msgid "Current refresh rate"
+msgstr "Aktuálna obnovovacia frekvencia"
+
+#: src/window.cr:1164
+msgid "Preferred resolution"
+msgstr "Preferované rozlíšenie"
+
+#: src/window.cr:1165
+msgid "Preferred refresh rate"
+msgstr "Preferovaná obnovovacia frekvencia"
+
+#: src/window.cr:1168
+msgid "Display size"
+msgstr "Veľkosť displeja"
+
+#: src/window.cr:1170
+msgid "Diagonal"
+msgstr "Uhlopriečka"
+
+#: src/window.cr:1172
+msgid "Supported resolutions"
+msgstr "Podporované rozlíšenia"
+
+#: src/window.cr:1177
+msgid "Monitor %{number}"
+msgstr "Monitor %{number}"
+
+#: src/window.cr:1178
+msgid "Primary"
+msgstr "Primárny"
+
+#: src/window.cr:1183
+msgid "Open sound settings"
+msgstr "Otvoriť nastavenia zvuku"
+
+#: src/window.cr:1184
+msgid "Audio session"
+msgstr "Zvuková relácia"
+
+#: src/window.cr:1185
+msgid "Audio server"
+msgstr "Zvukový server"
+
+#: src/window.cr:1186
+msgid "Default output"
+msgstr "Predvolený výstup"
+
+#: src/window.cr:1187
+msgid "Default input"
+msgstr "Predvolený vstup"
+
+#: src/window.cr:1188
+msgid "Audio device"
+msgstr "Zvukové zariadenie"
+
+#: src/window.cr:1197 src/window.cr:1276 src/window.cr:1380
+msgid "Name"
+msgstr "Názov"
+
+#: src/window.cr:1198
+msgid "Device ID"
+msgstr "ID zariadenia"
+
+#: src/window.cr:1200
+msgid "Driver"
+msgstr "Ovládač"
+
+#: src/window.cr:1201
+msgid "Codecs"
+msgstr "Kodeky"
+
+#: src/window.cr:1245
+msgid "Sensor readings"
+msgstr "Údaje zo senzorov"
+
+#: src/window.cr:1253
+msgid "Temperature %{number}"
+msgstr "Teplota %{number}"
+
+#: src/window.cr:1253
+msgid "Fan %{number}"
+msgstr "Ventilátor %{number}"
+
+#: src/window.cr:1270
+msgid "Video devices"
+msgstr "Video zariadenia"
+
+#: src/window.cr:1278
+msgid "Video capture"
+msgstr "Záznam videa"
+
+#: src/window.cr:1284 src/window.cr:1309
+msgid "Input device"
+msgstr "Vstupné zariadenie"
+
+#: src/window.cr:1295
+msgid "Open keyboard settings"
+msgstr "Otvoriť nastavenia klávesnice"
+
+#: src/window.cr:1297
+msgid "Open mouse and touchpad settings"
+msgstr "Otvoriť nastavenia myši a touchpadu"
+
+#: src/window.cr:1303
+msgid "Keyboard"
+msgstr "Klávesnica"
+
+#: src/window.cr:1304
+msgid "Mouse"
+msgstr "Myš"
+
+#: src/window.cr:1305
+msgid "Gamepad / Joystick"
+msgstr "Gamepad / joystick"
+
+#: src/window.cr:1306
+msgid "Touchpad"
+msgstr "Touchpad"
+
+#: src/window.cr:1307
+msgid "Touchscreen"
+msgstr "Dotyková obrazovka"
+
+#: src/window.cr:1308
+msgid "Graphics tablet"
+msgstr "Grafický tablet"
+
+#: src/window.cr:1314
+msgid "Vendor ID"
+msgstr "ID dodávateľa"
+
+#: src/window.cr:1320
+msgid "Open network settings"
+msgstr "Otvoriť nastavenia siete"
+
+#: src/window.cr:1322
+msgid "Network adapters"
+msgstr "Sieťové adaptéry"
+
+#: src/window.cr:1333
+msgid "Interface"
+msgstr "Rozhranie"
+
+#: src/window.cr:1335
+msgid "Connection profile"
+msgstr "Profil pripojenia"
+
+#: src/window.cr:1336 src/window.cr:1386
+msgid "Link speed"
+msgstr "Rýchlosť pripojenia"
+
+#: src/window.cr:1338
+msgid "Duplex"
+msgstr "Duplex"
+
+#: src/window.cr:1338
+msgid "Full duplex"
+msgstr "Plný duplex"
+
+#: src/window.cr:1338
+msgid "Half duplex"
+msgstr "Polovičný duplex"
+
+#: src/window.cr:1340 src/window.cr:1381 src/window.cr:1393
+msgid "MAC address"
+msgstr "MAC adresa"
+
+#: src/window.cr:1341
+msgid "Permanent MAC address"
+msgstr "Trvalá MAC adresa"
+
+#: src/window.cr:1342
+msgid "MTU"
+msgstr "MTU"
+
+#: src/window.cr:1345
+msgid "SSID"
+msgstr "SSID"
+
+#: src/window.cr:1346
+msgid "Access point (BSSID)"
+msgstr "Prístupový bod (BSSID)"
+
+#: src/window.cr:1347 src/window.cr:1396
+msgid "Signal strength"
+msgstr "Sila signálu"
+
+#: src/window.cr:1348
+msgid "Frequency"
+msgstr "Frekvencia"
+
+#: src/window.cr:1349
+msgid "Security"
+msgstr "Zabezpečenie"
+
+#: src/window.cr:1349
+msgid "Open network"
+msgstr "Otvorená sieť"
+
+#: src/window.cr:1358
+msgid "Open printer settings"
+msgstr "Otvoriť nastavenia tlačiarne"
+
+#: src/window.cr:1363
+msgid "Printer"
+msgstr "Tlačiareň"
+
+#: src/window.cr:1368
+msgid "Open Bluetooth settings"
+msgstr "Otvoriť nastavenia Bluetooth"
+
+#: src/window.cr:1370
+msgid "Bluetooth adapters"
+msgstr "Adaptéry Bluetooth"
+
+#: src/window.cr:1384
+msgid "Enabled"
+msgstr "Povolené"
+
+#: src/window.cr:1385
+msgid "Bluetooth version"
+msgstr "Verzia Bluetooth"
+
+#: src/window.cr:1387
+msgid "Discoverable"
+msgstr "Viditeľné"
+
+#: src/window.cr:1388
+msgid "Pairable"
+msgstr "Spárovateľné"
+
+#: src/window.cr:1389
+msgid "Connected devices"
+msgstr "Pripojené zariadenia"
+
+#: src/window.cr:1395
+msgid "Paired"
+msgstr "Spárované"
+
+#: src/window.cr:1404
+msgid "IP addresses"
+msgstr "IP adresy"
+
+#: src/window.cr:1405
+msgid "Address configuration"
+msgstr "Konfigurácia adresy"
+
+#: src/window.cr:1406 src/window.cr:1460
+msgid "DHCP"
+msgstr "DHCP"
+
+#: src/window.cr:1407
+msgid "Gateway"
+msgstr "Brána"
+
+#: src/window.cr:1408
+msgid "DNS servers"
+msgstr "DNS servery"
+
+#: src/window.cr:1409
+msgid "Search domains"
+msgstr "Vyhľadávacie domény"
+
+#: src/window.cr:1417
+msgid "Inactive"
+msgstr "Neaktívne"
+
+#: src/window.cr:1427
+msgid "%{days} d %{hours} h %{minutes} min"
+msgstr "%{days} d %{hours} h %{minutes} min"
+
+#: src/window.cr:1429
+msgid "%{hours} h %{minutes} min"
+msgstr "%{hours} h %{minutes} min"
+
+#: src/window.cr:1431
+msgid "%{minutes} min"
+msgstr "%{minutes} min"
+
+#: src/window.cr:1437
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: src/window.cr:1438
+msgid "Bluetooth PAN"
+msgstr "Bluetooth PAN"
+
+#: src/window.cr:1439
+msgid "Ethernet (LAN)"
+msgstr "Ethernet (LAN)"
+
+#: src/window.cr:1446
+msgid "Disconnected"
+msgstr "Odpojené"
+
+#: src/window.cr:1447
+msgid "Connecting"
+msgstr "Pripája sa"
+
+#: src/window.cr:1448
+msgid "Disconnecting"
+msgstr "Odpája sa"
+
+#: src/window.cr:1449
+msgid "Unavailable"
+msgstr "Nedostupné"
+
+#: src/window.cr:1450
+msgid "Unmanaged"
+msgstr "Nespravované"
+
+#: src/window.cr:1451
+msgid "Connection failed"
+msgstr "Pripojenie zlyhalo"
+
+#: src/window.cr:1458
+msgid "Automatic"
+msgstr "Automaticky"
+
+#: src/window.cr:1459
+msgid "Manual"
+msgstr "Ručne"
+
+#: src/window.cr:1461
+msgid "Link-local"
+msgstr "Lokálne prepojenie"
+
+#: src/window.cr:1462
+msgid "Shared"
+msgstr "Zdieľané"
+
+#: src/window.cr:1463
+msgid "Disabled"
+msgstr "Zakázané"
+
+#: src/window.cr:1464
+msgid "Ignored"
+msgstr "Ignorované"
