@@ -31,7 +31,7 @@ without FUSE use `APPIMAGE_EXTRACT_AND_RUN=1 ./System_View-VERSION-x86_64.AppIma
 To install a downloaded release bundle for your user, run:
 
 ```sh
-flatpak install --user System_View-0.3.2-x86_64.flatpak
+flatpak install --user System_View-0.3.3-x86_64.flatpak
 flatpak run de.magynhard.SystemView
 ```
 
@@ -50,7 +50,7 @@ Python 3.12+, PyYAML and the GNOME 51 SDK/runtime:
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user flathub org.gnome.Platform//51 org.gnome.Sdk//51
 make flatpak
-flatpak install --user dist/System_View-0.3.2-x86_64.flatpak
+flatpak install --user dist/System_View-0.3.3-x86_64.flatpak
 flatpak run de.magynhard.SystemView
 ```
 

@@ -285,6 +285,56 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.3.3" date="2026-11-20">
+      <description>
+        <p>Add translations for 42 additional languages and improve application metadata.</p>
+        <p>Fix opening Disk View from the AppImage by avoiding conflicting library and GTK paths.</p>
+        <p xml:lang="de">Übersetzungen für 42 weitere Sprachen hinzugefügt und die Anwendungsmetadaten verbessert.</p>
+        <p xml:lang="de">Das Öffnen von Disk View aus dem AppImage durch Vermeiden widersprüchlicher Bibliotheks- und GTK-Pfade verbessert.</p>
+        <p xml:lang="ar">أُضيفت ترجمات إلى ٤٢ لغة إضافية وحُسّنت بيانات التطبيق، مع إصلاح فتح Disk View من AppImage.</p>
+        <p xml:lang="bg">Добавени са преводи на още 42 езика и са подобрени метаданните; поправено е отварянето на Disk View от AppImage.</p>
+        <p xml:lang="bn">আরও ৪২টি ভাষায় অনুবাদ ও উন্নত অ্যাপ মেটাডেটা যোগ করা হয়েছে; AppImage থেকে Disk View খোলার সমস্যা সংশোধন করা হয়েছে।</p>
+        <p xml:lang="cs">Přidány překlady do dalších 42 jazyků a vylepšena metadata; opraveno otevírání Disk View z AppImage.</p>
+        <p xml:lang="da">Tilføjet oversættelser til 42 flere sprog og forbedrede metadata; rettet åbning af Disk View fra AppImage.</p>
+        <p xml:lang="el">Προστέθηκαν μεταφράσεις για 42 ακόμη γλώσσες και βελτιώθηκαν τα μεταδεδομένα· διορθώθηκε το άνοιγμα του Disk View από το AppImage.</p>
+        <p xml:lang="es">Se añadieron traducciones a 42 idiomas más y se mejoraron los metadatos; se corrigió la apertura de Disk View desde AppImage.</p>
+        <p xml:lang="et">Lisatud on tõlked veel 42 keelde ja täiustatud metaandmeid; parandatud Disk View avamine AppImage'ist.</p>
+        <p xml:lang="fa">ترجمهٔ ۴۲ زبان دیگر و فرادادهٔ بهتر اضافه شد؛ باز کردن Disk View از AppImage اصلاح شد.</p>
+        <p xml:lang="fi">Lisätty käännökset 42 uudelle kielelle ja parannettu metatietoja; korjattu Disk View'n avaaminen AppImagesta.</p>
+        <p xml:lang="fr">Ajout de traductions dans 42 langues supplémentaires et amélioration des métadonnées ; correction de l’ouverture de Disk View depuis l’AppImage.</p>
+        <p xml:lang="ga">Cuireadh aistriúcháin do 42 teanga eile agus meiteashonraí feabhsaithe leis; deisíodh oscailt Disk View ón AppImage.</p>
+        <p xml:lang="he">נוספו תרגומים ל־42 שפות נוספות ושופרו נתוני היישום; תוקנה פתיחת Disk View מתוך AppImage.</p>
+        <p xml:lang="hi">42 और भाषाओं के अनुवाद और बेहतर ऐप मेटाडेटा जोड़े गए; AppImage से Disk View खोलने की समस्या ठीक की गई।</p>
+        <p xml:lang="hr">Dodani su prijevodi za još 42 jezika i poboljšani metapodaci; popravljeno je otvaranje Disk Viewa iz AppImagea.</p>
+        <p xml:lang="hu">42 további nyelv fordítása és javított metaadatok kerültek be; javítva a Disk View megnyitása az AppImage-ből.</p>
+        <p xml:lang="id">Menambahkan terjemahan untuk 42 bahasa lagi dan memperbaiki metadata; memperbaiki pembukaan Disk View dari AppImage.</p>
+        <p xml:lang="is">Bætt var við þýðingum á 42 tungumál og lýsigögn bætt; lagað var að opna Disk View úr AppImage.</p>
+        <p xml:lang="it">Aggiunte traduzioni per altre 42 lingue e migliorati i metadati; corretta l'apertura di Disk View dall'AppImage.</p>
+        <p xml:lang="ja">42言語の翻訳を追加し、アプリのメタデータを改善しました。AppImageからDisk Viewを開く問題を修正しました。</p>
+        <p xml:lang="ko">42개 언어의 번역을 추가하고 앱 메타데이터를 개선했습니다. AppImage에서 Disk View를 여는 문제를 수정했습니다.</p>
+        <p xml:lang="lt">Pridėti vertimai į dar 42 kalbas ir patobulinti metaduomenys; pataisytas „Disk View“ atidarymas iš „AppImage“.</p>
+        <p xml:lang="lv">Pievienoti tulkojumi vēl 42 valodās un uzlaboti metadati; izlabota Disk View atvēršana no AppImage.</p>
+        <p xml:lang="ms">Terjemahan untuk 42 bahasa tambahan dan metadata yang lebih baik ditambah; pembukaan Disk View daripada AppImage diperbaiki.</p>
+        <p xml:lang="nb">Lagt til oversettelser for 42 flere språk og forbedret metadata; rettet åpning av Disk View fra AppImage.</p>
+        <p xml:lang="nl">Vertalingen voor 42 extra talen toegevoegd en metadata verbeterd; openen van Disk View vanuit de AppImage hersteld.</p>
+        <p xml:lang="pl">Dodano tłumaczenia na 42 kolejne języki i ulepszono metadane; poprawiono otwieranie Disk View z AppImage.</p>
+        <p xml:lang="pt">Adicionadas traduções para mais 42 idiomas e melhorados os metadados; corrigida a abertura do Disk View a partir da AppImage.</p>
+        <p xml:lang="pt_BR">Adicionadas traduções para mais 42 idiomas e melhorados os metadados; corrigida a abertura do Disk View a partir do AppImage.</p>
+        <p xml:lang="ro">Au fost adăugate traduceri pentru încă 42 de limbi și îmbunătățite metadatele; a fost corectată deschiderea Disk View din AppImage.</p>
+        <p xml:lang="ru">Добавлены переводы ещё на 42 языка и улучшены метаданные; исправлен запуск Disk View из AppImage.</p>
+        <p xml:lang="sk">Pridané preklady do ďalších 42 jazykov a vylepšené metadáta; opravené otváranie Disk View z AppImage.</p>
+        <p xml:lang="sr">Додати су преводи на још 42 језика и побољшани метаподаци; исправљено је отварање Disk View-а из AppImage-а.</p>
+        <p xml:lang="sv">Översättningar till ytterligare 42 språk har lagts till och metadata förbättrats; öppning av Disk View från AppImage har rättats.</p>
+        <p xml:lang="ta">மேலும் 42 மொழிகளுக்கான மொழிபெயர்ப்புகளும் மேம்படுத்தப்பட்ட பயன்பாட்டு விவரங்களும் சேர்க்கப்பட்டன; AppImage இலிருந்து Disk View திறப்பது சரிசெய்யப்பட்டது.</p>
+        <p xml:lang="th">เพิ่มคำแปลอีก 42 ภาษาและปรับปรุงข้อมูลแอป พร้อมแก้ไขการเปิด Disk View จาก AppImage</p>
+        <p xml:lang="tr">42 dil için daha çeviri eklendi ve uygulama üst verileri iyileştirildi; Disk View'ın AppImage içinden açılması düzeltildi.</p>
+        <p xml:lang="uk">Додано переклади ще 42 мовами та поліпшено метадані; виправлено відкриття Disk View з AppImage.</p>
+        <p xml:lang="ur">مزید ۴۲ زبانوں کے ترجمے اور بہتر ایپ میٹا ڈیٹا شامل کیا گیا؛ AppImage سے Disk View کھولنے کا مسئلہ درست کیا گیا۔</p>
+        <p xml:lang="vi">Thêm bản dịch cho 42 ngôn ngữ và cải thiện siêu dữ liệu; sửa lỗi mở Disk View từ AppImage.</p>
+        <p xml:lang="zh_CN">新增 42 种语言的翻译并改进应用元数据；修复从 AppImage 打开 Disk View 的问题。</p>
+        <p xml:lang="zh_TW">新增 42 種語言的翻譯並改善應用程式中繼資料；修正從 AppImage 開啟 Disk View 的問題。</p>
+      </description>
+    </release>
     <release version="0.3.2" date="2026-11-19">
       <description>
         <p>Unlock additional processor and memory details in the Flatpak using the host's installed tools and authorization.</p>

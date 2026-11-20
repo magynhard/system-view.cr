@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3 - 2026-11-20
+
+- Add interface translations for 42 additional languages and localize the application metadata.
+- Avoid passing System View's AppImage library and GTK paths when opening Disk View.
+- Expand the README with user-facing installation and usage information.
+
 ## 0.3.2 - 2026-11-19
 
 - Enable the authorized processor and memory details query in Flatpak using host-installed tools.
