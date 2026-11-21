@@ -85,6 +85,13 @@ class PackagingTests(unittest.TestCase):
         self.assertEqual(upload["permissions"]["contents"], "write")
         self.assertCountEqual(upload["needs"], ["appimage", "flatpak"])
         self.assertEqual(workflow["on"]["release"]["types"], ["published"])
+        flatpak = workflow["jobs"]["flatpak"]
+        self.assertCountEqual(flatpak["strategy"]["matrix"]["include"], [
+            {"arch": "x86_64", "runner": "ubuntu-24.04"},
+            {"arch": "aarch64", "runner": "ubuntu-24.04-arm"},
+        ])
+        self.assertIn("flatpak-${{ matrix.arch }}", str(flatpak["steps"]))
+        self.assertIn("aarch64.flatpak.sha256", upload["steps"][-1]["run"])
 
 
 if __name__ == "__main__":

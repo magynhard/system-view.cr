@@ -44,7 +44,15 @@ jobs:
           if-no-files-found: error
 
   flatpak:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51
       options: --privileged
@@ -70,11 +78,15 @@ jobs:
           version=$(python3 scripts/packaging.py verify)
           if [[ -n "$RELEASE_TAG" ]]; then test "${RELEASE_TAG#v}" = "$version"; fi
       - name: Build local Flatpak bundle
-        run: make flatpak
+        run: |
+          test "$(uname -m)" = "${{ matrix.arch }}"
+          make flatpak
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: flatpak-x86_64
-          path: dist/*.flatpak*
+          name: flatpak-${{ matrix.arch }}
+          path: |
+            dist/*-${{ matrix.arch }}.flatpak
+            dist/*-${{ matrix.arch }}.flatpak.sha256
           if-no-files-found: error
 
   release-assets:
@@ -93,4 +105,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$RELEASE_TAG" dist/* --clobber
+        run: |
+          version="${RELEASE_TAG#v}"
+          for asset in \
+            "System_View-${version}-x86_64.AppImage" \
+            "System_View-${version}-x86_64.AppImage.sha256" \
+            "System_View-${version}-x86_64.flatpak" \
+            "System_View-${version}-x86_64.flatpak.sha256" \
+            "System_View-${version}-aarch64.flatpak" \
+            "System_View-${version}-aarch64.flatpak.sha256"; do
+            test -s "dist/$asset"
+          done
+          gh release upload "$RELEASE_TAG" dist/* --clobber

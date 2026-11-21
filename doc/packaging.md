@@ -92,7 +92,8 @@ therefore makes the sandbox unsuitable as a security boundary for this app.
 
 This is a local/standalone packaging manifest, **not a Flathub submission**. No
 Flathub submission or publication is configured. Compiler architectures are
-pinned for x86_64/aarch64; the automated workflow currently builds x86_64 only.
+pinned for x86_64/aarch64; the automated workflow builds Flatpak bundles for
+both architectures on native GitHub-hosted runners.
 
 ## Updating inputs
 
@@ -110,8 +111,9 @@ make test-packaging
 
 `.github/workflows/linux-packages.yml` runs on `master` pushes, pull requests,
 manual dispatch and published GitHub releases. Both package jobs upload workflow
-artifacts. Only the `release: published` event enables the `release-assets` job,
-which waits for both builds and attaches all four distribution files.
+artifacts. The Flatpak job builds both x86_64 and aarch64 bundles. Only the
+`release: published` event enables the `release-assets` job, which waits for all
+builds and attaches the AppImage and both Flatpaks with their SHA-256 files.
 
 1. Inspect the working tree, remote, release history and CI. Choose an unused
    numeric version without a `v` prefix.
@@ -138,8 +140,9 @@ which waits for both builds and attaches all four distribution files.
    ```
 
 7. Verify the release is published and contains the versioned x86_64 AppImage,
-   Flatpak and a separate SHA-256 file for each. Report failures and missing
-   assets accurately; return the release URL only with its actual status.
+   x86_64 and aarch64 Flatpaks, and a separate SHA-256 file for each. Report
+   failures and missing assets accurately; return the release URL only with its
+   actual status.
 
 Version bumps, release notes, commits, tags and publication are explicit actions.
 Pushing a tag alone does not publish a GitHub release or attach packages.
