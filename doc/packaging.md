@@ -71,9 +71,11 @@ is healthy.
 
 The sandbox uses read-only `host-root` access for host hardware/OS identification
 and read-only `/run/udev` access for cached installed-RAM/module information,
-plus display, IPC and DRI access for the GUI. It does not request UDisks2,
-unrestricted system-bus access or a shared network namespace. Targeted system-bus
-permissions for `org.freedesktop.NetworkManager` and `org.bluez` support the
+plus display, IPC and DRI access for the GUI. It does not request unrestricted
+system-bus access or a shared network namespace. Targeted system-bus permissions
+for `org.freedesktop.UDisks2` allow reading cached drive health properties without
+opening devices or triggering an update. Permissions for
+`org.freedesktop.NetworkManager` and `org.bluez` support the
 Network page's read-only property/settings queries; no discovery or configuration
 methods are called. The `org.gnome.Shell` session-bus permission is used to read
 the active desktop version; `org.gnome.Mutter.DisplayConfig` supplies current
