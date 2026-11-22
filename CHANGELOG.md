@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0 - 2026-11-22
+
+- Bundle application icons for a consistent appearance across systems.
+- Publish standalone Flatpak bundles for ARM64 as well as x86_64.
+
 ## 0.3.4 - 2026-11-20
 
 - Improve repeated Disk View launches from the AppImage.

@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.4.0" date="2026-11-22">
+      <description>
+        <p>Bundle application icons for a consistent appearance across systems.</p>
+        <p xml:lang="de">App-Icons werden für ein einheitliches Aussehen auf allen Systemen mitgeliefert.</p>
+        <p xml:lang="ar">تُضمَّن أيقونات التطبيق لضمان مظهر متناسق على جميع الأنظمة.</p>
+        <p xml:lang="bg">Иконите на приложението са включени за еднакъв изглед на всички системи.</p>
+        <p xml:lang="bn">সব সিস্টেমে একই চেহারার জন্য অ্যাপের আইকন অন্তর্ভুক্ত করা হয়েছে।</p>
+        <p xml:lang="cs">Ikony aplikace jsou přibaleny pro jednotný vzhled ve všech systémech.</p>
+        <p xml:lang="da">Appens ikoner er inkluderet, så de ser ens ud på alle systemer.</p>
+        <p xml:lang="el">Τα εικονίδια περιλαμβάνονται στην εφαρμογή για ενιαία εμφάνιση σε όλα τα συστήματα.</p>
+        <p xml:lang="es">Los iconos se incluyen en la aplicación para ofrecer una apariencia uniforme en todos los sistemas.</p>
+        <p xml:lang="et">Rakenduse ikoonid on kaasatud, et need näeksid kõigis süsteemides ühesugused välja.</p>
+        <p xml:lang="fa">نمادهای برنامه برای ظاهری یکسان در همهٔ سیستم‌ها همراه آن ارائه می‌شوند.</p>
+        <p xml:lang="fi">Sovelluksen kuvakkeet sisältyvät ohjelmaan, joten ne näyttävät samoilta kaikissa järjestelmissä.</p>
+        <p xml:lang="fr">Les icônes sont intégrées à l’application pour une apparence cohérente sur tous les systèmes.</p>
+        <p xml:lang="ga">Tá deilbhíní an aip san áireamh le haghaidh cuma chomhsheasmhach ar gach córas.</p>
+        <p xml:lang="he">סמלי היישום כלולים בו כדי לשמור על מראה אחיד בכל המערכות.</p>
+        <p xml:lang="hi">सभी सिस्टम पर एक समान रूप के लिए ऐप के आइकन साथ शामिल हैं।</p>
+        <p xml:lang="hr">Ikone aplikacije uključene su za dosljedan izgled na svim sustavima.</p>
+        <p xml:lang="hu">Az alkalmazás ikonjai be vannak építve az egységes megjelenés érdekében minden rendszeren.</p>
+        <p xml:lang="id">Ikon aplikasi disertakan agar tampil konsisten di semua sistem.</p>
+        <p xml:lang="is">Tákn forritsins fylgja með svo útlitið sé samræmt á öllum kerfum.</p>
+        <p xml:lang="it">Le icone sono incluse nell'applicazione per un aspetto uniforme su tutti i sistemi.</p>
+        <p xml:lang="ja">アプリのアイコンを同梱し、すべてのシステムで統一した外観にしました。</p>
+        <p xml:lang="ko">모든 시스템에서 일관된 모양을 유지하도록 앱 아이콘을 포함했습니다.</p>
+        <p xml:lang="lt">Programos piktogramos įtrauktos siekiant vienodos išvaizdos visose sistemose.</p>
+        <p xml:lang="lv">Lietotnes ikonas ir iekļautas, lai tās visās sistēmās izskatītos vienādi.</p>
+        <p xml:lang="ms">Ikon aplikasi disertakan untuk penampilan yang konsisten pada semua sistem.</p>
+        <p xml:lang="nb">Appikonene følger med for et ensartet utseende på alle systemer.</p>
+        <p xml:lang="nl">App-pictogrammen zijn inbegrepen voor een consistent uiterlijk op alle systemen.</p>
+        <p xml:lang="pl">Ikony aplikacji są dołączone, aby wyglądały jednakowo we wszystkich systemach.</p>
+        <p xml:lang="pt">Os ícones da aplicação são incluídos para uma aparência consistente em todos os sistemas.</p>
+        <p xml:lang="pt_BR">Os ícones do aplicativo estão incluídos para uma aparência consistente em todos os sistemas.</p>
+        <p xml:lang="ro">Pictogramele aplicației sunt incluse pentru un aspect consecvent pe toate sistemele.</p>
+        <p xml:lang="ru">Значки включены в приложение для единообразного отображения во всех системах.</p>
+        <p xml:lang="sk">Ikony aplikácie sú pribalené na dosiahnutie jednotného vzhľadu vo všetkých systémoch.</p>
+        <p xml:lang="sr">Иконице апликације су укључене ради уједначеног изгледа на свим системима.</p>
+        <p xml:lang="sv">Appens ikoner ingår för ett enhetligt utseende på alla system.</p>
+        <p xml:lang="ta">எல்லா அமைப்புகளிலும் ஒரே தோற்றத்திற்காக பயன்பாட்டு சின்னங்கள் இணைக்கப்பட்டுள்ளன.</p>
+        <p xml:lang="th">รวมไอคอนของแอปไว้เพื่อให้มีรูปแบบสอดคล้องกันในทุกระบบ</p>
+        <p xml:lang="tr">Tüm sistemlerde tutarlı bir görünüm için uygulama simgeleri pakete dahil edildi.</p>
+        <p xml:lang="uk">Піктограми включено до програми для однакового вигляду в усіх системах.</p>
+        <p xml:lang="ur">تمام سسٹمز پر یکساں شکل کے لیے ایپ کے آئیکنز شامل کیے گئے ہیں۔</p>
+        <p xml:lang="vi">Biểu tượng được tích hợp để ứng dụng có giao diện nhất quán trên mọi hệ thống.</p>
+        <p xml:lang="zh_CN">内置应用图标，确保在所有系统上呈现一致的外观。</p>
+        <p xml:lang="zh_TW">內建應用程式圖示，確保在所有系統上呈現一致的外觀。</p>
+      </description>
+    </release>
     <release version="0.3.4" date="2026-11-20">
       <description>
         <p>Improve opening Disk View from the AppImage and add the Disk View shortcut to Flatpak when available on the host.</p>
