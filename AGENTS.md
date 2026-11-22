@@ -48,6 +48,9 @@ the current page. Use `AdwOverlaySplitView` with a breakpoint for responsive
 navigation. Missing hardware information must not prevent other sections loading.
 Show hardware facts in the UI, without data-source rows or implementation notes
 such as where values were read or how shared caches are counted.
+Bundle new application icons as embedded resources with application-specific
+names. Do not reference icons from the host system's icon theme or external
+resources; icon appearance must remain consistent across devices.
 CPU and RAM share one unlock state for the lifetime of the window. Present locked
 fields blank and disabled, using a pinned AdwBanner with a primary Unlock button;
 do not request authorization again on page changes or refresh.
