@@ -67,7 +67,7 @@ factory = -> do
   SystemView::RESOURCE._register
   Gtk::IconTheme.for_display(Gdk::Display.default.not_nil!).add_resource_path("/de/magynhard/SystemView/icons")
   icon_theme = Gtk::IconTheme.for_display(Gdk::Display.default.not_nil!)
-  {"graphics", "processor", "mainboard", "memory"}.each do |name|
+  {"graphics", "processor", "mainboard", "memory", "overview", "drive", "display", "audio", "camera", "keyboard", "network", "bluetooth", "system", "battery", "temperature", "printer", "desktop", "clock", "speakers", "microphone", "copy", "menu", "sidebar", "previous", "next", "warning", "computer"}.each do |name|
     icon = icon_theme.lookup_icon("system-view-#{name}-symbolic", nil, 16, 1, Gtk::TextDirection::None, Gtk::IconLookupFlags::None)
     check(icon.file.try(&.uri).try(&.includes?("/icons/scalable/actions/system-view-#{name}-symbolic.svg")) == true,
       "#{name} icon is loaded from the themed symbolic resources")
@@ -248,7 +248,7 @@ factory = -> do
           check(rows.any? { |row| row.title == "Desktop Environment" && row.subtitle == "GNOME 50.5" }, "overview includes desktop name and version")
           check(rows.any? { |row| row.title == "Uptime" && row.subtitle == "2 d 4 h 33 min" }, "overview shows the uptime")
           uptime = rows.find { |row| row.title == "Uptime" }.not_nil!
-          check(descendants(uptime).select(Gtk::Image).any? { |image| image.icon_name == "preferences-system-time-symbolic" }, "uptime row has a clock icon")
+          check(descendants(uptime).select(Gtk::Image).any? { |image| image.icon_name == "system-view-clock-symbolic" }, "uptime row has a clock icon")
           network_row = rows.find { |row| row.title == "Network" }.not_nil!
           check(network_row.subtitle.to_s.includes?("Ethernet (LAN) · enp1s0 · Connected · 2.5 Gbit/s · 192.0.2.10"), "LAN overview row includes the IPv4 address")
           check(network_row.subtitle.to_s.includes?("Bluetooth · Example Bluetooth · Active"), "Bluetooth overview row reports an active adapter")
@@ -333,7 +333,7 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Audio server" && row.subtitle == "PulseAudio (on PipeWire 1.2)" }, "audio server is displayed")
               check(detail_rows.any? { |row| row.title == "Default output" && row.subtitle == "Speakers" }, "default audio output is displayed")
               check(detail_rows.any? { |row| row.title == "Default input" && row.subtitle == "Microphone" }, "default audio input is displayed")
-              { {"Audio server", "audio-card-symbolic"}, {"Default output", "audio-speakers-symbolic"}, {"Default input", "audio-input-microphone-symbolic"} }.each do |title, icon|
+              { {"Audio server", "system-view-audio-symbolic"}, {"Default output", "system-view-speakers-symbolic"}, {"Default input", "system-view-microphone-symbolic"} }.each do |title, icon|
                 audio_row = detail_rows.find { |row| row.title == title }.not_nil!
                 check(descendants(audio_row).select(Gtk::Image).any? { |image| image.icon_name == icon }, "#{title} has its audio icon")
               end

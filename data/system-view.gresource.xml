@@ -6,5 +6,28 @@
     <file alias="icons/scalable/actions/system-view-memory-symbolic.svg">icons/system-view-memory-symbolic.svg</file>
     <file alias="icons/scalable/actions/system-view-mainboard-symbolic.svg">icons/system-view-mainboard-symbolic.svg</file>
     <file alias="icons/scalable/actions/system-view-graphics-symbolic.svg">icons/system-view-graphics-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-overview-symbolic.svg">icons/system-view-overview-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-drive-symbolic.svg">icons/system-view-drive-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-display-symbolic.svg">icons/system-view-display-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-audio-symbolic.svg">icons/system-view-audio-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-camera-symbolic.svg">icons/system-view-camera-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-keyboard-symbolic.svg">icons/system-view-keyboard-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-network-symbolic.svg">icons/system-view-network-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-bluetooth-symbolic.svg">icons/system-view-bluetooth-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-system-symbolic.svg">icons/system-view-system-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-battery-symbolic.svg">icons/system-view-battery-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-temperature-symbolic.svg">icons/system-view-temperature-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-printer-symbolic.svg">icons/system-view-printer-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-desktop-symbolic.svg">icons/system-view-desktop-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-clock-symbolic.svg">icons/system-view-clock-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-speakers-symbolic.svg">icons/system-view-speakers-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-microphone-symbolic.svg">icons/system-view-microphone-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-copy-symbolic.svg">icons/system-view-copy-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-menu-symbolic.svg">icons/system-view-menu-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-sidebar-symbolic.svg">icons/system-view-sidebar-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-previous-symbolic.svg">icons/system-view-previous-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-next-symbolic.svg">icons/system-view-next-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-warning-symbolic.svg">icons/system-view-warning-symbolic.svg</file>
+    <file alias="icons/scalable/actions/system-view-computer-symbolic.svg">icons/system-view-computer-symbolic.svg</file>
   </gresource>
 </gresources>

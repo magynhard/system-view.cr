@@ -83,7 +83,7 @@ module SystemView
       end
       update_controls.call
       copy_button = Gtk::MenuButton.new
-      copy_button.icon_name = "edit-copy-symbolic"
+      copy_button.icon_name = "system-view-copy-symbolic"
       copy_button.tooltip_text = translate("Copy system information")
       copy_button.primary = true
       copy_model = Gio::Menu.new
@@ -92,7 +92,7 @@ module SystemView
       copy_button.menu_model = copy_model
       header.pack_end(copy_button)
       menu = Gtk::MenuButton.new
-      menu.icon_name = "open-menu-symbolic"
+      menu.icon_name = "system-view-menu-symbolic"
       menu.tooltip_text = translate("Main menu")
       menu.primary = true
       model = Gio::Menu.new
@@ -170,19 +170,19 @@ module SystemView
     private def navigation_controls : Gtk::Box
       controls = Gtk::Box.new(:horizontal, 0)
       toggle = Gtk::ToggleButton.new
-      toggle.icon_name = "sidebar-show-symbolic"
+      toggle.icon_name = "system-view-sidebar-symbolic"
       toggle.tooltip_text = translate("Toggle sidebar")
       toggle.add_css_class("flat")
       toggle.active = @split.show_sidebar?
       toggle.toggled_signal.connect { @split.show_sidebar = toggle.active? }
       @split.notify_signal["show-sidebar"].connect { toggle.active = @split.show_sidebar? }
       controls.append(toggle)
-      back = Gtk::Button.new_from_icon_name("go-previous-symbolic")
+      back = Gtk::Button.new_from_icon_name("system-view-previous-symbolic")
       back.add_css_class("flat")
       back.tooltip_text = translate("Back")
       back.action_name = "win.back"
       controls.append(back)
-      forward = Gtk::Button.new_from_icon_name("go-next-symbolic")
+      forward = Gtk::Button.new_from_icon_name("system-view-next-symbolic")
       forward.add_css_class("flat")
       forward.tooltip_text = translate("Forward")
       forward.action_name = "win.forward"
@@ -253,22 +253,22 @@ module SystemView
         nil
       end
       entries = {
-        {"overview", translate("Summary"), "view-grid-symbolic"},
+        {"overview", translate("Summary"), "system-view-overview-symbolic"},
         {"graphics", translate("Graphics"), "system-view-graphics-symbolic"},
         {"processor", translate("Processor"), "system-view-processor-symbolic"},
         {"mainboard", translate("Mainboard"), "system-view-mainboard-symbolic"},
-        {"drives", translate("Drives"), "drive-harddisk-symbolic"},
+        {"drives", translate("Drives"), "system-view-drive-symbolic"},
         {"memory", translate("Memory"), "system-view-memory-symbolic"},
-        {"monitors", translate("Monitors"), "video-display-symbolic"},
-        {"audio", translate("Audio"), "audio-card-symbolic"},
-        {"video", translate("Video"), "camera-web-symbolic"},
-        {"inputs", translate("Input Devices"), "input-keyboard-symbolic"},
-        {"network", translate("Network"), "network-wired-symbolic"},
-        {"bluetooth", translate("Bluetooth"), "bluetooth-symbolic"},
-        {"system", translate("Operating System"), "emblem-system-symbolic"},
-        {"power", translate("Power"), "battery-symbolic"},
-        {"sensors", translate("Sensors"), "temperature-symbolic"},
-        {"printers", translate("Printers"), "printer-symbolic"},
+        {"monitors", translate("Monitors"), "system-view-display-symbolic"},
+        {"audio", translate("Audio"), "system-view-audio-symbolic"},
+        {"video", translate("Video"), "system-view-camera-symbolic"},
+        {"inputs", translate("Input Devices"), "system-view-keyboard-symbolic"},
+        {"network", translate("Network"), "system-view-network-symbolic"},
+        {"bluetooth", translate("Bluetooth"), "system-view-bluetooth-symbolic"},
+        {"system", translate("Operating System"), "system-view-system-symbolic"},
+        {"power", translate("Power"), "system-view-battery-symbolic"},
+        {"sensors", translate("Sensors"), "system-view-temperature-symbolic"},
+        {"printers", translate("Printers"), "system-view-printer-symbolic"},
       }
       entries.each do |id, title, icon|
         row = Gtk::ListBoxRow.new
@@ -356,7 +356,7 @@ module SystemView
             else
               clear_body
               status = Adw::StatusPage.new
-              status.icon_name = "dialog-warning-symbolic"
+              status.icon_name = "system-view-warning-symbolic"
               status.title = translate("Could not read system information")
               status.description = result.message || translate("Unknown")
               @body.append(status)
@@ -496,7 +496,7 @@ module SystemView
       clear_body
       unless data = @snapshot
         loading = Adw::StatusPage.new
-        loading.icon_name = "computer-symbolic"
+        loading.icon_name = "system-view-computer-symbolic"
         loading.title = translate("Reading system information…")
         @body.append(loading)
         return
@@ -668,7 +668,7 @@ module SystemView
         widget.activatable = true
         widget.focusable = true
         widget.subtitle_selectable = false
-        arrow = Gtk::Image.new_from_icon_name("go-next-symbolic")
+        arrow = Gtk::Image.new_from_icon_name("system-view-next-symbolic")
         arrow.valign = :center
         widget.add_suffix(arrow)
         widget.activated_signal.connect { navigate(page) }
@@ -753,13 +753,13 @@ module SystemView
       monitors = data.monitors.map do |monitor|
         [monitor.vendor, monitor.model, monitor.preferred_mode, monitor.connector].map { |value| value.empty? ? translate("Unknown") : value }.join(" · ")
       end.join("\n")
-      row(hardware, translate("Monitors"), monitors, "video-display-symbolic", target: "monitors")
+      row(hardware, translate("Monitors"), monitors, "system-view-display-symbolic", target: "monitors")
       memory_info = [Inventory.common_memory_model(data.memory), capacity(data.memory.installed, binary: true)].reject(&.empty?)
       kinds = data.memory.modules.map(&.kind).reject(&.empty?).uniq
       memory_info << kinds.join(" / ") unless kinds.empty?
       row(hardware, translate("Memory"), memory_info.join(" · "), "system-view-memory-symbolic", target: "memory")
       storage = data.drives.map { |drive| "#{drive.model} · #{capacity(drive.bytes)}" }.join("\n")
-      row(hardware, translate("Storage"), storage, "drive-harddisk-symbolic", target: "drives")
+      row(hardware, translate("Storage"), storage, "system-view-drive-symbolic", target: "drives")
       connections = data.connectivity.devices.map do |device|
         lan_ip = device.kind == "ethernet" ? device.ipv4.addresses.first?.try(&.split('/').first) || "" : ""
         [network_kind(device.kind), device.interface, network_state(device.state),
@@ -768,12 +768,12 @@ module SystemView
       data.connectivity.bluetooth.each do |adapter|
         connections << [translate("Bluetooth"), adapter.name.presence || adapter.id, power_state(adapter.powered)].join(" · ")
       end
-      row(hardware, translate("Network"), connections.empty? ? translate("None") : connections.join("\n"), "network-wired-symbolic", target: "network")
+      row(hardware, translate("Network"), connections.empty? ? translate("None") : connections.join("\n"), "system-view-network-symbolic", target: "network")
       software = group(translate("System"))
-      row(software, translate("Operating System"), data.os, "preferences-system-symbolic", target: "system")
+      row(software, translate("Operating System"), data.os, "system-view-system-symbolic", target: "system")
       row(software, translate("Kernel"), data.kernel, "system-view-processor-symbolic", target: "system")
-      row(software, translate("Desktop Environment"), data.desktop, "preferences-desktop-display-symbolic", target: "system")
-      uptime = row(software, translate("Uptime"), uptime_text(data.uptime), "preferences-system-time-symbolic", target: "system")
+      row(software, translate("Desktop Environment"), data.desktop, "system-view-desktop-symbolic", target: "system")
+      uptime = row(software, translate("Uptime"), uptime_text(data.uptime), "system-view-clock-symbolic", target: "system")
       track(uptime) { |snapshot| uptime_text(snapshot.uptime) }
     end
 
@@ -979,7 +979,7 @@ module SystemView
 
     private def drives(data : Snapshot)
       action = if @disk_view_available
-                 button = Gtk::Button.new_from_icon_name("emblem-system-symbolic")
+                 button = Gtk::Button.new_from_icon_name("system-view-system-symbolic")
                  button.tooltip_text = translate("Open Disk View")
                  button.valign = :center
                  button.add_css_class("flat")
@@ -1182,9 +1182,9 @@ module SystemView
     private def audio(data : Snapshot)
       heading(translate("Audio"), action: settings_button("sound", translate("Open sound settings")))
       session = group(translate("Audio session"))
-      row(session, translate("Audio server"), data.audio_session.server.presence || translate("Not reported"), "audio-card-symbolic")
-      row(session, translate("Default output"), data.audio_session.output.presence || translate("Not reported"), "audio-speakers-symbolic")
-      row(session, translate("Default input"), data.audio_session.input.presence || translate("Not reported"), "audio-input-microphone-symbolic")
+      row(session, translate("Audio server"), data.audio_session.server.presence || translate("Not reported"), "system-view-audio-symbolic")
+      row(session, translate("Default output"), data.audio_session.output.presence || translate("Not reported"), "system-view-speakers-symbolic")
+      row(session, translate("Default input"), data.audio_session.input.presence || translate("Not reported"), "system-view-microphone-symbolic")
       row(group(translate("Audio")), translate("Audio device"), "") if data.audio.empty?
       data.audio.each do |device|
         title = Gtk::Label.new(device.name)
@@ -1203,7 +1203,7 @@ module SystemView
     end
 
     private def settings_button(panel : String, tooltip : String) : Gtk::Button
-      button = Gtk::Button.new_from_icon_name("emblem-system-symbolic")
+      button = Gtk::Button.new_from_icon_name("system-view-system-symbolic")
       button.tooltip_text = tooltip
       button.valign = :center
       button.visible = @settings_available
