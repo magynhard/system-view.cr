@@ -54,7 +54,7 @@ jobs:
             runner: ubuntu-24.04-arm
     runs-on: ${{ matrix.runner }}
     container:
-      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51@sha256:78d969b18225ae107ca29497bf09c4a3f791e5f1838a9a912a529d0024fb6210
       options: --privileged
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -81,6 +81,13 @@ jobs:
         run: |
           test "$(uname -m)" = "${{ matrix.arch }}"
           make flatpak
+      - name: Test real Flatpak updates locally
+        if: matrix.arch == 'x86_64'
+        env:
+          SYSTEM_VIEW_TEST_FLATPAK_BUILD: build/flatpak/app
+        run: |
+          command -v gpg
+          python3 -m unittest discover -s tests -p test_flatpak_repository.py -v
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: flatpak-${{ matrix.arch }}
@@ -88,6 +95,54 @@ jobs:
             dist/*-${{ matrix.arch }}.flatpak
             dist/*-${{ matrix.arch }}.flatpak.sha256
           if-no-files-found: error
+      - name: Archive Flatpak repository
+        run: tar -C build/flatpak -cf "$RUNNER_TEMP/ostree-${{ matrix.arch }}.tar" repo
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ostree-${{ matrix.arch }}
+          path: ${{ runner.temp }}/ostree-${{ matrix.arch }}.tar
+          retention-days: 7
+          if-no-files-found: error
+
+  flatpak-repository-test:
+    needs: [flatpak]
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51@sha256:78d969b18225ae107ca29497bf09c4a3f791e5f1838a9a912a529d0024fb6210
+      options: --privileged
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: ostree-*
+          path: ${{ runner.temp }}/repositories
+          merge-multiple: true
+      - name: Assemble and verify with a temporary signing key
+        run: |
+          mkdir -p "$RUNNER_TEMP/x86" "$RUNNER_TEMP/arm" "$RUNNER_TEMP/test-key"
+          chmod 700 "$RUNNER_TEMP/test-key"
+          tar -xf "$RUNNER_TEMP/repositories/ostree-x86_64.tar" -C "$RUNNER_TEMP/x86"
+          tar -xf "$RUNNER_TEMP/repositories/ostree-aarch64.tar" -C "$RUNNER_TEMP/arm"
+          gpg --homedir "$RUNNER_TEMP/test-key" --batch --passphrase '' \
+            --quick-generate-key 'Local test <test@example.invalid>' ed25519 sign 1d
+          key=$(gpg --homedir "$RUNNER_TEMP/test-key" --with-colons --list-secret-keys |
+            awk -F: '$1 == "fpr" { print $10; exit }')
+          bash scripts/assemble-flatpak-repo.sh \
+            "$RUNNER_TEMP/x86/repo" "$RUNNER_TEMP/arm/repo" \
+            "$RUNNER_TEMP/assembled" "$RUNNER_TEMP/test-key" "$key"
+          for arch in x86_64 aarch64; do
+            ostree --repo="$RUNNER_TEMP/assembled/repo" rev-parse "appstream2/$arch"
+            ostree --repo="$RUNNER_TEMP/assembled/repo" cat "appstream2/$arch" /appstream.xml \
+              > "$RUNNER_TEMP/appstream-$arch.xml"
+            grep -F 'de.magynhard.SystemView' "$RUNNER_TEMP/appstream-$arch.xml" > /dev/null
+            ostree --repo="$RUNNER_TEMP/assembled/repo" cat "appstream2/$arch" \
+              /icons/128x128/de.magynhard.SystemView.png > /dev/null
+          done
+          test -s "$RUNNER_TEMP/assembled/repo/summary.sig"
+          test -s "$RUNNER_TEMP/assembled/de.magynhard.SystemView.flatpakref"
+          python3 scripts/prepare-flatpak-publication.py "$RUNNER_TEMP/assembled" "$RUNNER_TEMP/publication" "$RUNNER_TEMP/test-key" "$key"
+          test -s "$RUNNER_TEMP/publication/repo/summary.idx"
+          test ! -e "$RUNNER_TEMP/publication/repo/summary"
 
   release-assets:
     if: github.event_name == 'release'
@@ -98,6 +153,12 @@ jobs:
     steps:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
+          pattern: appimage-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: flatpak-*
           path: dist
           merge-multiple: true
       - name: Attach packages to the published GitHub release
@@ -117,3 +178,63 @@ jobs:
             test -s "dist/$asset"
           done
           gh release upload "$RELEASE_TAG" dist/* --clobber
+
+  flatpak-publish:
+    if: github.event_name == 'release' && github.event.release.prerelease == false && vars.FLATPAK_PUBLISH_ENABLED == 'true'
+    needs: [flatpak-repository-test, release-assets]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    environment: flatpak-production
+    concurrency:
+      group: system-view-flatpak-publication
+      cancel-in-progress: false
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51@sha256:78d969b18225ae107ca29497bf09c4a3f791e5f1838a9a912a529d0024fb6210
+      options: --privileged
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+      RELEASE_ID: ${{ github.event.release.id }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check latest stable release
+        run: python3 scripts/check-flatpak-release.py
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: ostree-*
+          path: ${{ runner.temp }}/repositories
+          merge-multiple: true
+      - name: Sign release repository
+        env:
+          SIGNING_KEY: ${{ secrets.FLATPAK_SIGNING_KEY }}
+          SIGNING_FINGERPRINT: ${{ vars.FLATPAK_SIGNING_FINGERPRINT }}
+        run: |
+          test -n "$SIGNING_KEY"
+          [[ "$SIGNING_FINGERPRINT" =~ ^[[:xdigit:]]{40}$ ]]
+          mkdir -p "$RUNNER_TEMP/x86" "$RUNNER_TEMP/arm" "$RUNNER_TEMP/signing"
+          chmod 700 "$RUNNER_TEMP/signing"
+          tar -xf "$RUNNER_TEMP/repositories/ostree-x86_64.tar" -C "$RUNNER_TEMP/x86"
+          tar -xf "$RUNNER_TEMP/repositories/ostree-aarch64.tar" -C "$RUNNER_TEMP/arm"
+          printf '%s' "$SIGNING_KEY" | gpg --homedir "$RUNNER_TEMP/signing" --batch --import
+          unset SIGNING_KEY
+          gpg --homedir "$RUNNER_TEMP/signing" --with-colons --list-secret-keys "$SIGNING_FINGERPRINT" |
+            awk -F: -v expected="${SIGNING_FINGERPRINT^^}" '$1 == "fpr" && $10 == expected { found=1 } END { exit !found }'
+          bash scripts/assemble-flatpak-repo.sh \
+            "$RUNNER_TEMP/x86/repo" "$RUNNER_TEMP/arm/repo" \
+            "$RUNNER_TEMP/assembled" "$RUNNER_TEMP/signing" "$SIGNING_FINGERPRINT"
+          python3 scripts/prepare-flatpak-publication.py \
+            "$RUNNER_TEMP/assembled" "$RUNNER_TEMP/publication" "$RUNNER_TEMP/signing" "$SIGNING_FINGERPRINT"
+          python3 -c 'import json,os,sys; sys.exit(json.load(open(sys.argv[1]))["version"] != os.environ["RELEASE_TAG"])' \
+            "$RUNNER_TEMP/publication/publication.json"
+      - name: Stage and activate release
+        env:
+          FTPS_HOST: ${{ secrets.FTPS_HOST }}
+          FTPS_PORT: ${{ secrets.FTPS_PORT }}
+          FTPS_USERNAME: ${{ secrets.FTPS_USERNAME }}
+          FTPS_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
+        run: |
+          python3 scripts/stage-flatpak-ftps.py "$RUNNER_TEMP/publication" --confirm-stage
+          python3 scripts/check-flatpak-release.py
+          expected=$(python3 scripts/current-flatpak-index.py)
+          python3 scripts/stage-flatpak-ftps.py "$RUNNER_TEMP/publication" \
+            --confirm-activate --expected-current-index="$expected" --release-version="$RELEASE_TAG"

@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import subprocess
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -12,6 +13,28 @@ spec.loader.exec_module(packaging)
 
 
 class PackagingTests(unittest.TestCase):
+    def test_local_env_is_excluded_from_packaging(self):
+        for name in (".env", ".env.local"):
+            self.assertEqual(subprocess.run(
+                ["git", "check-ignore", "-q", name], cwd=ROOT
+            ).returncode, 0)
+        dockerignore = (ROOT / ".dockerignore").read_text().splitlines()
+        self.assertIn(".env", dockerignore)
+        self.assertIn(".env.*", dockerignore)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "source"
+            root.mkdir()
+            for name in (".env", ".env.local", "safe.txt"):
+                (root / name).write_text("test")
+            from unittest.mock import patch
+            with patch.object(packaging, "ROOT", root), patch.object(packaging, "verify"):
+                destination = Path(directory) / "output"
+                packaging.flatpak_manifest(destination)
+            snapshot = destination / "source"
+            self.assertFalse((snapshot / ".env").exists())
+            self.assertFalse((snapshot / ".env.local").exists())
+            self.assertTrue((snapshot / "safe.txt").exists())
+
     def test_shard_pins_and_appstream_version_match(self):
         self.assertRegex(packaging.verify(), r"^\d+\.\d+\.\d+(?:[-+].+)?$")
 
@@ -92,6 +115,31 @@ class PackagingTests(unittest.TestCase):
         ])
         self.assertIn("flatpak-${{ matrix.arch }}", str(flatpak["steps"]))
         self.assertIn("aarch64.flatpak.sha256", upload["steps"][-1]["run"])
+        self.assertIn("ostree-${{ matrix.arch }}", str(flatpak["steps"]))
+        self.assertEqual(workflow["jobs"]["flatpak-repository-test"]["needs"], ["flatpak"])
+        self.assertIn("appstream2/$arch", str(workflow["jobs"]["flatpak-repository-test"]["steps"]))
+        patterns = [step.get("with", {}).get("pattern") for step in upload["steps"]]
+        self.assertIn("appimage-*", patterns)
+        self.assertIn("flatpak-*", patterns)
+        self.assertNotIn("ostree-*", patterns)
+        publish = workflow["jobs"]["flatpak-publish"]
+        images = [workflow["jobs"][name]["container"]["image"]
+                  for name in ("flatpak", "flatpak-repository-test", "flatpak-publish")]
+        self.assertEqual(len(set(images)), 1)
+        self.assertRegex(images[0], r"@sha256:[a-f0-9]{64}$")
+        self.assertIn("vars.FLATPAK_PUBLISH_ENABLED == 'true'", publish["if"])
+        self.assertIn("github.event.release.prerelease == false", publish["if"])
+        self.assertEqual(publish["environment"], "flatpak-production")
+        self.assertCountEqual(publish["needs"], ["flatpak-repository-test", "release-assets"])
+        self.assertEqual(publish["concurrency"]["cancel-in-progress"], "false")
+        sign = next(step for step in publish["steps"] if step.get("name") == "Sign release repository")
+        deploy = next(step for step in publish["steps"] if step.get("name") == "Stage and activate release")
+        self.assertIn("FLATPAK_SIGNING_KEY", str(sign["env"]))
+        self.assertNotIn("FTPS_PASSWORD", str(sign["env"]))
+        self.assertIn("FTPS_PASSWORD", str(deploy["env"]))
+        self.assertNotIn("FLATPAK_SIGNING_KEY", str(deploy["env"]))
+        self.assertIn("check-flatpak-release.py", deploy["run"])
+        self.assertIn("current-flatpak-index.py", deploy["run"])
 
 
 if __name__ == "__main__":

@@ -8,3 +8,6 @@ dist
 **/*.mo
 **/*.gresource
 **/__pycache__
+.env
+.env.*
+!.env.example

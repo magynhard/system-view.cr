@@ -105,7 +105,7 @@ def flatpak_manifest(destination):
     snapshot = destination / "source"
     if snapshot.exists():
         shutil.rmtree(snapshot)
-    shutil.copytree(ROOT, snapshot, ignore=shutil.ignore_patterns(".git", ".idea", "lib", "bin", "build", "dist", ".flatpak-builder", "*.mo", "*.gresource", "__pycache__"))
+    shutil.copytree(ROOT, snapshot, ignore=shutil.ignore_patterns(".git", ".idea", "lib", "bin", "build", "dist", ".flatpak-builder", ".env", ".env.*", "*.mo", "*.gresource", "__pycache__"))
     sources = [{"type": "dir", "path": str(snapshot)}]
     for architecture in ("x86_64", "aarch64"):
         sources.append({"type": "archive", **PINS["crystal"][architecture], "dest": "crystal", "strip-components": 2, "only-arches": [architecture]})
