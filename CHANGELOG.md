@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 - 2026-11-24
+
+- Add a signed Flatpak repository for updates through compatible software managers.
+- Keep standalone Flatpak bundles and the AppImage available as direct downloads.
+
 ## 0.4.0 - 2026-11-22
 
 - Bundle application icons for a consistent appearance across systems.

@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.4.1" date="2026-11-24">
+      <description>
+        <p>Install the Flatpak from the new repository to receive updates.</p>
+        <p xml:lang="de">Installiere das Flatpak aus dem neuen Repository, um Updates zu erhalten.</p>
+        <p xml:lang="ar">ثبّت Flatpak من المستودع الجديد للحصول على التحديثات.</p>
+        <p xml:lang="bg">Инсталирайте Flatpak от новото хранилище, за да получавате актуализации.</p>
+        <p xml:lang="bn">আপডেট পেতে নতুন রিপোজিটরি থেকে Flatpak ইনস্টল করুন।</p>
+        <p xml:lang="cs">Nainstalujte Flatpak z nového repozitáře a získávejte aktualizace.</p>
+        <p xml:lang="da">Installér Flatpak fra det nye softwarelager for at modtage opdateringer.</p>
+        <p xml:lang="el">Εγκαταστήστε το Flatpak από το νέο αποθετήριο για να λαμβάνετε ενημερώσεις.</p>
+        <p xml:lang="es">Instala el Flatpak desde el nuevo repositorio para recibir actualizaciones.</p>
+        <p xml:lang="et">Uuenduste saamiseks paigalda Flatpak uuest varamust.</p>
+        <p xml:lang="fa">برای دریافت به‌روزرسانی‌ها، Flatpak را از مخزن جدید نصب کنید.</p>
+        <p xml:lang="fi">Asenna Flatpak uudesta ohjelmistolähteestä saadaksesi päivitykset.</p>
+        <p xml:lang="fr">Installez le Flatpak depuis le nouveau dépôt pour recevoir les mises à jour.</p>
+        <p xml:lang="ga">Suiteáil an Flatpak ón stór nua chun nuashonruithe a fháil.</p>
+        <p xml:lang="he">יש להתקין את ה־Flatpak מהמאגר החדש כדי לקבל עדכונים.</p>
+        <p xml:lang="hi">अपडेट पाने के लिए नए रिपॉज़िटरी से Flatpak इंस्टॉल करें।</p>
+        <p xml:lang="hr">Instalirajte Flatpak iz novog repozitorija kako biste primali ažuriranja.</p>
+        <p xml:lang="hu">A frissítések fogadásához telepítse a Flatpakot az új tárolóból.</p>
+        <p xml:lang="id">Instal Flatpak dari repositori baru untuk menerima pembaruan.</p>
+        <p xml:lang="is">Settu Flatpak upp úr nýja hugbúnaðarsafninu til að fá uppfærslur.</p>
+        <p xml:lang="it">Installa il Flatpak dal nuovo repository per ricevere gli aggiornamenti.</p>
+        <p xml:lang="ja">更新を受け取るには、新しいリポジトリから Flatpak をインストールしてください。</p>
+        <p xml:lang="ko">업데이트를 받으려면 새 저장소에서 Flatpak을 설치하세요.</p>
+        <p xml:lang="lt">Norėdami gauti naujinimus, įdiekite „Flatpak“ iš naujos saugyklos.</p>
+        <p xml:lang="lv">Instalējiet Flatpak no jaunās krātuves, lai saņemtu atjauninājumus.</p>
+        <p xml:lang="ms">Pasang Flatpak daripada repositori baharu untuk menerima kemas kini.</p>
+        <p xml:lang="nb">Installer Flatpak fra det nye pakkelageret for å motta oppdateringer.</p>
+        <p xml:lang="nl">Installeer de Flatpak vanuit de nieuwe pakketbron om updates te ontvangen.</p>
+        <p xml:lang="pl">Zainstaluj Flatpak z nowego repozytorium, aby otrzymywać aktualizacje.</p>
+        <p xml:lang="pt">Instale o Flatpak a partir do novo repositório para receber atualizações.</p>
+        <p xml:lang="pt_BR">Instale o Flatpak do novo repositório para receber atualizações.</p>
+        <p xml:lang="ro">Instalați Flatpak din noul depozit pentru a primi actualizări.</p>
+        <p xml:lang="ru">Установите Flatpak из нового репозитория, чтобы получать обновления.</p>
+        <p xml:lang="sk">Nainštalujte Flatpak z nového repozitára a získavajte aktualizácie.</p>
+        <p xml:lang="sr">Инсталирајте Flatpak из новог складишта да бисте добијали ажурирања.</p>
+        <p xml:lang="sv">Installera Flatpak från det nya förrådet för att få uppdateringar.</p>
+        <p xml:lang="ta">புதுப்பிப்புகளைப் பெற புதிய களஞ்சியத்திலிருந்து Flatpak ஐ நிறுவுங்கள்.</p>
+        <p xml:lang="th">ติดตั้ง Flatpak จากคลังใหม่เพื่อรับการอัปเดต</p>
+        <p xml:lang="tr">Güncellemeleri almak için Flatpak'i yeni depodan yükleyin.</p>
+        <p xml:lang="uk">Установіть Flatpak з нового сховища, щоб отримувати оновлення.</p>
+        <p xml:lang="ur">اپ ڈیٹس حاصل کرنے کے لیے نئے ذخیرے سے Flatpak انسٹال کریں۔</p>
+        <p xml:lang="vi">Cài đặt Flatpak từ kho mới để nhận các bản cập nhật.</p>
+        <p xml:lang="zh_CN">从新软件仓库安装 Flatpak 以接收更新。</p>
+        <p xml:lang="zh_TW">從新的軟體庫安裝 Flatpak 以接收更新。</p>
+      </description>
+    </release>
     <release version="0.4.0" date="2026-11-22">
       <description>
         <p>Bundle application icons for a consistent appearance across systems.</p>
