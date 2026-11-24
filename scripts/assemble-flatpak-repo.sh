@@ -68,7 +68,7 @@ cat > "$output/$app_id.flatpakref" <<EOF
 Name=$app_id
 Branch=$branch
 Title=System View
-Url=https://flatpak.magynhard.de/repo/
+Url=https://flatpak.magynhard.de/system-view/repo/
 SuggestRemoteName=system-view
 RuntimeRepo=https://flathub.org/repo/flathub.flatpakrepo
 IsRuntime=false

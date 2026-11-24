@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2 - 2026-11-24
+
+- Publish the signed Flatpak update repository under its own `/system-view/` path.
+- Keep the AppImage and standalone Flatpak bundles available as direct downloads.
+
 ## 0.4.1 - 2026-11-24
 
 - Add a signed Flatpak repository for updates through compatible software managers.

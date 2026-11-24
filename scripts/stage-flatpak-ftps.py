@@ -21,6 +21,7 @@ REQUIRED = ("FTPS_HOST", "FTPS_PORT", "FTPS_USERNAME", "FTPS_PASSWORD")
 SAFE_NAME = re.compile(r"^[A-Za-z0-9._+-]+$")
 LOCK = "system-view-staging.lock"
 PUBLIC_HOST = "flatpak.magynhard.de"
+APP_ROOT = "/system-view"
 DESCRIPTOR = "de.magynhard.SystemView.flatpakref"
 RELEASE_RECORD = "system-view-release.json"
 VERSION = re.compile(r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$")
@@ -87,7 +88,7 @@ def verify_publication(publication):
         parsed.read(descriptor)
         info = parsed["Flatpak Ref"]
         if (info["Name"] != "de.magynhard.SystemView" or info["Branch"] != "master" or
-                info["Url"] != "https://flatpak.magynhard.de/repo/"):
+                info["Url"] != f"https://{PUBLIC_HOST}{APP_ROOT}/repo/"):
             raise ValueError("Flatpak descriptor does not match the expected application")
         key = base64.b64decode(info["GPGKey"], validate=True)
         record = json.loads(manifest.read_bytes())
@@ -113,7 +114,7 @@ def entries(ftp):
 
 
 def enter_directory(ftp, parts):
-    ftp.cwd("/")
+    ftp.cwd(APP_ROOT)
     for part in parts:
         listing = entries(ftp)
         if part not in listing:
@@ -137,6 +138,17 @@ def local_digest(path):
 def stage(ftp, publication, files):
     """Stage only immutable data; never upload the index or descriptor."""
     ftp.cwd("/")
+    app_directory = APP_ROOT.lstrip("/")
+    listing = entries(ftp)
+    if app_directory not in listing:
+        try:
+            ftp.mkd(app_directory)
+        except ftplib.error_perm:
+            if entries(ftp).get(app_directory, {}).get("type") != "dir":
+                raise
+    elif listing[app_directory].get("type") != "dir":
+        raise RuntimeError("Remote application path is not a directory")
+    ftp.cwd(APP_ROOT)
     ftp.mkd(LOCK)
     locked = True
     temporary = None
@@ -171,7 +183,7 @@ def stage(ftp, publication, files):
                 cleanup_failed = True
         if locked:
             try:
-                ftp.cwd("/")
+                ftp.cwd(APP_ROOT)
                 ftp.rmd(LOCK)
             except (ftplib.Error, OSError, EOFError):
                 print(f"Could not remove {LOCK}; inspect it before retrying.", file=sys.stderr)
@@ -183,7 +195,7 @@ def stage(ftp, publication, files):
 def verify_https(path, expected_digest, expected_size):
     connection = http.client.HTTPSConnection(PUBLIC_HOST, timeout=30, context=ssl.create_default_context())
     try:
-        connection.request("GET", path, headers={"Cache-Control": "no-cache"})
+        connection.request("GET", APP_ROOT + path, headers={"Cache-Control": "no-cache"})
         response = connection.getresponse()
         digest = hashlib.sha256()
         remaining = expected_size + 1
@@ -238,14 +250,14 @@ def activate(ftp, publication, files, expected, version):
     """Manually publish an already staged snapshot after HTTPS verification."""
     if not VERSION.fullmatch(version):
         raise ValueError("Release version must be a numeric MAJOR.MINOR.PATCH")
-    ftp.cwd("/")
+    ftp.cwd(APP_ROOT)
     ftp.mkd(LOCK)
     try:
         for path in files:
             relative = path.relative_to(publication / "repo")
             verify_https("/repo/" + relative.as_posix(), local_digest(path), path.stat().st_size)
 
-        ftp.cwd("/")
+        ftp.cwd(APP_ROOT)
         root_entries = entries(ftp)
         descriptor = publication / DESCRIPTOR
         descriptor_exists = DESCRIPTOR in root_entries
@@ -287,13 +299,13 @@ def activate(ftp, publication, files, expected, version):
         atomic_upload(ftp, index, "summary.idx")
         verify_https("/repo/summary.idx", local_digest(index), index.stat().st_size)
         if not descriptor_exists:
-            ftp.cwd("/")
+            ftp.cwd(APP_ROOT)
             atomic_upload(ftp, descriptor, DESCRIPTOR)
         verify_https("/" + DESCRIPTOR, local_digest(descriptor), descriptor.stat().st_size)
     finally:
         active_error = sys.exc_info()[0] is not None
         try:
-            ftp.cwd("/")
+            ftp.cwd(APP_ROOT)
             ftp.rmd(LOCK)
         except (ftplib.Error, OSError, EOFError):
             print(f"Could not remove {LOCK}; inspect it before retrying.", file=sys.stderr)

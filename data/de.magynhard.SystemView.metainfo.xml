@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.4.2" date="2026-11-24">
+      <description>
+        <p>Install the Flatpak from the System View repository to receive updates.</p>
+        <p xml:lang="de">Installiere das Flatpak aus dem System-View-Repository, um Updates zu erhalten.</p>
+        <p xml:lang="ar">ثبّت Flatpak من مستودع System View للحصول على التحديثات.</p>
+        <p xml:lang="bg">Инсталирайте Flatpak от хранилището на System View, за да получавате актуализации.</p>
+        <p xml:lang="bn">আপডেট পেতে System View রিপোজিটরি থেকে Flatpak ইনস্টল করুন।</p>
+        <p xml:lang="cs">Nainstalujte Flatpak z repozitáře System View a získávejte aktualizace.</p>
+        <p xml:lang="da">Installér Flatpak fra System Views softwarelager for at modtage opdateringer.</p>
+        <p xml:lang="el">Εγκαταστήστε το Flatpak από το αποθετήριο του System View για να λαμβάνετε ενημερώσεις.</p>
+        <p xml:lang="es">Instala el Flatpak desde el repositorio de System View para recibir actualizaciones.</p>
+        <p xml:lang="et">Uuenduste saamiseks paigalda Flatpak System View hoidlast.</p>
+        <p xml:lang="fa">برای دریافت به‌روزرسانی‌ها، Flatpak را از مخزن System View نصب کنید.</p>
+        <p xml:lang="fi">Asenna Flatpak System View’n ohjelmistolähteestä saadaksesi päivitykset.</p>
+        <p xml:lang="fr">Installez le Flatpak depuis le dépôt de System View pour recevoir les mises à jour.</p>
+        <p xml:lang="ga">Suiteáil an Flatpak ó stór System View chun nuashonruithe a fháil.</p>
+        <p xml:lang="he">יש להתקין את ה־Flatpak מהמאגר של System View כדי לקבל עדכונים.</p>
+        <p xml:lang="hi">अपडेट पाने के लिए System View रिपॉज़िटरी से Flatpak इंस्टॉल करें।</p>
+        <p xml:lang="hr">Instalirajte Flatpak iz repozitorija System View kako biste primali ažuriranja.</p>
+        <p xml:lang="hu">A frissítések fogadásához telepítse a Flatpakot a System View tárolójából.</p>
+        <p xml:lang="id">Instal Flatpak dari repositori System View untuk menerima pembaruan.</p>
+        <p xml:lang="is">Settu Flatpak upp úr hugbúnaðarsafni System View til að fá uppfærslur.</p>
+        <p xml:lang="it">Installa il Flatpak dal repository di System View per ricevere gli aggiornamenti.</p>
+        <p xml:lang="ja">更新を受け取るには、System View のリポジトリから Flatpak をインストールしてください。</p>
+        <p xml:lang="ko">업데이트를 받으려면 System View 저장소에서 Flatpak을 설치하세요.</p>
+        <p xml:lang="lt">Norėdami gauti naujinimus, įdiekite „Flatpak“ iš „System View“ saugyklos.</p>
+        <p xml:lang="lv">Instalējiet Flatpak no System View krātuves, lai saņemtu atjauninājumus.</p>
+        <p xml:lang="ms">Pasang Flatpak daripada repositori System View untuk menerima kemas kini.</p>
+        <p xml:lang="nb">Installer Flatpak fra pakkelageret til System View for å motta oppdateringer.</p>
+        <p xml:lang="nl">Installeer de Flatpak vanuit de pakketbron van System View om updates te ontvangen.</p>
+        <p xml:lang="pl">Zainstaluj Flatpak z repozytorium System View, aby otrzymywać aktualizacje.</p>
+        <p xml:lang="pt">Instale o Flatpak a partir do repositório do System View para receber atualizações.</p>
+        <p xml:lang="pt_BR">Instale o Flatpak do repositório do System View para receber atualizações.</p>
+        <p xml:lang="ro">Instalați Flatpak din depozitul System View pentru a primi actualizări.</p>
+        <p xml:lang="ru">Установите Flatpak из репозитория System View, чтобы получать обновления.</p>
+        <p xml:lang="sk">Nainštalujte Flatpak z repozitára System View, aby ste získavali aktualizácie.</p>
+        <p xml:lang="sr">Инсталирајте Flatpak из складишта System View да бисте добијали ажурирања.</p>
+        <p xml:lang="sv">Installera Flatpak från System Views förråd för att få uppdateringar.</p>
+        <p xml:lang="ta">புதுப்பிப்புகளைப் பெற System View களஞ்சியத்திலிருந்து Flatpak ஐ நிறுவுங்கள்.</p>
+        <p xml:lang="th">ติดตั้ง Flatpak จากคลังของ System View เพื่อรับการอัปเดต</p>
+        <p xml:lang="tr">Güncellemeleri almak için Flatpak’i System View deposundan yükleyin.</p>
+        <p xml:lang="uk">Установіть Flatpak зі сховища System View, щоб отримувати оновлення.</p>
+        <p xml:lang="ur">اپ ڈیٹس حاصل کرنے کے لیے Flatpak کو System View کے ذخیرے سے انسٹال کریں۔</p>
+        <p xml:lang="vi">Cài đặt Flatpak từ kho System View để nhận các bản cập nhật.</p>
+        <p xml:lang="zh_CN">从 System View 软件仓库安装 Flatpak 以接收更新。</p>
+        <p xml:lang="zh_TW">從 System View 軟體庫安裝 Flatpak 以接收更新。</p>
+      </description>
+    </release>
     <release version="0.4.1" date="2026-11-24">
       <description>
         <p>Install the Flatpak from the new repository to receive updates.</p>

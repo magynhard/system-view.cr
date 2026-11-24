@@ -163,7 +163,7 @@ bash scripts/assemble-flatpak-repo.sh X86_REPO ARM_REPO NEW_OUTPUT_DIR GPG_HOME 
 The output directory must not exist. The script imports the `master` app ref
 for each architecture, signs the commits and repository metadata, verifies
 the commits with the exported public key, and generates a `.flatpakref` for
-`https://flatpak.magynhard.de/repo/`. The result is local only. Use a temporary
+`https://flatpak.magynhard.de/system-view/repo/`. The result is local only. Use a temporary
 test key for experiments; do not publish a descriptor containing a test key.
 
 Prepare the files for static hosting with:
@@ -200,10 +200,13 @@ the data-only staging command can be run explicitly:
 ```
 
 It uses explicit FTPS with certificate validation and encrypted data
-connections. It uploads `config`, `objects/`, and `summaries/` only, verifying
+connections. The FTPS login root maps to the webroot. System View uses its own
+`/system-view/` directory, with the `.flatpakref` alongside `repo/`, so other
+apps can use sibling directories. Staging uploads `config`, `objects/`, and
+`summaries/` to `/system-view/repo/` only, verifying
 each uploaded file and comparing existing files rather than overwriting them.
 It uses a temporary server-side lock; after an interrupted run, inspect a
-remaining `system-view-staging.lock` directory before removing it manually.
+remaining `/system-view/system-view-staging.lock` directory before removing it manually.
 Staging does **not** publish `summary.idx` or the `.flatpakref` and cannot
 activate an update. It requires FTP `MLSD` support; this has not yet been
 verified with the hosting provider.
@@ -224,7 +227,7 @@ The following is only for a first publication when no index exists:
 ```
 
 For an existing repository, `--expected-current-index` must instead be the
-lowercase SHA-256 of the current `repo/summary.idx`, obtained independently.
+lowercase SHA-256 of the current `/system-view/repo/summary.idx`, obtained independently.
 The activation compares this expected value under the staging lock and refuses
 to change an existing `.flatpakref` with different content. It verifies the
 staged files over HTTPS before replacing the index, then verifies the published

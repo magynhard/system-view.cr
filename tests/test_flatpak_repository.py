@@ -103,7 +103,7 @@ class FlatpakRepositoryTests(unittest.TestCase):
             ref = descriptor["Flatpak Ref"]
             self.assertEqual(ref["Name"], APP_ID)
             self.assertEqual(ref["Branch"], "master")
-            self.assertEqual(ref["Url"], "https://flatpak.magynhard.de/repo/")
+            self.assertEqual(ref["Url"], "https://flatpak.magynhard.de/system-view/repo/")
             self.assertEqual(base64.b64decode(ref["GPGKey"]), (output / "public-key.gpg").read_bytes())
             for arch, source in (("x86_64", x86), ("aarch64", arm)):
                 app_ref = f"app/{APP_ID}/{arch}/master"
@@ -197,7 +197,7 @@ class FlatpakRepositoryTests(unittest.TestCase):
             thread.start()
             try:
                 descriptor = (outputs[0] / f"{APP_ID}.flatpakref").read_text().replace(
-                    "https://flatpak.magynhard.de/repo/", f"http://127.0.0.1:{server.server_port}/repo/"
+                    "https://flatpak.magynhard.de/system-view/repo/", f"http://127.0.0.1:{server.server_port}/repo/"
                 )
                 ref_file = root / f"{APP_ID}.flatpakref"
                 ref_file.write_text(descriptor)
@@ -286,7 +286,7 @@ class FlatpakRepositoryTests(unittest.TestCase):
             try:
                 ref = root / f"{APP_ID}.flatpakref"
                 ref.write_text((outputs[0] / ref.name).read_text().replace(
-                    "https://flatpak.magynhard.de/repo/", f"http://127.0.0.1:{server.server_port}/repo/"))
+                    "https://flatpak.magynhard.de/system-view/repo/", f"http://127.0.0.1:{server.server_port}/repo/"))
                 env = os.environ.copy()
                 env.update(XDG_DATA_HOME=str(root / "data"), XDG_CONFIG_HOME=str(root / "config"),
                            XDG_CACHE_HOME=str(root / "cache"), LC_ALL="C")

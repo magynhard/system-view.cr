@@ -11,7 +11,7 @@ def current_index():
     connection = http.client.HTTPSConnection("flatpak.magynhard.de", timeout=30,
                                              context=ssl.create_default_context())
     try:
-        connection.request("GET", "/repo/summary.idx", headers={"Cache-Control": "no-cache"})
+        connection.request("GET", "/system-view/repo/summary.idx", headers={"Cache-Control": "no-cache"})
         response = connection.getresponse()
         if response.status == 404:
             return "none"

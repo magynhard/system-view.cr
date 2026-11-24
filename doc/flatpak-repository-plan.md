@@ -31,8 +31,8 @@ View. No app code, network permissions, or Flatpak sandbox settings change.
    OSTree objects without the server retaining historical commits. Measure
    transfer and site size before deciding whether to add static deltas.
 3. **Stage the install link.** Publish the repository at
-    `https://flatpak.magynhard.de/repo/` and the install file
-    at `https://flatpak.magynhard.de/de.magynhard.SystemView.flatpakref`.
+    `https://flatpak.magynhard.de/system-view/repo/` and the install file
+    at `https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref`.
    The file declares `Name=de.magynhard.SystemView`, `Branch=master`,
    `IsRuntime=false`, the repository URL, a stable suggested remote name,
    the Flathub runtime source, and the base64-encoded public signing key.
@@ -48,9 +48,9 @@ View. No app code, network permissions, or Flatpak sandbox settings change.
    architecture or failed signing check must leave the existing site untouched.
     Report FTPS deployment failures independently of release asset status.
 5. **Set up the host and signing.** Use explicit FTPS. The FTP login root maps
-    to the public webroot; upload the repository under `/repo/` and the
-    `.flatpakref` into `/`. Use a dedicated account restricted to the deployment
-    directory. Store `FTPS_HOST`, `FTPS_PORT`, `FTPS_USERNAME`, and
+    to the public webroot; keep the repository, descriptor, and deployment lock
+    under `/system-view/`. Other apps can use sibling directories. Use a
+    dedicated deployment account. Store `FTPS_HOST`, `FTPS_PORT`, `FTPS_USERNAME`, and
     `FTPS_PASSWORD` as GitHub environment secrets and inject them as environment
     variables only in the upload step. Do not commit the values, provide
     defaults, or print them; fail before connecting if any are missing. The
