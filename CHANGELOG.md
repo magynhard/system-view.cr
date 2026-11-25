@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3 - 2026-11-25
+
+- Document how to install System View from the signed Flatpak repository.
+
 ## 0.4.2 - 2026-11-24
 
 - Publish the signed Flatpak update repository under its own `/system-view/` path.

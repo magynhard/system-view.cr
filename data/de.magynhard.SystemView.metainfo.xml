@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.4.3" date="2026-11-25">
+      <description>
+        <p>Document installation from the signed Flatpak repository.</p>
+        <p xml:lang="de">Die Installation aus dem signierten Flatpak-Repository ist dokumentiert.</p>
+        <p xml:lang="ar">توثيق التثبيت من مستودع Flatpak الموقّع.</p>
+        <p xml:lang="bg">Документирана е инсталацията от подписаното хранилище на Flatpak.</p>
+        <p xml:lang="bn">স্বাক্ষরিত Flatpak রিপোজিটরি থেকে ইনস্টল করার পদ্ধতি নথিভুক্ত করা হয়েছে।</p>
+        <p xml:lang="cs">Přidán návod k instalaci z podepsaného repozitáře Flatpak.</p>
+        <p xml:lang="da">Installation fra det signerede Flatpak-lager er dokumenteret.</p>
+        <p xml:lang="el">Προστέθηκαν οδηγίες εγκατάστασης από το υπογεγραμμένο αποθετήριο Flatpak.</p>
+        <p xml:lang="es">Se documenta la instalación desde el repositorio firmado de Flatpak.</p>
+        <p xml:lang="et">Lisati juhised allkirjastatud Flatpaki hoidlast paigaldamiseks.</p>
+        <p xml:lang="fa">روش نصب از مخزن امضاشدهٔ Flatpak مستند شد.</p>
+        <p xml:lang="fi">Lisättiin ohjeet asentamiseen allekirjoitetusta Flatpak-lähteestä.</p>
+        <p xml:lang="fr">L’installation depuis le dépôt Flatpak signé est documentée.</p>
+        <p xml:lang="ga">Tá treoracha ar fáil chun an aip a shuiteáil ón stór sínithe Flatpak.</p>
+        <p xml:lang="he">נוספו הוראות התקנה ממאגר Flatpak החתום.</p>
+        <p xml:lang="hi">हस्ताक्षरित Flatpak रिपॉज़िटरी से इंस्टॉल करने के निर्देश जोड़े गए।</p>
+        <p xml:lang="hr">Dodane su upute za instalaciju iz potpisanog Flatpak repozitorija.</p>
+        <p xml:lang="hu">Elkészült az aláírt Flatpak-tárolóból történő telepítés útmutatója.</p>
+        <p xml:lang="id">Petunjuk pemasangan dari repositori Flatpak yang ditandatangani telah ditambahkan.</p>
+        <p xml:lang="is">Leiðbeiningum um uppsetningu úr undirrituðu Flatpak-safni var bætt við.</p>
+        <p xml:lang="it">Documentata l’installazione dal repository Flatpak firmato.</p>
+        <p xml:lang="ja">署名付き Flatpak リポジトリからのインストール手順を追加しました。</p>
+        <p xml:lang="ko">서명된 Flatpak 저장소에서 설치하는 방법을 문서에 추가했습니다.</p>
+        <p xml:lang="lt">Pridėtos diegimo iš pasirašytos „Flatpak“ saugyklos instrukcijos.</p>
+        <p xml:lang="lv">Pievienoti norādījumi instalēšanai no parakstītās Flatpak krātuves.</p>
+        <p xml:lang="ms">Panduan pemasangan daripada repositori Flatpak yang ditandatangani telah ditambah.</p>
+        <p xml:lang="nb">Installasjon fra det signerte Flatpak-pakkelageret er dokumentert.</p>
+        <p xml:lang="nl">De installatie vanuit de ondertekende Flatpak-pakketbron is gedocumenteerd.</p>
+        <p xml:lang="pl">Dodano instrukcję instalacji z podpisanego repozytorium Flatpak.</p>
+        <p xml:lang="pt">Foi documentada a instalação a partir do repositório Flatpak assinado.</p>
+        <p xml:lang="pt_BR">A instalação pelo repositório Flatpak assinado foi documentada.</p>
+        <p xml:lang="ro">Au fost adăugate instrucțiuni de instalare din depozitul Flatpak semnat.</p>
+        <p xml:lang="ru">Добавлены инструкции по установке из подписанного репозитория Flatpak.</p>
+        <p xml:lang="sk">Pridaný návod na inštaláciu z podpísaného repozitára Flatpak.</p>
+        <p xml:lang="sr">Додато је упутство за инсталацију из потписаног Flatpak складишта.</p>
+        <p xml:lang="sv">Installation från det signerade Flatpak-förrådet har dokumenterats.</p>
+        <p xml:lang="ta">கையொப்பமிடப்பட்ட Flatpak களஞ்சியத்திலிருந்து நிறுவுவதற்கான வழிமுறைகள் சேர்க்கப்பட்டன.</p>
+        <p xml:lang="th">เพิ่มคู่มือการติดตั้งจากคลัง Flatpak ที่ลงลายเซ็นแล้ว</p>
+        <p xml:lang="tr">İmzalı Flatpak deposundan kurulum adımları belgelendi.</p>
+        <p xml:lang="uk">Додано інструкції зі встановлення з підписаного сховища Flatpak.</p>
+        <p xml:lang="ur">دستخط شدہ Flatpak ذخیرے سے تنصیب کی ہدایات شامل کی گئیں۔</p>
+        <p xml:lang="vi">Đã bổ sung hướng dẫn cài đặt từ kho Flatpak có chữ ký.</p>
+        <p xml:lang="zh_CN">补充了从已签名的 Flatpak 软件仓库安装的说明。</p>
+        <p xml:lang="zh_TW">新增從已簽署的 Flatpak 軟體庫安裝的說明。</p>
+      </description>
+    </release>
     <release version="0.4.2" date="2026-11-24">
       <description>
         <p>Install the Flatpak from the System View repository to receive updates.</p>
