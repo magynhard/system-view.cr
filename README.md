@@ -22,18 +22,27 @@ live readings together in a simple GTK4 and libadwaita interface.
 
 ## Download and install
 
-**[Download the latest release](https://github.com/magynhard/system-view.cr/releases/latest)**
+**[Install System View with Flatpak](https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref)** (x86_64 and ARM64)
 
-Choose an x86_64 package from the release page:
+Install from the signed repository to receive updates through a compatible
+software manager or `flatpak update`. From a terminal:
+
+```sh
+flatpak install --user --from https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref
+```
+
+The Flatpak requires Flatpak 1.17 or newer and the GNOME 51 runtime from Flathub.
+Open **System View** from your applications menu or run
+`flatpak run de.magynhard.SystemView`.
+
+**[Download the latest release](https://github.com/magynhard/system-view.cr/releases/latest)** for standalone packages:
 
 - **AppImage:** Download the `.AppImage` file, make it executable and open it.
   It requires glibc 2.39 or newer.
-- **Flatpak:** Download the `.flatpak` file and install it with your software
-  manager or `flatpak install --user System_View-*.flatpak`. It requires Flatpak
-  1.17 or newer and the GNOME 51 runtime. Open **System View** from your
-  applications menu, or run `flatpak run de.magynhard.SystemView`.
+- **Standalone Flatpak:** Download the `.flatpak` file for x86_64 or ARM64.
+  Installs from these files do not automatically switch to the update repository.
 
-Both packages include a separate SHA-256 checksum. See
+Each standalone package has a separate SHA-256 checksum. See
 [Linux packaging](doc/packaging.md) for installation details and alternatives.
 
 ## Features
@@ -80,8 +89,8 @@ available in the standalone Flatpak.
 
 ## Requirements
 
-Linux and a graphical session are required. The released packages support x86_64:
-the AppImage requires glibc 2.39 or newer; the Flatpak requires Flatpak 1.17 or
+Linux and a graphical session are required. The AppImage supports x86_64 and
+requires glibc 2.39 or newer. The Flatpak supports x86_64 and ARM64 and requires Flatpak 1.17 or
 newer and the GNOME 51 runtime. Optional tools and services provide additional
 hardware information. See [Linux packaging](doc/packaging.md) for details.
 
