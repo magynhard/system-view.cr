@@ -22,28 +22,42 @@ live readings together in a simple GTK4 and libadwaita interface.
 
 ## Download and install
 
-**[Install System View with Flatpak](https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref)** (x86_64 and ARM64)
+### Install Flatpak from the signed repository
 
-Install from the signed repository to receive updates through a compatible
-software manager or `flatpak update`. From a terminal:
+Available for x86_64 and ARM64. Both methods below let you receive updates
+through a compatible software manager or `flatpak update`, without downloading
+each release manually.
+
+The Flatpak requires Flatpak 1.17 or newer and the GNOME 51 runtime from Flathub.
+After installation, open **System View** from your applications menu.
+
+#### Using a software manager
+
+1. Right-click the [System View `.flatpakref` link](https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref)
+   and choose **Save Link As…**.
+2. Double-click the saved file in your file manager and select **Install**.
+   You need a software manager with Flatpak support, such as GNOME Software
+   with its Flatpak plugin.
+
+#### Using the terminal
 
 ```sh
 flatpak install --user --from https://flatpak.magynhard.de/system-view/de.magynhard.SystemView.flatpakref
 ```
 
-The Flatpak requires Flatpak 1.17 or newer and the GNOME 51 runtime from Flathub.
-Open **System View** from your applications menu or run
-`flatpak run de.magynhard.SystemView`.
+### Install standalone packages
 
-**[Download the latest release](https://github.com/magynhard/system-view.cr/releases/latest)** for standalone packages:
+**[Download the latest release](https://github.com/magynhard/system-view.cr/releases/latest)**
+to install a standalone package. These packages do not receive updates from the
+signed repository. To update, download the new release and install the new
+Flatpak bundle or replace the old AppImage.
 
 - **AppImage:** Download the `.AppImage` file, make it executable and open it.
-  It requires glibc 2.39 or newer.
+  It is available for x86_64 and requires glibc 2.39 or newer.
 - **Standalone Flatpak:** Download the `.flatpak` file for x86_64 or ARM64.
-  Installs from these files do not automatically switch to the update repository.
+  Open it with a software manager that supports Flatpak and select **Install**.
 
-Each standalone package has a separate SHA-256 checksum. See
-[Linux packaging](doc/packaging.md) for installation details and alternatives.
+Each standalone package has a separate SHA-256 checksum.
 
 ## Features
 
@@ -90,9 +104,9 @@ available in the standalone Flatpak.
 ## Requirements
 
 Linux and a graphical session are required. The AppImage supports x86_64 and
-requires glibc 2.39 or newer. The Flatpak supports x86_64 and ARM64 and requires Flatpak 1.17 or
-newer and the GNOME 51 runtime. Optional tools and services provide additional
-hardware information. See [Linux packaging](doc/packaging.md) for details.
+requires glibc 2.39 or newer. The Flatpak supports x86_64 and ARM64 and requires
+Flatpak 1.17 or newer and the GNOME 51 runtime. Optional tools and services
+provide additional hardware information.
 
 For native and AppImage installations, the following optional packages provide
 OpenGL/Vulkan diagnostics, audio session details, printer information and the

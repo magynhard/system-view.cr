@@ -29,7 +29,7 @@ make run
 
 `make setup` installs dependencies and generates the GTK bindings. `make build`
 creates `bin/system-view`; `make install PREFIX="$HOME/.local"` installs it for
-your user. See [Linux packaging](doc/packaging.md) for package builds.
+your user.
 
 To start the application in English regardless of the system language:
 
@@ -45,6 +45,12 @@ SYSTEM_VIEW_TEST_MISSING_TOOLS=1 ./bin/system-view
 
 This simulates missing optional tools and libraries for both the notice and the
 affected features. Other hardware discovery remains available.
+
+## Building packages
+
+See the [packaging guide](doc/packaging.md) for building and testing AppImage
+and Flatpak packages, publishing GitHub releases, and maintaining the signed
+Flatpak repository.
 
 ## Checks
 

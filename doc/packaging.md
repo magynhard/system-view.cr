@@ -1,7 +1,8 @@
 # Packaging
 
-System View follows Disk View's two independent Linux package builds. The source
-version is `shard.yml`; the newest AppStream release must match it.
+This guide covers building the AppImage and Flatpak packages, publishing GitHub
+releases, and operating the signed Flatpak repository. The version in `shard.yml`
+must match the newest AppStream release.
 
 ## AppImage
 
@@ -99,8 +100,8 @@ both architectures on native GitHub-hosted runners.
 
 `packaging/sources.json` records archive hashes and exact shard commits. Keep its
 versions and URLs aligned with `shard.lock`, and update the pins whenever
-dependencies change. Build images and runtime branches follow the base project's
-conventions; they are not fully bit-for-bit reproducible OS snapshots.
+dependencies change. Build images and runtime branches are not pinned to
+bit-for-bit reproducible OS snapshots.
 
 ```sh
 python3 scripts/packaging.py verify
