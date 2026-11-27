@@ -70,13 +70,13 @@ factory = -> do
       rows = tree.select(Adw::ActionRow)
       if phase == 0 && rows.any? { |row| row.subtitle.to_s.includes?("Example CPU 9000") }
         navigation = tree.select(Gtk::ListBox).find { |list| list.has_css_class("navigation-sidebar") }.not_nil!
-        navigation.select_row(navigation.row_at_index(1))
+        navigation.select_row(discovery_widgets(navigation).select(Gtk::ListBoxRow).find! { |row| row.name == "graphics" })
         phase = 1
       elsif phase == 1
         raise "OpenGL subprocess output was lost" unless rows.any? { |row| row.title == "OpenGL" && row.subtitle == "4.6" }
         raise "Vulkan subprocess output was lost" unless rows.any? { |row| row.title == "Vulkan" && row.subtitle == "1.3.280" }
         navigation = tree.select(Gtk::ListBox).find { |list| list.has_css_class("navigation-sidebar") }.not_nil!
-        navigation.select_row(navigation.row_at_index(4))
+        navigation.select_row(discovery_widgets(navigation).select(Gtk::ListBoxRow).find! { |row| row.name == "drives" })
         phase = 2
       elsif phase == 2
         button = tree.select(Gtk::Button).find { |item| item.tooltip_text == "Open Disk View" }.not_nil!

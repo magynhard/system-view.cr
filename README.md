@@ -87,7 +87,7 @@ cannot be determined are shown as unknown or not reported.
 | Memory | Installed and available memory, swap and memory module details |
 | Monitors | Connected displays, resolution and refresh rates |
 | Audio | Audio devices, the active sound server and default input and output |
-| Video | Detected cameras and other video capture devices |
+| Cameras | Detected cameras and other video capture devices |
 | Input Devices | Keyboards, mice, touchpads, game controllers and other input devices |
 | Network | Ethernet and Wi-Fi connections, addresses and connection details |
 | Bluetooth | Adapters and paired or connected devices |

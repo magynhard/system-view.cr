@@ -119,6 +119,7 @@ module SystemView
       @body.margin_end = 20
       clamp = Adw::Clamp.new
       clamp.maximum_size = 1200
+      clamp.tightening_threshold = clamp.maximum_size
       clamp.child = @body
       scroll = @content_scroll
       scroll.hscrollbar_policy = :never
@@ -240,35 +241,42 @@ module SystemView
       @navigation.selection_mode = :single
       @navigation.margin_top = 8
       @navigation.header_func = ->(row : Gtk::ListBoxRow, _previous : Gtk::ListBoxRow?) do
-        if row.name == "graphics"
-          separator = Gtk::Separator.new(:horizontal)
-          separator.margin_top = 8
-          separator.margin_bottom = 8
-          separator.margin_start = 12
-          separator.margin_end = 12
-          row.header = separator
-        else
-          row.header = nil
+        title = case row.name
+                when "processor" then translate("Hardware")
+                when "monitors"  then translate("Peripherals")
+                when "system"    then translate("System")
+                end
+        row.header = title.try do |text|
+          label = Gtk::Label.new(text)
+          label.add_css_class("heading")
+          label.add_css_class("dim-label")
+          label.xalign = 0.0
+          label.wrap = true
+          label.margin_top = 12
+          label.margin_bottom = 4
+          label.margin_start = 12
+          label.margin_end = 12
+          label
         end
         nil
       end
       entries = {
         {"overview", translate("Summary"), "system-view-overview-symbolic"},
-        {"graphics", translate("Graphics"), "system-view-graphics-symbolic"},
         {"processor", translate("Processor"), "system-view-processor-symbolic"},
         {"mainboard", translate("Mainboard"), "system-view-mainboard-symbolic"},
-        {"drives", translate("Drives"), "system-view-drive-symbolic"},
         {"memory", translate("Memory"), "system-view-memory-symbolic"},
-        {"monitors", translate("Monitors"), "system-view-display-symbolic"},
+        {"graphics", translate("Graphics"), "system-view-graphics-symbolic"},
         {"audio", translate("Audio"), "system-view-audio-symbolic"},
-        {"video", translate("Video"), "system-view-camera-symbolic"},
+        {"drives", translate("Drives"), "system-view-drive-symbolic"},
+        {"monitors", translate("Monitors"), "system-view-display-symbolic"},
+        {"video", translate("Cameras"), "system-view-camera-symbolic"},
         {"inputs", translate("Input Devices"), "system-view-keyboard-symbolic"},
+        {"printers", translate("Printers"), "system-view-printer-symbolic"},
+        {"system", translate("Operating System"), "system-view-system-symbolic"},
         {"network", translate("Network"), "system-view-network-symbolic"},
         {"bluetooth", translate("Bluetooth"), "system-view-bluetooth-symbolic"},
-        {"system", translate("Operating System"), "system-view-system-symbolic"},
         {"power", translate("Power"), "system-view-battery-symbolic"},
         {"sensors", translate("Sensors"), "system-view-temperature-symbolic"},
-        {"printers", translate("Printers"), "system-view-printer-symbolic"},
       }
       entries.each do |id, title, icon|
         row = Gtk::ListBoxRow.new
@@ -635,12 +643,16 @@ module SystemView
       @body.append(box)
     end
 
-    private def group(title : String, parent : Gtk::Box | Gtk::FlowBox = @body) : Adw::PreferencesGroup
+    private def group(title : String, parent : Gtk::Box | Gtk::FlowBox | Nil = nil) : Adw::PreferencesGroup
       widget = Adw::PreferencesGroup.new
       widget.title = title
       widget.width_request = 240 if parent.is_a?(Gtk::FlowBox)
       widget.valign = :start
-      parent.append(widget)
+      if parent
+        parent.append(widget)
+      else
+        @body.append(widget)
+      end
       widget
     end
 
@@ -653,6 +665,14 @@ module SystemView
       columns.column_spacing = 24
       columns.row_spacing = 24
       @body.append(columns)
+      columns
+    end
+
+    private def equal_width_columns : Gtk::FlowBox
+      columns = group_columns(2)
+      columns.homogeneous = true
+      columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
+      @two_column_layouts << columns
       columns
     end
 
@@ -744,22 +764,22 @@ module SystemView
       cpu_info = [cpu.name, translate("%{cores} cores · %{threads} threads", cores: count(cpu.cores), threads: count(cpu.threads))].reject(&.empty?).join("\n")
       row(hardware, translate("Processor"), cpu_info, "system-view-processor-symbolic", target: "processor")
       row(hardware, translate("Mainboard"), [data.mainboard.vendor, data.mainboard.name].reject(&.empty?).join(" "), "system-view-mainboard-symbolic", target: "mainboard")
+      memory_info = [Inventory.common_memory_model(data.memory), capacity(data.memory.installed, binary: true)].reject(&.empty?)
+      kinds = data.memory.modules.map(&.kind).reject(&.empty?).uniq
+      memory_info << kinds.join(" / ") unless kinds.empty?
+      row(hardware, translate("Memory"), memory_info.join(" · "), "system-view-memory-symbolic", target: "memory")
       graphics = data.graphics.map do |gpu|
         vendor = gpu.board_vendor.empty? ? gpu.vendor : gpu.board_vendor
         vendor = "ASUS" if vendor.starts_with?("ASUSTeK")
         [vendor.empty? ? translate("Unknown") : vendor, gpu.name, capacity(gpu.memory, binary: true)].join(" · ")
       end.join("\n")
       row(hardware, translate("Graphics"), graphics, "system-view-graphics-symbolic", target: "graphics")
+      storage = data.drives.map { |drive| "#{drive.model} · #{capacity(drive.bytes)}" }.join("\n")
+      row(hardware, translate("Storage"), storage, "system-view-drive-symbolic", target: "drives")
       monitors = data.monitors.map do |monitor|
         [monitor.vendor, monitor.model, monitor.preferred_mode, monitor.connector].map { |value| value.empty? ? translate("Unknown") : value }.join(" · ")
       end.join("\n")
       row(hardware, translate("Monitors"), monitors, "system-view-display-symbolic", target: "monitors")
-      memory_info = [Inventory.common_memory_model(data.memory), capacity(data.memory.installed, binary: true)].reject(&.empty?)
-      kinds = data.memory.modules.map(&.kind).reject(&.empty?).uniq
-      memory_info << kinds.join(" / ") unless kinds.empty?
-      row(hardware, translate("Memory"), memory_info.join(" · "), "system-view-memory-symbolic", target: "memory")
-      storage = data.drives.map { |drive| "#{drive.model} · #{capacity(drive.bytes)}" }.join("\n")
-      row(hardware, translate("Storage"), storage, "system-view-drive-symbolic", target: "drives")
       connections = data.connectivity.devices.map do |device|
         lan_ip = device.kind == "ethernet" ? device.ipv4.addresses.first?.try(&.split('/').first) || "" : ""
         [network_kind(device.kind), device.interface, network_state(device.state),
@@ -1069,7 +1089,7 @@ module SystemView
 
     private def system(data : Snapshot)
       heading(translate("Operating System"), data.os, action: settings_button("system", translate("Open system settings")))
-      columns = group_columns(2)
+      columns = equal_width_columns
       details = group(translate("System"), columns)
       row(details, translate("Operating System"), data.os)
       row(details, translate("Kernel"), data.kernel)
@@ -1091,8 +1111,9 @@ module SystemView
       supply = data.power_supply
       if supply.batteries.empty? && supply.adapters.empty?
         row(group(translate("Power")), translate("Power information"), translate("Not reported"))
+        return
       end
-      columns = group_columns(2)
+      columns = equal_width_columns if supply.batteries.size + supply.adapters.size > 1
       supply.adapters.each do |adapter|
         details = group(translate("Power adapter") + " · " + adapter.name, columns)
         connected = row(details, translate("Connected"), enabled(adapter.online))
@@ -1148,10 +1169,7 @@ module SystemView
         title.wrap = true
         title.add_css_class("heading")
         @body.append(title)
-        columns = group_columns(2)
-        columns.homogeneous = true
-        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
-        @two_column_layouts << columns
+        columns = equal_width_columns
         details = group("", columns)
         row(details, translate("Manufacturer"), monitor.vendor)
         row(details, translate("Model"), monitor.model)
@@ -1245,8 +1263,9 @@ module SystemView
         row(group(translate("Sensors")), translate("Sensor readings"), translate("Not reported"))
         return
       end
-      columns = group_columns
-      data.sensors.group_by { |sensor| sensor.id.split('/').first }.each_value do |items|
+      chips = data.sensors.group_by { |sensor| sensor.id.split('/').first }
+      columns = equal_width_columns if chips.size > 1
+      chips.each_value do |items|
         details = group(items.first.chip, columns)
         items.each do |sensor|
           number = sensor.id.split('/').last.gsub(/\D/, "")
@@ -1265,9 +1284,9 @@ module SystemView
     end
 
     private def video(data : Snapshot)
-      heading(translate("Video"))
+      heading(translate("Cameras"))
       if data.video_devices.empty?
-        row(group(translate("Video")), translate("Video devices"), translate("Not reported"))
+        row(group(""), translate("Video devices"), translate("Not reported"))
         return
       end
       columns = group_columns(2)
@@ -1324,10 +1343,7 @@ module SystemView
       data.connectivity.devices.each do |device|
         title = [network_kind(device.kind), device.interface, device.connection].reject(&.empty?).join(" · ")
         device_heading(title)
-        columns = group_columns(2)
-        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
-        @two_column_layouts << columns
-        columns.homogeneous = true
+        columns = equal_width_columns
         details = group("", columns)
         row(details, translate("Model"), device.name) unless device.name.empty?
         row(details, translate("Interface"), device.interface)
@@ -1372,10 +1388,7 @@ module SystemView
       data.connectivity.bluetooth.each do |adapter|
         title = adapter.name.empty? || adapter.name == adapter.id ? adapter.id : "#{adapter.id} · #{adapter.name}"
         device_heading(title)
-        columns = group_columns(2)
-        columns.min_children_per_line = @split.collapsed? ? 1_u32 : 2_u32
-        @two_column_layouts << columns
-        columns.homogeneous = true
+        columns = equal_width_columns
         details = group("", columns)
         row(details, translate("Name"), adapter.name)
         row(details, translate("MAC address"), adapter.address)

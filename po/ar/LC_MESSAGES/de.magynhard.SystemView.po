@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: System View\n"
 "Report-Msgid-Bugs-To: https://github.com/magynhard/system-view.cr/issues\n"
-"POT-Creation-Date: 2026-11-19 07:37+0100\n"
+"POT-Creation-Date: 2026-11-27 09:47+0100\n"
 "PO-Revision-Date: 2026-11-19 07:37+0100\n"
 "Last-Translator: OpenCode\n"
 "Language-Team: System View translators\n"
@@ -40,7 +40,7 @@ msgstr "حدّث"
 msgid "About System View"
 msgstr "حول System View"
 
-#: src/window.cr:101 src/window.cr:612
+#: src/window.cr:101 src/window.cr:619
 msgid "Close"
 msgstr "أغلق"
 
@@ -72,1106 +72,1119 @@ msgstr "تقدم"
 msgid "Your system and hardware at a glance."
 msgstr "اطّلع على نظامك وعتادك بنظرة واحدة."
 
-#: src/window.cr:256
-msgid "Summary"
-msgstr "الملخص"
+#: src/window.cr:244
+msgid "Hardware"
+msgstr "العتاد"
 
-#: src/window.cr:257 src/window.cr:752 src/window.cr:910 src/window.cr:912
-msgid "Graphics"
-msgstr "الرسوميات"
+#: src/window.cr:245
+msgid "Peripherals"
+msgstr "الأجهزة الطرفية"
 
-#: src/window.cr:258 src/window.cr:745 src/window.cr:781
-msgid "Processor"
-msgstr "المعالج"
-
-#: src/window.cr:259 src/window.cr:746 src/window.cr:878
-msgid "Mainboard"
-msgstr "اللوحة الأم"
-
-#: src/window.cr:260 src/window.cr:995 src/window.cr:997
-msgid "Drives"
-msgstr "محركات الأقراص"
-
-#: src/window.cr:261 src/window.cr:760 src/window.cr:1026 src/window.cr:1028
-msgid "Memory"
-msgstr "الذاكرة"
-
-#: src/window.cr:262 src/window.cr:756 src/window.cr:1143 src/window.cr:1144
-msgid "Monitors"
-msgstr "الشاشات"
-
-#: src/window.cr:263 src/window.cr:1183 src/window.cr:1188
-msgid "Audio"
-msgstr "الصوت"
-
-#: src/window.cr:264 src/window.cr:1268 src/window.cr:1270
-msgid "Video"
-msgstr "الفيديو"
-
-#: src/window.cr:265 src/window.cr:1283 src/window.cr:1284
-msgid "Input Devices"
-msgstr "أجهزة الإدخال"
-
-#: src/window.cr:266 src/window.cr:771 src/window.cr:1320 src/window.cr:1322
-msgid "Network"
-msgstr "الشبكة"
-
-#: src/window.cr:267 src/window.cr:769 src/window.cr:1368 src/window.cr:1370
-msgid "Bluetooth"
-msgstr "Bluetooth"
-
-#: src/window.cr:268 src/window.cr:773 src/window.cr:1071 src/window.cr:1074
-msgid "Operating System"
-msgstr "نظام التشغيل"
-
-#: src/window.cr:269 src/window.cr:1090 src/window.cr:1093
-msgid "Power"
-msgstr "الطاقة"
-
-#: src/window.cr:270 src/window.cr:1243 src/window.cr:1245
-msgid "Sensors"
-msgstr "المستشعرات"
-
-#: src/window.cr:271 src/window.cr:1358 src/window.cr:1361
-msgid "Printers"
-msgstr "الطابعات"
-
-#: src/window.cr:360
-msgid "Could not read system information"
-msgstr "تعذرت قراءة معلومات النظام"
-
-#: src/window.cr:361 src/window.cr:663 src/window.cr:683 src/window.cr:720
-#: src/window.cr:724 src/window.cr:750 src/window.cr:754 src/window.cr:825
-#: src/window.cr:867 src/window.cr:893 src/window.cr:898 src/window.cr:1138
-#: src/window.cr:1361 src/window.cr:1402 src/window.cr:1413 src/window.cr:1417
-#: src/window.cr:1421 src/window.cr:1452 src/window.cr:1465 src/window.cr:1470
-msgid "Unknown"
-msgstr "غير معروف"
-
-#: src/window.cr:434
-msgid "Authentication cancelled."
-msgstr "أُلغيت المصادقة."
-
-#: src/window.cr:434 src/window.cr:442
-msgid "Hardware details could not be unlocked."
-msgstr "تعذر فتح تفاصيل العتاد."
-
-#: src/window.cr:466
-msgid "Unlocking…"
-msgstr "جارٍ إلغاء القفل…"
-
-#: src/window.cr:466
-msgid "Unlock…"
-msgstr "ألغِ القفل…"
-
-#: src/window.cr:500
-msgid "Reading system information…"
-msgstr "جارٍ قراءة معلومات النظام…"
-
-#: src/window.cr:539
-msgid "OpenGL information"
-msgstr "معلومات OpenGL"
-
-#: src/window.cr:540
-msgid "Vulkan information"
-msgstr "معلومات Vulkan"
-
-#: src/window.cr:541
-msgid "Audio server and default devices"
-msgstr "خادم الصوت والأجهزة الافتراضية"
-
-#: src/window.cr:542
-msgid "Bounded background queries"
-msgstr "استعلامات خلفية محدودة"
-
-#: src/window.cr:543
-msgid "Additional processor and memory details"
-msgstr "تفاصيل إضافية عن المعالج والذاكرة"
-
-#: src/window.cr:544
-msgid "Printer information"
-msgstr "معلومات الطابعة"
-
-#: src/window.cr:549
-msgid "Optional software"
-msgstr "برامج اختيارية"
-
-#: src/window.cr:557
-msgid "The Flatpak can only use software available inside its sandbox."
-msgstr "لا يمكن لـ Flatpak استخدام سوى البرامج المتاحة داخل بيئته المعزولة."
-
-#: src/window.cr:563
-msgid "" 
-"Add these packages to environment.systemPackages in your NixOS configuration:"
-msgstr "أضف هذه الحزم إلى environment.systemPackages في إعداد NixOS لديك:"
-
-#: src/window.cr:574
-msgid "Apply your configuration with sudo nixos-rebuild switch."
-msgstr "طبّق إعداداتك باستخدام sudo nixos-rebuild switch."
-
-#: src/window.cr:581
-msgid "" 
-"Enable security.polkit.enable and a graphical authentication agent for "
-"additional hardware details."
-msgstr "فعّل security.polkit.enable ووكيل مصادقة رسوميًا للحصول على تفاصيل إضافية عن العتاد."
-
-#: src/window.cr:588
-msgid "The CUPS library must also be available to the application at runtime."
-msgstr "يجب أن تكون مكتبة CUPS متاحة للتطبيق أثناء التشغيل أيضًا."
-
-#: src/window.cr:594
-msgid "Install using your package manager:"
-msgstr "ثبّت باستخدام مدير الحزم:"
-
-#: src/window.cr:606
-msgid "Install the missing software using your package manager."
-msgstr "ثبّت البرامج الناقصة باستخدام مدير الحزم."
-
-#: src/window.cr:742
-msgid "Hardware summary"
-msgstr "ملخص العتاد"
-
-#: src/window.cr:744
-msgid "%{cores} cores · %{threads} threads"
-msgstr "%{cores} أنوية · %{threads} خيطًا"
-
-#: src/window.cr:762 src/window.cr:997
-msgid "Storage"
-msgstr "التخزين"
-
-#: src/window.cr:771 src/window.cr:1033 src/window.cr:1322 src/window.cr:1361
-#: src/window.cr:1370 src/window.cr:1402
-msgid "None"
-msgstr "لا شيء"
-
-#: src/window.cr:772 src/window.cr:1073
+#: src/window.cr:246 src/window.cr:779 src/window.cr:1080
 msgid "System"
 msgstr "النظام"
 
-#: src/window.cr:774 src/window.cr:1075
+#: src/window.cr:263
+msgid "Summary"
+msgstr "الملخص"
+
+#: src/window.cr:264 src/window.cr:752 src/window.cr:788
+msgid "Processor"
+msgstr "المعالج"
+
+#: src/window.cr:265 src/window.cr:753 src/window.cr:885
+msgid "Mainboard"
+msgstr "اللوحة الأم"
+
+#: src/window.cr:266 src/window.cr:767 src/window.cr:1033 src/window.cr:1035
+msgid "Memory"
+msgstr "الذاكرة"
+
+#: src/window.cr:267 src/window.cr:759 src/window.cr:917 src/window.cr:919
+msgid "Graphics"
+msgstr "الرسوميات"
+
+#: src/window.cr:268 src/window.cr:1190 src/window.cr:1195
+msgid "Audio"
+msgstr "الصوت"
+
+#: src/window.cr:269 src/window.cr:1002 src/window.cr:1004
+msgid "Drives"
+msgstr "محركات الأقراص"
+
+#: src/window.cr:270 src/window.cr:763 src/window.cr:1150 src/window.cr:1151
+msgid "Monitors"
+msgstr "الشاشات"
+
+#: src/window.cr:271 src/window.cr:1275
+msgid "Cameras"
+msgstr "الكاميرات"
+
+#: src/window.cr:272 src/window.cr:1290 src/window.cr:1291
+msgid "Input Devices"
+msgstr "أجهزة الإدخال"
+
+#: src/window.cr:273 src/window.cr:1365 src/window.cr:1368
+msgid "Printers"
+msgstr "الطابعات"
+
+#: src/window.cr:274 src/window.cr:780 src/window.cr:1078 src/window.cr:1081
+msgid "Operating System"
+msgstr "نظام التشغيل"
+
+#: src/window.cr:275 src/window.cr:778 src/window.cr:1327 src/window.cr:1329
+msgid "Network"
+msgstr "الشبكة"
+
+#: src/window.cr:276 src/window.cr:776 src/window.cr:1375 src/window.cr:1377
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/window.cr:277 src/window.cr:1097 src/window.cr:1100
+msgid "Power"
+msgstr "الطاقة"
+
+#: src/window.cr:278 src/window.cr:1250 src/window.cr:1252
+msgid "Sensors"
+msgstr "المستشعرات"
+
+#: src/window.cr:367
+msgid "Could not read system information"
+msgstr "تعذرت قراءة معلومات النظام"
+
+#: src/window.cr:368 src/window.cr:670 src/window.cr:690 src/window.cr:727
+#: src/window.cr:731 src/window.cr:757 src/window.cr:761 src/window.cr:832
+#: src/window.cr:874 src/window.cr:900 src/window.cr:905 src/window.cr:1145
+#: src/window.cr:1368 src/window.cr:1409 src/window.cr:1420 src/window.cr:1424
+#: src/window.cr:1428 src/window.cr:1459 src/window.cr:1472 src/window.cr:1477
+msgid "Unknown"
+msgstr "غير معروف"
+
+#: src/window.cr:441
+msgid "Authentication cancelled."
+msgstr "أُلغيت المصادقة."
+
+#: src/window.cr:441 src/window.cr:449
+msgid "Hardware details could not be unlocked."
+msgstr "تعذر فتح تفاصيل العتاد."
+
+#: src/window.cr:473
+msgid "Unlocking…"
+msgstr "جارٍ إلغاء القفل…"
+
+#: src/window.cr:473
+msgid "Unlock…"
+msgstr "ألغِ القفل…"
+
+#: src/window.cr:507
+msgid "Reading system information…"
+msgstr "جارٍ قراءة معلومات النظام…"
+
+#: src/window.cr:546
+msgid "OpenGL information"
+msgstr "معلومات OpenGL"
+
+#: src/window.cr:547
+msgid "Vulkan information"
+msgstr "معلومات Vulkan"
+
+#: src/window.cr:548
+msgid "Audio server and default devices"
+msgstr "خادم الصوت والأجهزة الافتراضية"
+
+#: src/window.cr:549
+msgid "Bounded background queries"
+msgstr "استعلامات خلفية محدودة"
+
+#: src/window.cr:550
+msgid "Additional processor and memory details"
+msgstr "تفاصيل إضافية عن المعالج والذاكرة"
+
+#: src/window.cr:551
+msgid "Printer information"
+msgstr "معلومات الطابعة"
+
+#: src/window.cr:556
+msgid "Optional software"
+msgstr "برامج اختيارية"
+
+#: src/window.cr:564
+msgid "The Flatpak can only use software available inside its sandbox."
+msgstr "لا يمكن لـ Flatpak استخدام سوى البرامج المتاحة داخل بيئته المعزولة."
+
+#: src/window.cr:570
+msgid ""
+"Add these packages to environment.systemPackages in your NixOS configuration:"
+msgstr "أضف هذه الحزم إلى environment.systemPackages في إعداد NixOS لديك:"
+
+#: src/window.cr:581
+msgid "Apply your configuration with sudo nixos-rebuild switch."
+msgstr "طبّق إعداداتك باستخدام sudo nixos-rebuild switch."
+
+#: src/window.cr:588
+msgid ""
+"Enable security.polkit.enable and a graphical authentication agent for "
+"additional hardware details."
+msgstr ""
+"فعّل security.polkit.enable ووكيل مصادقة رسوميًا للحصول على تفاصيل إضافية عن "
+"العتاد."
+
+#: src/window.cr:595
+msgid "The CUPS library must also be available to the application at runtime."
+msgstr "يجب أن تكون مكتبة CUPS متاحة للتطبيق أثناء التشغيل أيضًا."
+
+#: src/window.cr:601
+msgid "Install using your package manager:"
+msgstr "ثبّت باستخدام مدير الحزم:"
+
+#: src/window.cr:613
+msgid "Install the missing software using your package manager."
+msgstr "ثبّت البرامج الناقصة باستخدام مدير الحزم."
+
+#: src/window.cr:749
+msgid "Hardware summary"
+msgstr "ملخص العتاد"
+
+#: src/window.cr:751
+msgid "%{cores} cores · %{threads} threads"
+msgstr "%{cores} أنوية · %{threads} خيطًا"
+
+#: src/window.cr:769 src/window.cr:1004
+msgid "Storage"
+msgstr "التخزين"
+
+#: src/window.cr:778 src/window.cr:1040 src/window.cr:1329 src/window.cr:1368
+#: src/window.cr:1377 src/window.cr:1409
+msgid "None"
+msgstr "لا شيء"
+
+#: src/window.cr:781 src/window.cr:1082
 msgid "Kernel"
 msgstr "النواة"
 
-#: src/window.cr:775 src/window.cr:1076
+#: src/window.cr:782 src/window.cr:1083
 msgid "Desktop Environment"
 msgstr "بيئة سطح المكتب"
 
-#: src/window.cr:776 src/window.cr:1078
+#: src/window.cr:783 src/window.cr:1085
 msgid "Uptime"
 msgstr "مدة التشغيل"
 
-#: src/window.cr:784 src/window.cr:881 src/window.cr:923
+#: src/window.cr:791 src/window.cr:888 src/window.cr:930
 msgid "Identification"
 msgstr "التعريف"
 
-#: src/window.cr:786 src/window.cr:883 src/window.cr:1007 src/window.cr:1061
-#: src/window.cr:1104 src/window.cr:1157 src/window.cr:1332
+#: src/window.cr:793 src/window.cr:890 src/window.cr:1014 src/window.cr:1068
+#: src/window.cr:1111 src/window.cr:1164 src/window.cr:1339
 msgid "Model"
 msgstr "الطراز"
 
-#: src/window.cr:787 src/window.cr:882 src/window.cr:1008 src/window.cr:1103
-#: src/window.cr:1156
+#: src/window.cr:794 src/window.cr:889 src/window.cr:1015 src/window.cr:1110
+#: src/window.cr:1163
 msgid "Manufacturer"
 msgstr "الشركة المصنّعة"
 
-#: src/window.cr:788
+#: src/window.cr:795
 msgid "Architecture"
 msgstr "البنية"
 
-#: src/window.cr:789
+#: src/window.cr:796
 msgid "CPU family"
 msgstr "عائلة وحدة المعالجة المركزية"
 
-#: src/window.cr:790
+#: src/window.cr:797
 msgid "Model ID"
 msgstr "معرّف الطراز"
 
-#: src/window.cr:791
+#: src/window.cr:798
 msgid "Stepping"
 msgstr "مراجعة الشريحة"
 
-#: src/window.cr:792
+#: src/window.cr:799
 msgid "Topology and socket"
 msgstr "البنية والمقبس"
 
-#: src/window.cr:793
+#: src/window.cr:800
 msgid "Physical cores"
 msgstr "الأنوية الفعلية"
 
-#: src/window.cr:794
+#: src/window.cr:801
 msgid "Logical processors"
 msgstr "المعالجات المنطقية"
 
-#: src/window.cr:795
+#: src/window.cr:802
 msgid "Socket count"
 msgstr "عدد المقابس"
 
-#: src/window.cr:804 src/window.cr:809
+#: src/window.cr:811 src/window.cr:816
 msgid "Socket"
 msgstr "المقبس"
 
-#: src/window.cr:805 src/window.cr:810
+#: src/window.cr:812 src/window.cr:817
 msgid "Socket type"
 msgstr "نوع المقبس"
 
-#: src/window.cr:808
+#: src/window.cr:815
 msgid "Socket %{number}"
 msgstr "المقبس %{number}"
 
-#: src/window.cr:813
+#: src/window.cr:820
 msgid "Clock speed"
 msgstr "سرعة الساعة"
 
-#: src/window.cr:815
+#: src/window.cr:822
 msgid "Base clock"
 msgstr "الساعة الأساسية"
 
-#: src/window.cr:816
+#: src/window.cr:823
 msgid "Minimum clock"
 msgstr "أدنى سرعة للساعة"
 
-#: src/window.cr:817 src/window.cr:836
+#: src/window.cr:824 src/window.cr:843
 msgid "Maximum clock"
 msgstr "أقصى سرعة للساعة"
 
-#: src/window.cr:818
+#: src/window.cr:825
 msgid "Current clock range"
 msgstr "نطاق الساعة الحالي"
 
-#: src/window.cr:820
+#: src/window.cr:827
 msgid "Clock control"
 msgstr "التحكم بالساعة"
 
-#: src/window.cr:821
+#: src/window.cr:828
 msgid "Available frequency steps"
 msgstr "خطوات التردد المتاحة"
 
-#: src/window.cr:822
+#: src/window.cr:829
 msgid "Frequency driver"
 msgstr "برنامج تشغيل التردد"
 
-#: src/window.cr:823
+#: src/window.cr:830
 msgid "Governor"
 msgstr "منظّم التردد"
 
-#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+#: src/window.cr:832 src/window.cr:1022 src/window.cr:1167 src/window.cr:1420
 msgid "Yes"
 msgstr "نعم"
 
-#: src/window.cr:825 src/window.cr:1015 src/window.cr:1160 src/window.cr:1413
+#: src/window.cr:832 src/window.cr:1022 src/window.cr:1167 src/window.cr:1420
 msgid "No"
 msgstr "لا"
 
-#: src/window.cr:826
+#: src/window.cr:833
 msgid "Boost enabled"
 msgstr "التعزيز مفعّل"
 
-#: src/window.cr:828
+#: src/window.cr:835
 msgid "Additional processor information"
 msgstr "معلومات إضافية عن المعالج"
 
-#: src/window.cr:830 src/window.cr:858
+#: src/window.cr:837 src/window.cr:865
 msgid "%{section} · Socket %{number}"
 msgstr "%{section} · المقبس %{number}"
 
-#: src/window.cr:833 src/window.cr:1063
+#: src/window.cr:840 src/window.cr:1070
 msgid "Voltage"
 msgstr "الجهد"
 
-#: src/window.cr:834
+#: src/window.cr:841
 msgid "External clock"
 msgstr "الساعة الخارجية"
 
-#: src/window.cr:835
+#: src/window.cr:842
 msgid "Configured clock"
 msgstr "الساعة المضبوطة"
 
-#: src/window.cr:838
+#: src/window.cr:845
 msgid "Caches"
 msgstr "ذاكرات التخزين المؤقت"
 
-#: src/window.cr:839
+#: src/window.cr:846
 msgid "Cache information"
 msgstr "معلومات ذاكرة التخزين المؤقت"
 
-#: src/window.cr:842
+#: src/window.cr:849
 msgid "Data"
 msgstr "البيانات"
 
-#: src/window.cr:843
+#: src/window.cr:850
 msgid "Instructions"
 msgstr "التعليمات"
 
-#: src/window.cr:844
+#: src/window.cr:851
 msgid "Data and instructions"
 msgstr "البيانات والتعليمات"
 
-#: src/window.cr:847
+#: src/window.cr:854
 msgid "L%{level} cache (%{type})"
 msgstr "ذاكرة التخزين المؤقت L%{level} (%{type})"
 
-#: src/window.cr:849
+#: src/window.cr:856
 msgid "%{count} × %{size} · %{total} total"
 msgstr "%{count} × %{size} · الإجمالي %{total}"
 
-#: src/window.cr:851
+#: src/window.cr:858
 msgid "%{size} cache lines"
 msgstr "%{size} سطرًا في ذاكرة التخزين المؤقت"
 
-#: src/window.cr:852
+#: src/window.cr:859
 msgid "%{ways}-way associative"
 msgstr "ترابطية %{ways} اتجاهات"
 
-#: src/window.cr:856
+#: src/window.cr:863
 msgid "Processor features"
 msgstr "ميزات المعالج"
 
-#: src/window.cr:861
+#: src/window.cr:868
 msgid "Processor Features"
 msgstr "ميزات المعالج"
 
-#: src/window.cr:862
+#: src/window.cr:869
 msgid "Characteristics"
 msgstr "الخصائص"
 
-#: src/window.cr:884 src/window.cr:940
+#: src/window.cr:891 src/window.cr:947
 msgid "Revision"
 msgstr "المراجعة"
 
-#: src/window.cr:885
+#: src/window.cr:892
 msgid "Firmware"
 msgstr "البرنامج الثابت"
 
-#: src/window.cr:886
+#: src/window.cr:893
 msgid "BIOS vendor"
 msgstr "الشركة المصنّعة لـ BIOS"
 
-#: src/window.cr:887
+#: src/window.cr:894
 msgid "BIOS version"
 msgstr "إصدار BIOS"
 
-#: src/window.cr:888
+#: src/window.cr:895
 msgid "BIOS date"
 msgstr "تاريخ BIOS"
 
-#: src/window.cr:889
+#: src/window.cr:896
 msgid "Boot and security"
 msgstr "الإقلاع والأمان"
 
-#: src/window.cr:892
+#: src/window.cr:899
 msgid "Legacy BIOS"
 msgstr "BIOS قديم"
 
-#: src/window.cr:895
+#: src/window.cr:902
 msgid "Boot mode"
 msgstr "وضع الإقلاع"
 
-#: src/window.cr:896
+#: src/window.cr:903
 msgid "Secure Boot"
 msgstr "الإقلاع الآمن"
 
-#: src/window.cr:900
+#: src/window.cr:907
 msgid "Not detected"
 msgstr "لم يُكتشف"
 
-#: src/window.cr:902
+#: src/window.cr:909
 msgid "Detected"
 msgstr "تم الاكتشاف"
 
-#: src/window.cr:906
+#: src/window.cr:913
 msgid "TPM"
 msgstr "TPM"
 
-#: src/window.cr:912
+#: src/window.cr:919
 msgid "Display controller"
 msgstr "متحكم العرض"
 
-#: src/window.cr:924
+#: src/window.cr:931
 msgid "GPU model"
 msgstr "طراز GPU"
 
-#: src/window.cr:925
+#: src/window.cr:932
 msgid "GPU manufacturer"
 msgstr "الشركة المصنّعة لـ GPU"
 
-#: src/window.cr:926
+#: src/window.cr:933
 msgid "Card manufacturer"
 msgstr "الشركة المصنّعة للبطاقة"
 
-#: src/window.cr:927
+#: src/window.cr:934
 msgid "Board model"
 msgstr "طراز اللوحة"
 
-#: src/window.cr:928
+#: src/window.cr:935
 msgid "Model group"
 msgstr "مجموعة الطراز"
 
-#: src/window.cr:935
+#: src/window.cr:942
 msgid "Connected monitors"
 msgstr "الشاشات المتصلة"
 
-#: src/window.cr:937
+#: src/window.cr:944
 msgid "PCI and driver"
 msgstr "PCI وبرنامج التشغيل"
 
-#: src/window.cr:938
+#: src/window.cr:945
 msgid "PCI ID"
 msgstr "معرّف PCI"
 
-#: src/window.cr:939
+#: src/window.cr:946
 msgid "Subsystem ID"
 msgstr "معرّف النظام الفرعي"
 
-#: src/window.cr:941
+#: src/window.cr:948
 msgid "PCI address"
 msgstr "عنوان PCI"
 
-#: src/window.cr:942 src/window.cr:1343 src/window.cr:1382
+#: src/window.cr:949 src/window.cr:1350 src/window.cr:1389
 msgid "Kernel driver"
 msgstr "برنامج تشغيل النواة"
 
-#: src/window.cr:943
+#: src/window.cr:950
 msgid "Current PCIe link"
 msgstr "وصلة PCIe الحالية"
 
-#: src/window.cr:943 src/window.cr:944 src/window.cr:945 src/window.cr:948
-#: src/window.cr:951 src/window.cr:953 src/window.cr:956 src/window.cr:958
-#: src/window.cr:959 src/window.cr:960 src/window.cr:961 src/window.cr:963
-#: src/window.cr:964 src/window.cr:965 src/window.cr:967 src/window.cr:973
-#: src/window.cr:976 src/window.cr:1017 src/window.cr:1019 src/window.cr:1020
-#: src/window.cr:1021 src/window.cr:1062 src/window.cr:1093 src/window.cr:1107
-#: src/window.cr:1108 src/window.cr:1109 src/window.cr:1110 src/window.cr:1114
-#: src/window.cr:1117 src/window.cr:1118 src/window.cr:1119 src/window.cr:1120
-#: src/window.cr:1126 src/window.cr:1162 src/window.cr:1163 src/window.cr:1185
-#: src/window.cr:1186 src/window.cr:1187 src/window.cr:1245 src/window.cr:1256
-#: src/window.cr:1263 src/window.cr:1270 src/window.cr:1386
+#: src/window.cr:950 src/window.cr:951 src/window.cr:952 src/window.cr:955
+#: src/window.cr:958 src/window.cr:960 src/window.cr:963 src/window.cr:965
+#: src/window.cr:966 src/window.cr:967 src/window.cr:968 src/window.cr:970
+#: src/window.cr:971 src/window.cr:972 src/window.cr:974 src/window.cr:980
+#: src/window.cr:983 src/window.cr:1024 src/window.cr:1026 src/window.cr:1027
+#: src/window.cr:1028 src/window.cr:1069 src/window.cr:1100 src/window.cr:1114
+#: src/window.cr:1115 src/window.cr:1116 src/window.cr:1117 src/window.cr:1121
+#: src/window.cr:1124 src/window.cr:1125 src/window.cr:1126 src/window.cr:1127
+#: src/window.cr:1133 src/window.cr:1169 src/window.cr:1170 src/window.cr:1192
+#: src/window.cr:1193 src/window.cr:1194 src/window.cr:1252 src/window.cr:1263
+#: src/window.cr:1270 src/window.cr:1277 src/window.cr:1393
 msgid "Not reported"
 msgstr "غير مُبلّغ عنه"
 
-#: src/window.cr:945
+#: src/window.cr:952
 msgid "Maximum PCIe link"
 msgstr "أقصى وصلة PCIe"
 
-#: src/window.cr:946
+#: src/window.cr:953
 msgid "Memory and clocks"
 msgstr "الذاكرة والساعات"
 
-#: src/window.cr:947
+#: src/window.cr:954
 msgid "Dedicated video memory"
 msgstr "ذاكرة فيديو مخصصة"
 
-#: src/window.cr:948
+#: src/window.cr:955
 msgid "Current GPU clock"
 msgstr "ساعة GPU الحالية"
 
-#: src/window.cr:953
+#: src/window.cr:960
 msgid "Current video memory clock"
 msgstr "ساعة ذاكرة الفيديو الحالية"
 
-#: src/window.cr:958
+#: src/window.cr:965
 msgid "GPU utilization"
 msgstr "استخدام GPU"
 
-#: src/window.cr:960
+#: src/window.cr:967
 msgid "GPU power"
 msgstr "طاقة GPU"
 
-#: src/window.cr:962
+#: src/window.cr:969
 msgid "Graphics APIs"
 msgstr "واجهات برمجة الرسوميات"
 
-#: src/window.cr:963
+#: src/window.cr:970
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: src/window.cr:964
+#: src/window.cr:971
 msgid "GLSL"
 msgstr "GLSL"
 
-#: src/window.cr:965
+#: src/window.cr:972
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: src/window.cr:966
+#: src/window.cr:973
 msgid "OpenGL renderer"
 msgstr "مصيّر OpenGL"
 
-#: src/window.cr:967
+#: src/window.cr:974
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/window.cr:968
+#: src/window.cr:975
 msgid "Vulkan driver"
 msgstr "برنامج تشغيل Vulkan"
 
-#: src/window.cr:970
+#: src/window.cr:977
 msgid "Discrete GPU"
 msgstr "GPU منفصل"
 
-#: src/window.cr:971
+#: src/window.cr:978
 msgid "Integrated GPU"
 msgstr "GPU مدمج"
 
-#: src/window.cr:972
+#: src/window.cr:979
 msgid "Virtual GPU"
 msgstr "GPU افتراضي"
 
-#: src/window.cr:975
+#: src/window.cr:982
 msgid "Vulkan device type"
 msgstr "نوع جهاز Vulkan"
 
-#: src/window.cr:976
+#: src/window.cr:983
 msgid "Vulkan driver version"
 msgstr "إصدار برنامج تشغيل Vulkan"
 
-#: src/window.cr:983
+#: src/window.cr:990
 msgid "Open Disk View"
 msgstr "افتح Disk View"
 
-#: src/window.cr:1010
+#: src/window.cr:1017
 msgid "Capacity"
 msgstr "السعة"
 
-#: src/window.cr:1011 src/window.cr:1278 src/window.cr:1311
+#: src/window.cr:1018 src/window.cr:1285 src/window.cr:1318
 msgid "Type"
 msgstr "النوع"
 
-#: src/window.cr:1013 src/window.cr:1159 src/window.cr:1312
+#: src/window.cr:1020 src/window.cr:1166 src/window.cr:1319
 msgid "Connection"
 msgstr "الاتصال"
 
-#: src/window.cr:1014 src/window.cr:1277
+#: src/window.cr:1021 src/window.cr:1284
 msgid "Device"
 msgstr "الجهاز"
 
-#: src/window.cr:1015
+#: src/window.cr:1022
 msgid "Removable"
 msgstr "قابل للإزالة"
 
-#: src/window.cr:1017
+#: src/window.cr:1024
 msgid "Warning"
 msgstr "تحذير"
 
-#: src/window.cr:1017
+#: src/window.cr:1024
 msgid "OK"
 msgstr "سليم"
 
-#: src/window.cr:1018
+#: src/window.cr:1025
 msgid "Status (SMART)"
 msgstr "الحالة (SMART)"
 
-#: src/window.cr:1019
+#: src/window.cr:1026
 msgid "Temperature"
 msgstr "درجة الحرارة"
 
-#: src/window.cr:1020
+#: src/window.cr:1027
 msgid "Power-on hours"
 msgstr "ساعات التشغيل"
 
-#: src/window.cr:1021
+#: src/window.cr:1028
 msgid "Last updated"
 msgstr "آخر تحديث"
 
-#: src/window.cr:1029
+#: src/window.cr:1036
 msgid "Installed RAM"
 msgstr "ذاكرة RAM المثبتة"
 
-#: src/window.cr:1030
+#: src/window.cr:1037
 msgid "Usable RAM"
 msgstr "ذاكرة RAM القابلة للاستخدام"
 
-#: src/window.cr:1031
+#: src/window.cr:1038
 msgid "Available RAM"
 msgstr "ذاكرة RAM المتاحة"
 
-#: src/window.cr:1033
+#: src/window.cr:1040
 msgid "Swap"
 msgstr "الذاكرة البديلة"
 
-#: src/window.cr:1037
+#: src/window.cr:1044
 msgid "Module %{number}"
 msgstr "الوحدة %{number}"
 
-#: src/window.cr:1062
+#: src/window.cr:1069
 msgid "Timings (CL–tRCD–tRP–tRAS)"
 msgstr "التوقيتات (CL–tRCD–tRP–tRAS)"
 
-#: src/window.cr:1064
+#: src/window.cr:1071
 msgid "Minimum voltage"
 msgstr "أدنى جهد"
 
-#: src/window.cr:1065
+#: src/window.cr:1072
 msgid "Maximum voltage"
 msgstr "أقصى جهد"
 
-#: src/window.cr:1071
+#: src/window.cr:1078
 msgid "Open system settings"
 msgstr "افتح إعدادات النظام"
 
-#: src/window.cr:1077
+#: src/window.cr:1084
 msgid "Hostname"
 msgstr "اسم المضيف"
 
-#: src/window.cr:1080
+#: src/window.cr:1087
 msgid "Runtime environment"
 msgstr "بيئة التشغيل"
 
-#: src/window.cr:1081
+#: src/window.cr:1088
 msgid "Session type"
 msgstr "نوع الجلسة"
 
-#: src/window.cr:1082
+#: src/window.cr:1089
 msgid "System architecture"
 msgstr "بنية النظام"
 
-#: src/window.cr:1083
+#: src/window.cr:1090
 msgid "Virtual machine"
 msgstr "آلة افتراضية"
 
-#: src/window.cr:1084
+#: src/window.cr:1091
 msgid "Virtualization"
 msgstr "الافتراضية"
 
-#: src/window.cr:1085
+#: src/window.cr:1092
 msgid "Container"
 msgstr "حاوية"
 
-#: src/window.cr:1086
+#: src/window.cr:1093
 msgid "Application format"
 msgstr "تنسيق التطبيق"
 
-#: src/window.cr:1090
+#: src/window.cr:1097
 msgid "Open power settings"
 msgstr "افتح إعدادات الطاقة"
 
-#: src/window.cr:1093
+#: src/window.cr:1100
 msgid "Power information"
 msgstr "معلومات الطاقة"
 
-#: src/window.cr:1097
+#: src/window.cr:1104
 msgid "Power adapter"
 msgstr "محوّل الطاقة"
 
-#: src/window.cr:1098 src/window.cr:1394 src/window.cr:1445
+#: src/window.cr:1105 src/window.cr:1401 src/window.cr:1452
 msgid "Connected"
 msgstr "متصل"
 
-#: src/window.cr:1102
+#: src/window.cr:1109
 msgid "Battery"
 msgstr "البطارية"
 
-#: src/window.cr:1105 src/window.cr:1334
+#: src/window.cr:1112 src/window.cr:1341
 msgid "Status"
 msgstr "الحالة"
 
-#: src/window.cr:1107
+#: src/window.cr:1114
 msgid "Charge"
 msgstr "الشحن"
 
-#: src/window.cr:1109
+#: src/window.cr:1116
 msgid "Full charge capacity"
 msgstr "سعة الشحن الكامل"
 
-#: src/window.cr:1110
+#: src/window.cr:1117
 msgid "Design capacity"
 msgstr "السعة التصميمية"
 
-#: src/window.cr:1116
+#: src/window.cr:1123
 msgid "Battery health"
 msgstr "حالة البطارية"
 
-#: src/window.cr:1117
+#: src/window.cr:1124
 msgid "Charge cycles"
 msgstr "دورات الشحن"
 
-#: src/window.cr:1118
+#: src/window.cr:1125
 msgid "Battery power"
 msgstr "قدرة البطارية"
 
-#: src/window.cr:1120 src/window.cr:1126
+#: src/window.cr:1127 src/window.cr:1133
 msgid "0 min"
 msgstr "0 دقيقة"
 
-#: src/window.cr:1121 src/window.cr:1125
+#: src/window.cr:1128 src/window.cr:1132
 msgid "Estimated time to full"
 msgstr "الوقت المتوقع حتى الشحن الكامل"
 
-#: src/window.cr:1121 src/window.cr:1125
+#: src/window.cr:1128 src/window.cr:1132
 msgid "Estimated time remaining"
 msgstr "الوقت المتبقي المتوقع"
 
-#: src/window.cr:1134
+#: src/window.cr:1141
 msgid "Charging"
 msgstr "جارٍ الشحن"
 
-#: src/window.cr:1135
+#: src/window.cr:1142
 msgid "Discharging"
 msgstr "جارٍ التفريغ"
 
-#: src/window.cr:1136
+#: src/window.cr:1143
 msgid "Fully charged"
 msgstr "مُشحن بالكامل"
 
-#: src/window.cr:1137
+#: src/window.cr:1144
 msgid "Not charging"
 msgstr "لا يشحن"
 
-#: src/window.cr:1143
+#: src/window.cr:1150
 msgid "Open display settings"
 msgstr "افتح إعدادات الشاشة"
 
-#: src/window.cr:1144
+#: src/window.cr:1151
 msgid "Monitor"
 msgstr "الشاشة"
 
-#: src/window.cr:1158 src/window.cr:1315
+#: src/window.cr:1165 src/window.cr:1322
 msgid "Product ID"
 msgstr "معرّف المنتج"
 
-#: src/window.cr:1160 src/window.cr:1417
+#: src/window.cr:1167 src/window.cr:1424
 msgid "Active"
 msgstr "نشط"
 
-#: src/window.cr:1162
+#: src/window.cr:1169
 msgid "Current resolution"
 msgstr "الدقة الحالية"
 
-#: src/window.cr:1163
+#: src/window.cr:1170
 msgid "Current refresh rate"
 msgstr "معدل التحديث الحالي"
 
-#: src/window.cr:1164
+#: src/window.cr:1171
 msgid "Preferred resolution"
 msgstr "الدقة المفضلة"
 
-#: src/window.cr:1165
+#: src/window.cr:1172
 msgid "Preferred refresh rate"
 msgstr "معدل التحديث المفضل"
 
-#: src/window.cr:1168
+#: src/window.cr:1175
 msgid "Display size"
 msgstr "حجم الشاشة"
 
-#: src/window.cr:1170
+#: src/window.cr:1177
 msgid "Diagonal"
 msgstr "القطر"
 
-#: src/window.cr:1172
+#: src/window.cr:1179
 msgid "Supported resolutions"
 msgstr "الدقات المدعومة"
 
-#: src/window.cr:1177
+#: src/window.cr:1184
 msgid "Monitor %{number}"
 msgstr "الشاشة %{number}"
 
-#: src/window.cr:1178
+#: src/window.cr:1185
 msgid "Primary"
 msgstr "أساسي"
 
-#: src/window.cr:1183
+#: src/window.cr:1190
 msgid "Open sound settings"
 msgstr "افتح إعدادات الصوت"
 
-#: src/window.cr:1184
+#: src/window.cr:1191
 msgid "Audio session"
 msgstr "جلسة الصوت"
 
-#: src/window.cr:1185
+#: src/window.cr:1192
 msgid "Audio server"
 msgstr "خادم الصوت"
 
-#: src/window.cr:1186
+#: src/window.cr:1193
 msgid "Default output"
 msgstr "الإخراج الافتراضي"
 
-#: src/window.cr:1187
+#: src/window.cr:1194
 msgid "Default input"
 msgstr "الإدخال الافتراضي"
 
-#: src/window.cr:1188
+#: src/window.cr:1195
 msgid "Audio device"
 msgstr "جهاز الصوت"
 
-#: src/window.cr:1197 src/window.cr:1276 src/window.cr:1380
+#: src/window.cr:1204 src/window.cr:1283 src/window.cr:1387
 msgid "Name"
 msgstr "الاسم"
 
-#: src/window.cr:1198
+#: src/window.cr:1205
 msgid "Device ID"
 msgstr "معرّف الجهاز"
 
-#: src/window.cr:1200
+#: src/window.cr:1207
 msgid "Driver"
 msgstr "برنامج التشغيل"
 
-#: src/window.cr:1201
+#: src/window.cr:1208
 msgid "Codecs"
 msgstr "المرمّزات"
 
-#: src/window.cr:1245
+#: src/window.cr:1252
 msgid "Sensor readings"
 msgstr "قراءات المستشعرات"
 
-#: src/window.cr:1253
+#: src/window.cr:1260
 msgid "Temperature %{number}"
 msgstr "درجة الحرارة %{number}"
 
-#: src/window.cr:1253
+#: src/window.cr:1260
 msgid "Fan %{number}"
 msgstr "المروحة %{number}"
 
-#: src/window.cr:1270
+#: src/window.cr:1277
 msgid "Video devices"
 msgstr "أجهزة الفيديو"
 
-#: src/window.cr:1278
+#: src/window.cr:1285
 msgid "Video capture"
 msgstr "التقاط الفيديو"
 
-#: src/window.cr:1284 src/window.cr:1309
+#: src/window.cr:1291 src/window.cr:1316
 msgid "Input device"
 msgstr "جهاز إدخال"
 
-#: src/window.cr:1295
+#: src/window.cr:1302
 msgid "Open keyboard settings"
 msgstr "افتح إعدادات لوحة المفاتيح"
 
-#: src/window.cr:1297
+#: src/window.cr:1304
 msgid "Open mouse and touchpad settings"
 msgstr "افتح إعدادات الفأرة ولوحة اللمس"
 
-#: src/window.cr:1303
+#: src/window.cr:1310
 msgid "Keyboard"
 msgstr "لوحة المفاتيح"
 
-#: src/window.cr:1304
+#: src/window.cr:1311
 msgid "Mouse"
 msgstr "الفأرة"
 
-#: src/window.cr:1305
+#: src/window.cr:1312
 msgid "Gamepad / Joystick"
 msgstr "لوحة ألعاب / عصا تحكم"
 
-#: src/window.cr:1306
+#: src/window.cr:1313
 msgid "Touchpad"
 msgstr "لوحة اللمس"
 
-#: src/window.cr:1307
+#: src/window.cr:1314
 msgid "Touchscreen"
 msgstr "شاشة لمس"
 
-#: src/window.cr:1308
+#: src/window.cr:1315
 msgid "Graphics tablet"
 msgstr "لوحة رسومية"
 
-#: src/window.cr:1314
+#: src/window.cr:1321
 msgid "Vendor ID"
 msgstr "معرّف المورّد"
 
-#: src/window.cr:1320
+#: src/window.cr:1327
 msgid "Open network settings"
 msgstr "افتح إعدادات الشبكة"
 
-#: src/window.cr:1322
+#: src/window.cr:1329
 msgid "Network adapters"
 msgstr "محولات الشبكة"
 
-#: src/window.cr:1333
+#: src/window.cr:1340
 msgid "Interface"
 msgstr "الواجهة"
 
-#: src/window.cr:1335
+#: src/window.cr:1342
 msgid "Connection profile"
 msgstr "ملف تعريف الاتصال"
 
-#: src/window.cr:1336 src/window.cr:1386
+#: src/window.cr:1343 src/window.cr:1393
 msgid "Link speed"
 msgstr "سرعة الاتصال"
 
-#: src/window.cr:1338
+#: src/window.cr:1345
 msgid "Duplex"
 msgstr "ازدواجية"
 
-#: src/window.cr:1338
+#: src/window.cr:1345
 msgid "Full duplex"
 msgstr "ازدواجية كاملة"
 
-#: src/window.cr:1338
+#: src/window.cr:1345
 msgid "Half duplex"
 msgstr "نصف ازدواجية"
 
-#: src/window.cr:1340 src/window.cr:1381 src/window.cr:1393
+#: src/window.cr:1347 src/window.cr:1388 src/window.cr:1400
 msgid "MAC address"
 msgstr "عنوان MAC"
 
-#: src/window.cr:1341
+#: src/window.cr:1348
 msgid "Permanent MAC address"
 msgstr "عنوان MAC دائم"
 
-#: src/window.cr:1342
+#: src/window.cr:1349
 msgid "MTU"
 msgstr "MTU"
 
-#: src/window.cr:1345
+#: src/window.cr:1352
 msgid "SSID"
 msgstr "SSID"
 
-#: src/window.cr:1346
+#: src/window.cr:1353
 msgid "Access point (BSSID)"
 msgstr "نقطة الوصول (BSSID)"
 
-#: src/window.cr:1347 src/window.cr:1396
+#: src/window.cr:1354 src/window.cr:1403
 msgid "Signal strength"
 msgstr "قوة الإشارة"
 
-#: src/window.cr:1348
+#: src/window.cr:1355
 msgid "Frequency"
 msgstr "التردد"
 
-#: src/window.cr:1349
+#: src/window.cr:1356
 msgid "Security"
 msgstr "الأمان"
 
-#: src/window.cr:1349
+#: src/window.cr:1356
 msgid "Open network"
 msgstr "شبكة مفتوحة"
 
-#: src/window.cr:1358
+#: src/window.cr:1365
 msgid "Open printer settings"
 msgstr "افتح إعدادات الطابعة"
 
-#: src/window.cr:1363
+#: src/window.cr:1370
 msgid "Printer"
 msgstr "الطابعة"
 
-#: src/window.cr:1368
+#: src/window.cr:1375
 msgid "Open Bluetooth settings"
 msgstr "افتح إعدادات Bluetooth"
 
-#: src/window.cr:1370
+#: src/window.cr:1377
 msgid "Bluetooth adapters"
 msgstr "محولات Bluetooth"
 
-#: src/window.cr:1384
+#: src/window.cr:1391
 msgid "Enabled"
 msgstr "مفعّل"
 
-#: src/window.cr:1385
+#: src/window.cr:1392
 msgid "Bluetooth version"
 msgstr "إصدار Bluetooth"
 
-#: src/window.cr:1387
+#: src/window.cr:1394
 msgid "Discoverable"
 msgstr "قابل للاكتشاف"
 
-#: src/window.cr:1388
+#: src/window.cr:1395
 msgid "Pairable"
 msgstr "قابل للاقتران"
 
-#: src/window.cr:1389
+#: src/window.cr:1396
 msgid "Connected devices"
 msgstr "الأجهزة المتصلة"
 
-#: src/window.cr:1395
+#: src/window.cr:1402
 msgid "Paired"
 msgstr "مقترن"
 
-#: src/window.cr:1404
+#: src/window.cr:1411
 msgid "IP addresses"
 msgstr "عناوين IP"
 
-#: src/window.cr:1405
+#: src/window.cr:1412
 msgid "Address configuration"
 msgstr "إعداد العنوان"
 
-#: src/window.cr:1406 src/window.cr:1460
+#: src/window.cr:1413 src/window.cr:1467
 msgid "DHCP"
 msgstr "DHCP"
 
-#: src/window.cr:1407
+#: src/window.cr:1414
 msgid "Gateway"
 msgstr "البوابة"
 
-#: src/window.cr:1408
+#: src/window.cr:1415
 msgid "DNS servers"
 msgstr "خوادم DNS"
 
-#: src/window.cr:1409
+#: src/window.cr:1416
 msgid "Search domains"
 msgstr "نطاقات البحث"
 
-#: src/window.cr:1417
+#: src/window.cr:1424
 msgid "Inactive"
 msgstr "غير نشط"
 
-#: src/window.cr:1427
+#: src/window.cr:1434
 msgid "%{days} d %{hours} h %{minutes} min"
 msgstr "%{days} يوم %{hours} س %{minutes} د"
 
-#: src/window.cr:1429
+#: src/window.cr:1436
 msgid "%{hours} h %{minutes} min"
 msgstr "%{hours} س %{minutes} د"
 
-#: src/window.cr:1431
+#: src/window.cr:1438
 msgid "%{minutes} min"
 msgstr "%{minutes} د"
 
-#: src/window.cr:1437
+#: src/window.cr:1444
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
-#: src/window.cr:1438
+#: src/window.cr:1445
 msgid "Bluetooth PAN"
 msgstr "Bluetooth PAN"
 
-#: src/window.cr:1439
+#: src/window.cr:1446
 msgid "Ethernet (LAN)"
 msgstr "Ethernet (LAN)"
 
-#: src/window.cr:1446
+#: src/window.cr:1453
 msgid "Disconnected"
 msgstr "غير متصل"
 
-#: src/window.cr:1447
+#: src/window.cr:1454
 msgid "Connecting"
 msgstr "جارٍ الاتصال"
 
-#: src/window.cr:1448
+#: src/window.cr:1455
 msgid "Disconnecting"
 msgstr "جارٍ قطع الاتصال"
 
-#: src/window.cr:1449
+#: src/window.cr:1456
 msgid "Unavailable"
 msgstr "غير متاح"
 
-#: src/window.cr:1450
+#: src/window.cr:1457
 msgid "Unmanaged"
 msgstr "غير مُدار"
 
-#: src/window.cr:1451
+#: src/window.cr:1458
 msgid "Connection failed"
 msgstr "فشل الاتصال"
 
-#: src/window.cr:1458
+#: src/window.cr:1465
 msgid "Automatic"
 msgstr "تلقائي"
 
-#: src/window.cr:1459
+#: src/window.cr:1466
 msgid "Manual"
 msgstr "يدوي"
 
-#: src/window.cr:1461
+#: src/window.cr:1468
 msgid "Link-local"
 msgstr "ارتباط محلي"
 
-#: src/window.cr:1462
+#: src/window.cr:1469
 msgid "Shared"
 msgstr "مشترك"
 
-#: src/window.cr:1463
+#: src/window.cr:1470
 msgid "Disabled"
 msgstr "معطّل"
 
-#: src/window.cr:1464
+#: src/window.cr:1471
 msgid "Ignored"
 msgstr "متجاهل"
+
+#~ msgid "Video"
+#~ msgstr "الفيديو"

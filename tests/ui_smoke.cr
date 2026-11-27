@@ -123,6 +123,8 @@ factory = -> do
   tracked_sensor : Adw::ActionRow? = nil
   ticks = 0
   resize_cycles = 0
+  network_column_width = 0
+  network_content_width = 0
   GLib.timeout(200.milliseconds) do
     begin
       ticks += 1
@@ -133,6 +135,7 @@ factory = -> do
       end
       split = widgets.select(Adw::OverlaySplitView).first
       navigation = widgets.select(Gtk::ListBox).find { |list| list.has_css_class("navigation-sidebar") }.not_nil!
+      navigation_rows = descendants(navigation).select(Gtk::ListBoxRow).to_h { |row| {row.name, row} }
       rows = widgets.select(Adw::ActionRow)
       banner = widgets.select(Adw::Banner).first
       unlock_action = window.lookup_action("hardware-details").not_nil!
@@ -141,7 +144,7 @@ factory = -> do
         if rows.any? { |row| row.subtitle.try(&.includes?("Example CPU 9000")) }
           check(Thread.current == gtk_thread, "GTK callbacks stay on the original application thread")
           check(!window.lookup_action("back").not_nil!.enabled? && !window.lookup_action("forward").not_nil!.enabled?, "history starts with no previous or next page")
-          navigation.select_row(navigation.row_at_index(2))
+          navigation.select_row(navigation_rows["processor"])
           locked_rows = descendants(window).select(Adw::ActionRow)
           check(banner.revealed? && banner.title == "Some hardware details are locked", "CPU page shows the unlock banner")
           socket = locked_rows.find { |row| row.title == "Socket" }.not_nil!
@@ -153,7 +156,7 @@ factory = -> do
         end
       when -7
         screenshot(window, "system-view-processor-locked")
-        navigation.select_row(navigation.row_at_index(5))
+        navigation.select_row(navigation_rows["memory"])
         locked_rows = descendants(window).select(Adw::ActionRow).select { |row| {"Voltage", "Minimum voltage", "Maximum voltage"}.includes?(row.title) }
         check(banner.revealed? && !locked_rows.empty?, "RAM page shares the unlock banner and has voltage placeholders")
         check(locked_rows.all? { |row| !row.sensitive? && row.subtitle.to_s.empty? }, "all locked RAM voltages are empty and disabled")
@@ -176,7 +179,7 @@ factory = -> do
         check(banner.button_label == "Unlock…", "banner labels its unlock action")
         button.clicked_signal.emit
         check(!unlock_action.enabled?, "unlock is disabled while authorization is pending")
-        navigation.select_row(navigation.row_at_index(2))
+        navigation.select_row(navigation_rows["processor"])
         unlock_action.activate(nil)
         phase = -3
       when -3
@@ -191,7 +194,7 @@ factory = -> do
           socket = rows.find { |row| row.title == "Socket" }.not_nil!
           check(socket.sensitive? && socket.subtitle == "AM4", "successful unlock populates and enables CPU fields")
           check(!unlock_action.enabled?, "already unlocked details cannot start another query")
-          navigation.select_row(navigation.row_at_index(5))
+          navigation.select_row(navigation_rows["memory"])
           phase = -1
         end
       when -1
@@ -200,7 +203,7 @@ factory = -> do
         check(rows.find { |row| row.title == "Maximum voltage" }.not_nil!.subtitle == "1.35 V", "unlock retains readable values absent from the additional response")
         unlock_action.activate(nil)
         check(requests.get == 2, "switching sections reuses the successful unlock without another query")
-        navigation.select_row(navigation.row_at_index(0))
+        navigation.select_row(navigation_rows["overview"])
         phase = 0
       when 0
         if rows.any? { |row| row.subtitle.try(&.includes?("Example CPU 9000")) }
@@ -217,7 +220,15 @@ factory = -> do
           dialog = descendants(window).select(Adw::AlertDialog).find { |item| item.heading == "Optional software" }.not_nil!
           check(descendants(dialog.extra_child.not_nil!).select(Gtk::Label).any? { |label| label.selectable? && label.text.includes?("vulkaninfo") }, "optional software details are selectable")
           dialog.force_close
-          check(navigation.row_at_index(0).not_nil!.tooltip_text == "Summary", "navigation names the summary")
+          check(navigation_rows["overview"].tooltip_text == "Summary", "navigation names the summary")
+          expected_navigation = %w(overview processor mainboard memory graphics audio drives monitors video inputs printers system network bluetooth power sensors)
+          check(navigation_rows.values.sort_by(&.index).map(&.name) == expected_navigation, "sidebar follows the agreed section order")
+          expected_headers = {"processor" => "Hardware", "monitors" => "Peripherals", "system" => "System"}
+          navigation_rows.each do |id, row|
+            header = row.header.as?(Gtk::Label)
+            check(header.try(&.text) == expected_headers[id]?, "sidebar group boundary for #{id}")
+          end
+          check(navigation_rows["video"].tooltip_text == "Cameras", "camera navigation uses the Cameras label")
           content_controls = widgets.select(Gtk::Box).find { |box| box.name == "content-controls" }.not_nil!
           check(!content_controls.visible?, "sidebar header contains navigation controls while sidebar is open")
           split.show_sidebar = false
@@ -226,18 +237,20 @@ factory = -> do
           check(!content_controls.visible?, "navigation controls return to the sidebar header")
           back = window.lookup_action("back").not_nil!
           forward = window.lookup_action("forward").not_nil!
-          navigation.select_row(navigation.row_at_index(1))
-          navigation.select_row(navigation.row_at_index(2))
+          navigation.select_row(navigation_rows["graphics"])
+          navigation.select_row(navigation_rows["processor"])
           back.activate(nil)
           check(navigation.selected_row.not_nil!.name == "graphics" && forward.enabled?, "back restores the previous page")
           forward.activate(nil)
           check(navigation.selected_row.not_nil!.name == "processor" && !forward.enabled?, "forward restores the next page")
           back.activate(nil)
-          navigation.select_row(navigation.row_at_index(5))
+          navigation.select_row(navigation_rows["memory"])
           check(!forward.enabled?, "new navigation discards forward history")
-          navigation.select_row(navigation.row_at_index(0))
-          check(navigation.row_at_index(1).not_nil!.header.is_a?(Gtk::Separator), "overview separated from hardware sections")
+          navigation.select_row(navigation_rows["overview"])
           check(!split.collapsed? && split.show_sidebar?, "wide sidebar is visible (width=#{window.width}, collapsed=#{split.collapsed?}, shown=#{split.show_sidebar?})")
+          hardware_summary = widgets.select(Adw::PreferencesGroup).find! { |group| group.title == "Hardware summary" }
+          hardware_titles = descendants(hardware_summary).select(Adw::ActionRow).map(&.title)
+          check(hardware_titles == %w(Processor Mainboard Memory Graphics Storage Monitors Network), "hardware summary follows the expected order")
           check(rows.any? { |row| row.subtitle.try(&.includes?("Exact GPU 5000")) }, "resolved GPU model displayed")
           check(rows.any? { |row| row.title == "Graphics" && row.subtitle.try(&.includes?(" · 7.5 GiB")) }, "overview includes GPU memory beside manufacturer and model")
           check(rows.any? { |row| row.subtitle.try(&.includes?("Example NVMe 1TB")) }, "physical drives displayed")
@@ -262,15 +275,15 @@ factory = -> do
             check(item.activatable?, "overview #{title} is keyboard/click activatable")
             item.activate
             check(navigation.selected_row.not_nil!.name == page, "overview #{title} opens its matching section")
-            navigation.select_row(navigation.row_at_index(0))
+            navigation.select_row(navigation_rows["overview"])
           end
           (1..15).each do |index|
             navigation.select_row(navigation.row_at_index(index))
             page = navigation.selected_row.not_nil!.name
             detail_rows = descendants(window).select(Adw::ActionRow)
-            if {"mainboard", "memory", "monitors", "audio", "inputs", "network", "bluetooth", "system", "sensors"}.includes?(page)
+            if {"mainboard", "memory", "monitors", "audio", "inputs", "network", "bluetooth", "system", "power"}.includes?(page)
               layouts = descendants(window).select(Gtk::FlowBox)
-              expected_columns = {"mainboard", "monitors", "inputs", "network", "bluetooth", "system"}.includes?(page) ? 2 : 3
+              expected_columns = {"memory", "audio"}.includes?(page) ? 3 : 2
               check(!layouts.empty? && layouts.all? { |layout| layout.max_children_per_line == expected_columns }, "detail page #{index} uses at most #{expected_columns} columns")
             end
             check(!detail_rows.empty?, "detail page #{index} has real information")
@@ -278,7 +291,7 @@ factory = -> do
             check(missing_banner.revealed? == {"graphics", "printers"}.includes?(page), "missing software notice is limited to affected page #{page}")
             check(detail_rows.none? { |row| {"Capacity source", "Model identification"}.includes?(row.title) }, "detail page #{index} omits data provenance")
             check(descendants(window).select(Adw::PreferencesGroup).all? { |group| group.description.to_s.empty? }, "detail page #{index} omits implementation explanations")
-            if index == 1
+            if page == "graphics"
               check(detail_rows.any? { |row| row.title == "GPU model" && row.subtitle == "Unknown" }, "generic PCI family is not presented as an exact model")
               check(detail_rows.any? { |row| row.title == "Dedicated video memory" && row.subtitle == "7.5 GiB" }, "video memory uses base 1024 and GiB")
               check(detail_rows.any? { |row| row.title == "Current GPU clock" && row.subtitle == "1800 MHz" }, "GPU page shows the current clock")
@@ -289,7 +302,7 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "GPU utilization" && row.subtitle == "27.0 %" }, "GPU utilization is displayed")
               check(detail_rows.any? { |row| row.title == "GPU power" && row.subtitle == "42.5 W" }, "GPU power is displayed")
               check(detail_rows.any? { |row| row.title == "Connected monitors" && row.subtitle.try(&.includes?("75.0 Hz")) }, "GPU page links its attached displays and refresh rates")
-            elsif index == 2
+            elsif page == "processor"
               check(detail_rows.any? { |row| row.title == "Socket" && row.subtitle == "AM4" }, "additional CPU details include the physical socket type")
               check(detail_rows.any? { |row| row.title == "Processor Features" && row.subtitle.try(&.includes?("MMX")) }, "processor features retain their firmware values under the new label")
               check(detail_rows.none? { |row| row.title == "Flags" }, "CPU flags are no longer displayed")
@@ -298,15 +311,15 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Socket count" && row.subtitle == "1" }, "CPU socket quantity is explicitly labelled")
               check(detail_rows.any? { |row| row.title == "Base clock" && row.subtitle == "3.4 GHz" }, "CPU details show clock speeds")
               check(detail_rows.any? { |row| row.title == "L3 cache (Data and instructions)" && row.subtitle.try(&.includes?("32.0 MiB total")) }, "shared L3 cache is counted once")
-            elsif index == 3
+            elsif page == "mainboard"
               check(detail_rows.any? { |row| row.title == "Boot mode" && row.subtitle == "UEFI" }, "mainboard shows the boot mode")
               check(detail_rows.any? { |row| row.title == "Secure Boot" && row.subtitle == "Active" }, "mainboard shows the Secure Boot state")
               check(detail_rows.any? { |row| row.title == "TPM" && row.subtitle == "TPM 2.0" }, "mainboard shows the TPM version")
-            elsif index == 4
+            elsif page == "drives"
               disk_button = descendants(window).select(Gtk::Button).find { |item| item.tooltip_text == "Open Disk View" }.not_nil!
               disk_button.clicked_signal.emit
               check(disk_view_requests.get == 1, "drive header opens Disk View")
-            elsif index == 5
+            elsif page == "memory"
               check(detail_rows.any? { |row| row.title == "Voltage" && row.subtitle == "1.2 V" }, "precise module voltage is displayed")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("Corsair Vengeance LPX · CMK32GX4M2E3200C16")) }, "RAM manufacturer and series precede the model identifier")
               check(detail_rows.first.title == "Installed RAM" && detail_rows.first.subtitle == "32.0 GiB", "installed capacity comes first on RAM page")
@@ -315,14 +328,14 @@ factory = -> do
               check(detail_rows.any? { |row| row.title == "Usable RAM" && row.subtitle == "30.5 GiB" }, "RAM details use base 1024 and GiB")
               check(detail_rows.any? { |row| row.subtitle.try(&.includes?("TEST-16G-DDR4")) }, "RAM page includes module identification")
               check(detail_rows.count { |row| row.title == "Timings (CL–tRCD–tRP–tRAS)" && row.subtitle == "Not reported" } == 2, "each module exposes missing timings without inferring them from its part number")
-            elsif index == 6
+            elsif page == "monitors"
               check(detail_rows.any? { |row| row.subtitle == "ExamplePanel" }, "monitor details are populated")
               check(descendants(window).select(Gtk::Label).any? { |label| label.text == "Monitor 2 (Primary)" && label.has_css_class("heading") }, "monitor heading uses desktop numbering and primary status")
               check(detail_rows.any? { |row| row.title == "Current refresh rate" && row.subtitle == "75.0 Hz" }, "monitor current refresh is distinct from its preferred timing")
               settings = descendants(window).select(Gtk::Button).find { |button| button.tooltip_text == "Open display settings" }.not_nil!
               settings.clicked_signal.emit
               check(settings_requests.last == "display", "monitor settings open the display panel")
-            elsif index == 7
+            elsif page == "audio"
               check(detail_rows.any? { |row| row.subtitle == "Example USB Audio" }, "audio details are populated")
               driver = detail_rows.find { |row| row.title == "Driver" }.not_nil!
               codecs = detail_rows.find { |row| row.title == "Codecs" }.not_nil!
@@ -337,7 +350,8 @@ factory = -> do
                 audio_row = detail_rows.find { |row| row.title == title }.not_nil!
                 check(descendants(audio_row).select(Gtk::Image).any? { |image| image.icon_name == icon }, "#{title} has its audio icon")
               end
-              check(navigation.row_at_index(8).not_nil!.name == "video", "video follows audio in navigation")
+            elsif page == "video"
+              check(descendants(window).select(Gtk::Label).any? { |label| label.text == "Cameras" }, "camera page uses the Cameras label")
             elsif page == "inputs"
               check(detail_rows.any? { |row| row.subtitle == "Keyboard" }, "input devices are classified")
               { {"Open keyboard settings", "keyboard"}, {"Open mouse and touchpad settings", "mouse"} }.each do |tooltip, panel|
@@ -419,8 +433,8 @@ factory = -> do
       when 2
         check(split.show_sidebar?, "sidebar can be opened as an overlay")
         screenshot(window, "system-view-narrow-sidebar")
-        navigation.select_row(navigation.row_at_index(0))
-        navigation.row_activated_signal.emit(navigation.row_at_index(0).not_nil!)
+        navigation.select_row(navigation_rows["overview"])
+        navigation.row_activated_signal.emit(navigation_rows["overview"])
         check(!split.show_sidebar?, "selecting a page dismisses overlay")
         window.set_default_size(360, 780)
         phase = 3
@@ -431,7 +445,7 @@ factory = -> do
           item = descendants(window).select(Adw::ActionRow).find { |row| row.title == "Memory" }.not_nil!
           item.activate
           check(navigation.selected_row.not_nil!.name == "memory" && !split.show_sidebar?, "overview navigation also works with the collapsed sidebar")
-          navigation.select_row(navigation.row_at_index(2))
+          navigation.select_row(navigation_rows["processor"])
           settings_available.set(false)
           disk_view_available.set(false)
           window.lookup_action("refresh").not_nil!.activate(nil)
@@ -449,7 +463,7 @@ factory = -> do
         if tracked_clock.try(&.subtitle) == "1.0 GHz – 3.4 GHz"
           check(rows.any? { |row| row == tracked_clock }, "live clock updates without rebuilding the page")
           check(navigation.selected_row.not_nil!.name == "processor", "live updates preserve the selected page")
-          navigation.select_row(navigation.row_at_index(14))
+          navigation.select_row(navigation_rows["sensors"])
           tracked_sensor = descendants(window).select(Adw::ActionRow).find { |row| row.title == "CPU Package" }.not_nil!
           files.set_temperature(51_000)
           phase = -16
@@ -457,7 +471,7 @@ factory = -> do
       when -16
         if tracked_sensor.try(&.subtitle) == "51.0 °C"
           check(rows.any? { |row| row == tracked_sensor }, "sensor readings update without rebuilding the page")
-          navigation.select_row(navigation.row_at_index(2))
+          navigation.select_row(navigation_rows["processor"])
           window.set_default_size(1040, 780)
           phase = 5
         end
@@ -520,14 +534,14 @@ factory = -> do
         end
       when 6
         screenshot(window, "system-view-caches")
-        navigation.select_row(navigation.row_at_index(5))
+        navigation.select_row(navigation_rows["memory"])
         phase = 7
       when 7
         scroll = descendants(window).select(Gtk::ScrolledWindow).find { |view| descendants(view).any? { |child| child.is_a?(Adw::Clamp) } }.not_nil!
         check(scroll.vadjustment.value == 0.0, "switching pages starts at the top")
         check(!banner.revealed? && !unlock_action.enabled? && requests.get == 2, "refresh preserves the shared unlocked state")
         screenshot(window, "system-view-memory")
-        navigation.select_row(navigation.row_at_index(6))
+        navigation.select_row(navigation_rows["monitors"])
         phase = 8
       when 8
         monitor_layout = widgets.select(Gtk::FlowBox).first
@@ -538,11 +552,11 @@ factory = -> do
         second = monitor_groups[1].parent.not_nil!.compute_bounds(monitor_layout)
         check(first.origin.y == second.origin.y && (first.size.width - second.size.width).abs <= 1, "monitor groups have equal-width columns")
         screenshot(window, "system-view-monitors")
-        navigation.select_row(navigation.row_at_index(7))
+        navigation.select_row(navigation_rows["audio"])
         phase = 9
       when 9
         screenshot(window, "system-view-audio")
-        navigation.select_row(navigation.row_at_index(4))
+        navigation.select_row(navigation_rows["drives"])
         phase = -9
       when -9
         check(widgets.select(Gtk::FlowBox).size == 2 && widgets.select(Adw::PreferencesGroup).size == 8, "each drive includes its health group")
@@ -550,11 +564,11 @@ factory = -> do
         check(rows.any? { |row| row.title == "Temperature" && row.subtitle == "30.0 °C" }, "drive temperature is displayed")
         check(rows.any? { |row| row.title == "Power-on hours" && row.subtitle == "42" }, "drive power-on hours are displayed")
         screenshot(window, "system-view-drives")
-        navigation.select_row(navigation.row_at_index(9))
+        navigation.select_row(navigation_rows["inputs"])
         phase = 10
       when 10
         screenshot(window, "system-view-inputs")
-        navigation.select_row(navigation.row_at_index(10))
+        navigation.select_row(navigation_rows["network"])
         phase = 11
       when 11
         network_layout = widgets.select(Gtk::FlowBox).first
@@ -563,7 +577,25 @@ factory = -> do
         first = network_groups[0].parent.not_nil!.compute_bounds(network_layout)
         second = network_groups[1].parent.not_nil!.compute_bounds(network_layout)
         check(first.origin.y == second.origin.y && (first.size.width - second.size.width).abs <= 1, "network columns have equal widths")
+        network_column_width = network_groups[0].parent.not_nil!.width
+        network_content_width = network_layout.parent.not_nil!.width
         screenshot(window, "system-view-network")
+        navigation.select_row(navigation_rows["system"])
+        phase = -21
+      when -21, -22
+        page = navigation.selected_row.not_nil!.name
+        layout = widgets.select(Gtk::FlowBox).first
+        first, second = descendants(layout).select(Adw::PreferencesGroup).map { |group| group.parent.not_nil! }
+        check(layout.homogeneous? && (first.width - second.width).abs <= 1, "#{page} uses equal-width columns")
+        check((first.width - network_column_width).abs <= 1, "#{page} matches the network column width")
+        screenshot(window, "system-view-#{page}")
+        navigation.select_row(navigation_rows[phase == -21 ? "power" : "sensors"])
+        phase -= 1
+      when -23
+        group = widgets.select(Adw::PreferencesGroup).first
+        check(group.parent.is_a?(Gtk::Box) && group.width == network_content_width, "a single sensor group fills the same content width as network")
+        screenshot(window, "system-view-sensors")
+        navigation.select_row(navigation_rows["network"])
         window.set_default_size(360, 780)
         phase = 12
       when 12
@@ -582,13 +614,13 @@ factory = -> do
           check(rows.any? { |row| row.title == "IPv4 · IP addresses" && row.subtitle == "192.0.2.10/24" }, "refresh reloads per-interface network addresses")
           button = widgets.select(Gtk::Button).find { |item| item.tooltip_text == "Open network settings" }.not_nil!
           check(!button.visible?, "settings button is hidden when the service becomes unavailable")
-          navigation.select_row(navigation.row_at_index(4))
+          navigation.select_row(navigation_rows["drives"])
           check(descendants(window).select(Gtk::Button).none? { |item| item.tooltip_text == "Open Disk View" }, "Disk View button is hidden when it is unavailable")
-          navigation.select_row(navigation.row_at_index(10))
+          navigation.select_row(navigation_rows["network"])
           phase = 14
         end
       when 14
-        navigation.select_row(navigation.row_at_index(1))
+        navigation.select_row(navigation_rows["graphics"])
         phase = 15
       when 15
         screenshot(window, "system-view-graphics-narrow")
