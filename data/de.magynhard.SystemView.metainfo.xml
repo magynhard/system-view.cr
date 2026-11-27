@@ -285,6 +285,54 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.4.4" date="2026-11-27">
+      <description>
+        <p>Organized the sidebar into groups, reordered the hardware summary, and made detail page widths consistent.</p>
+        <p xml:lang="de">Die Seitenleiste ist gruppiert, die Hardware-Zusammenfassung neu sortiert und die Breite der Detailseiten vereinheitlicht.</p>
+        <p xml:lang="ar">جُمّعت عناصر الشريط الجانبي، وأُعيد ترتيب ملخص العتاد، ووُحّد عرض صفحات التفاصيل.</p>
+        <p xml:lang="bg">Групирана е страничната лента, пренареден е прегледът на хардуера и е уеднаквена ширината на страниците с подробности.</p>
+        <p xml:lang="bn">সাইডবারের আইটেমগুলোকে গোষ্ঠীবদ্ধ করা হয়েছে, হার্ডওয়্যারের সারাংশের ক্রম বদলানো হয়েছে এবং বিস্তারিত পৃষ্ঠাগুলোর প্রস্থ সমান করা হয়েছে।</p>
+        <p xml:lang="cs">Položky postranního panelu jsou ve skupinách, přehled hardwaru má nové pořadí a stránky s podrobnostmi jednotnou šířku.</p>
+        <p xml:lang="da">Sidepanelet er inddelt i grupper, hardwareoversigten har fået en ny rækkefølge, og detaljesiderne har ens bredde.</p>
+        <p xml:lang="el">Ομαδοποιήθηκαν οι επιλογές της πλευρικής γραμμής, αναδιατάχθηκε η σύνοψη υλικού και ενοποιήθηκε το πλάτος των σελίδων λεπτομερειών.</p>
+        <p xml:lang="es">Se agrupó la barra lateral, se reordenó el resumen de hardware y se unificó el ancho de las páginas de detalles.</p>
+        <p xml:lang="et">Külgriba kirjed on rühmitatud, riistvara ülevaade ümber järjestatud ja üksikasjade lehtede laius ühtlustatud.</p>
+        <p xml:lang="fa">موارد نوار کناری گروه‌بندی شدند، ترتیب خلاصهٔ سخت‌افزار تغییر کرد و عرض صفحه‌های جزئیات یکسان شد.</p>
+        <p xml:lang="fi">Sivupalkin kohteet ryhmiteltiin, laitteiston yleiskatsauksen järjestystä muutettiin ja tietosivujen leveydet yhtenäistettiin.</p>
+        <p xml:lang="fr">La barre latérale est organisée en groupes, le résumé du matériel a été réordonné et la largeur des pages de détails a été harmonisée.</p>
+        <p xml:lang="ga">Cuireadh míreanna an bharra taoibh i ngrúpaí, athordaíodh achoimre na crua-earraí agus caighdeánaíodh leithead na leathanach mionsonraí.</p>
+        <p xml:lang="he">הפריטים בסרגל הצד קובצו, סדר תקציר החומרה עודכן ורוחב דפי הפרטים הותאם למידה אחידה.</p>
+        <p xml:lang="hi">साइडबार के आइटम समूहों में बाँटे गए, हार्डवेयर सारांश का क्रम बदला गया और विवरण पृष्ठों की चौड़ाई एक जैसी की गई।</p>
+        <p xml:lang="hr">Stavke bočne trake grupirane su, pregled hardvera ima novi redoslijed, a stranice s detaljima ujednačenu širinu.</p>
+        <p xml:lang="hu">Az oldalsáv elemei csoportokba kerültek, a hardverösszefoglaló sorrendje és a részletoldalak szélessége egységesebb lett.</p>
+        <p xml:lang="id">Bilah samping dibagi ke dalam kelompok, ringkasan perangkat keras diurutkan ulang, dan lebar halaman rincian diseragamkan.</p>
+        <p xml:lang="is">Atriði hliðarstikunnar voru flokkuð, röð í yfirliti vélbúnaðar breytt og breidd ítarupplýsingasíðna samræmd.</p>
+        <p xml:lang="it">La barra laterale è stata suddivisa in gruppi, il riepilogo dell’hardware è stato riordinato e la larghezza delle pagine di dettaglio è stata uniformata.</p>
+        <p xml:lang="ja">サイドバーをグループ化し、ハードウェア概要の表示順を変更し、詳細ページの幅を統一しました。</p>
+        <p xml:lang="ko">사이드바 항목을 그룹으로 나누고 하드웨어 요약의 순서를 조정했으며 상세 페이지의 너비를 통일했습니다.</p>
+        <p xml:lang="lt">Šoninės juostos elementai sugrupuoti, pakeista aparatinės įrangos suvestinės tvarka, o išsamios informacijos puslapių plotis suvienodintas.</p>
+        <p xml:lang="lv">Sānjoslas vienumi ir sagrupēti, aparatūras pārskats pārkārtots, un detalizētās informācijas lapu platums ir vienādots.</p>
+        <p xml:lang="ms">Item bar sisi dikumpulkan, ringkasan perkakasan disusun semula dan lebar halaman butiran diseragamkan.</p>
+        <p xml:lang="nb">Sidepanelet er delt inn i grupper, maskinvareoversikten har fått ny rekkefølge, og detaljsidene har fått lik bredde.</p>
+        <p xml:lang="nl">De zijbalk is ingedeeld in groepen, het hardwareoverzicht is herschikt en de detailpagina’s hebben een consistente breedte.</p>
+        <p xml:lang="pl">Pogrupowano pozycje na pasku bocznym, zmieniono kolejność w podsumowaniu sprzętu i ujednolicono szerokość stron szczegółów.</p>
+        <p xml:lang="pt">A barra lateral foi organizada em grupos, o resumo do hardware foi reordenado e a largura das páginas de detalhes foi uniformizada.</p>
+        <p xml:lang="pt_BR">A barra lateral foi organizada em grupos, o resumo de hardware foi reorganizado e a largura das páginas de detalhes foi padronizada.</p>
+        <p xml:lang="ro">Bara laterală a fost organizată în grupuri, rezumatul hardware a fost reordonat, iar lățimea paginilor cu detalii a fost uniformizată.</p>
+        <p xml:lang="ru">Разделы боковой панели сгруппированы, порядок в сводке оборудования изменён, а ширина страниц с подробностями унифицирована.</p>
+        <p xml:lang="sk">Položky bočného panela sú zoskupené, prehľad hardvéru má nové poradie a stránky s podrobnosťami majú jednotnú šírku.</p>
+        <p xml:lang="sr">Ставке бочне траке су груписане, редослед у прегледу хардвера је промењен, а ширина страница са детаљима уједначена.</p>
+        <p xml:lang="sv">Sidopanelen har delats in i grupper, maskinvaruöversikten har fått en ny ordning och detaljsidorna har fått enhetlig bredd.</p>
+        <p xml:lang="ta">பக்கப்பட்டி உருப்படிகள் குழுக்களாகப் பிரிக்கப்பட்டன, வன்பொருள் சுருக்கத்தின் வரிசை மாற்றப்பட்டது, விவரப் பக்கங்களின் அகலம் ஒரே சீராக்கப்பட்டது.</p>
+        <p xml:lang="th">จัดกลุ่มรายการในแถบด้านข้าง เรียงลำดับสรุปฮาร์ดแวร์ใหม่ และปรับความกว้างของหน้ารายละเอียดให้สม่ำเสมอ</p>
+        <p xml:lang="tr">Kenar çubuğu gruplara ayrıldı, donanım özeti yeniden sıralandı ve ayrıntı sayfalarının genişliği eşitlendi.</p>
+        <p xml:lang="uk">Пункти бічної панелі згруповано, порядок в огляді обладнання змінено, а ширину сторінок подробиць уніфіковано.</p>
+        <p xml:lang="ur">سائیڈ بار کے اندراجات کو گروپوں میں تقسیم کیا گیا، ہارڈویئر کے خلاصے کی ترتیب بدلی گئی، اور تفصیلی صفحات کی چوڑائی یکساں کی گئی۔</p>
+        <p xml:lang="vi">Các mục trên thanh bên được chia thành nhóm, phần tổng quan phần cứng được sắp xếp lại và chiều rộng của các trang chi tiết được đồng nhất.</p>
+        <p xml:lang="zh_CN">对侧边栏条目进行了分组，调整了硬件概览的顺序，并统一了详情页面的宽度。</p>
+        <p xml:lang="zh_TW">將側邊欄項目分組，調整硬體摘要的順序，並統一詳細資料頁面的寬度。</p>
+      </description>
+    </release>
     <release version="0.4.3" date="2026-11-25">
       <description>
         <p>Document installation from the signed Flatpak repository.</p>

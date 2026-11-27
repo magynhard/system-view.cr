@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.4 - 2026-11-27
+
+- Group the sidebar into Hardware, Peripherals, and System, and rename Video to Cameras.
+- Reorder the hardware summary and align content widths across detail pages.
+- Clarify how to install and update System View from the signed Flatpak repository or standalone downloads.
+
 ## 0.4.3 - 2026-11-25
 
 - Document how to install System View from the signed Flatpak repository.
